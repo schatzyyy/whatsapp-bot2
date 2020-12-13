@@ -1,5 +1,5 @@
 <p align="center">
-<img src="https://avatars.githubusercontent.com/thoriqazzikra" width="300" height="300"/>
+<img src="https://avatars.githubusercontent.com/thoriqazzikra" width="225" height="225"/>
 </p>
 <p align="center">
 <a href="#"><img title="Whatsapp-Bot" src="https://img.shields.io/badge/Whatsapp Bot-green?colorA=%23ff0000&colorB=%23017e40&style=for-the-badge"></a>
@@ -171,7 +171,7 @@ after running it you need to scan the qr
 | Ai Quote|✅|
 | Doggo|✅|
 | Get Owner Group|✅|
-| Dewa Batch|v|
+| Dewa Batch|✅|
 | How Much in Group|✅|
 | Group Bot|✅|
 | WP Anime|✅|
