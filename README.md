@@ -15,11 +15,12 @@
 </p>
 <div align="center">
   
-<div>
+  
+  
+<a>
 <a href="https://github.com/thoriqazzikra/whatsapp-bot2">
  <img align="center" src="https://github-readme-stats.vercel.app/api/pin/?username=thoriqazzikra&repo=whatsapp-bot2&theme=dark" />
 </a>
-</div>
 
   
   
