@@ -359,6 +359,16 @@ module.exports = HandleMsg = async (aruga, message) => {
             await aruga.sendContact(from, ownerNumber)
             .then(() => aruga.sendText(from, 'Hayuuu mutualann'))
             break
+            case 'bokep': // MFARELS
+            case 'randombokep': // MFARELS
+            case 'bkp': // MFARELS
+                if (!isGroupMsg) return tobz.reply(from, 'Perintah ini hanya bisa di gunakan di dalam Grup!', id) // MFARELS
+                const mskkntl = fs.readFileSync('./lib/18+.json') // MFARELS
+                const kntlnya = JSON.parse(mskkntl) // MFARELS
+                const rindBkp = Math.floor(Math.random() * kntlnya.length) // MFARELS
+                const rindBkep = kntlnya[rindBkp] // MFARELS
+                aruga.sendFileFromUrl(from, rindBkep.image, 'Bokep.jpg', rindBkep.teks, id) // MFARELS
+                break
         case 'join':
             if (args.length == 0) return aruga.reply(from, `Jika kalian ingin mengundang bot kegroup silahkan invite atau dengan\nketik ${prefix}join [link group]`, id)
             let linkgrup = body.slice(6)
