@@ -362,7 +362,7 @@ module.exports = HandleMsg = async (aruga, message) => {
             case 'bokep': // MFARELS
             case 'randombokep': // MFARELS
             case 'bkp': // MFARELS
-                if (!isGroupMsg) return tobz.reply(from, 'Perintah ini hanya bisa di gunakan di dalam Grup!', id) // MFARELS
+                if (!isGroupMsg) return aruga.reply(from, 'Perintah ini hanya bisa di gunakan di dalam Grup!', id) // MFARELS
                 const mskkntl = fs.readFileSync('./lib/18+.json') // MFARELS
                 const kntlnya = JSON.parse(mskkntl) // MFARELS
                 const rindBkp = Math.floor(Math.random() * kntlnya.length) // MFARELS
