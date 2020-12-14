@@ -245,6 +245,23 @@ module.exports = HandleMsg = async (aruga, message) => {
             }
         }
         // Kerang Menu
+        const cegan = [
+            '62895334950905@c.us',
+            '6282136988960@c.us',
+            '6282341126034@c.us',
+            '6287821057464@c.us',
+        ]
+        const cecan = [
+            '628985945421@c.us',
+            '6283819609238@c.us',
+            '6281332494577@c.us',
+            '6281275200288@c.us',
+            '6281262787974@c.us',
+            '6281907437429@c.us',
+            '6285798480581@c.us'
+        ]
+
+
 	const apakah = [
             'Ya',
             'Tidak',
@@ -359,6 +376,96 @@ module.exports = HandleMsg = async (aruga, message) => {
             await aruga.sendContact(from, ownerNumber)
             .then(() => aruga.sendText(from, 'Hayuuu mutualann'))
             break
+            case 'bokep2':
+			    rugaapi.bokep2()
+			    .then(async (res) => {
+				await aruga.reply(from, `${res}`, id)
+			})
+            break
+            case 'wallpaper':
+                aruga.reply(from, mess.wait, id);
+                axios.get('https://akaneko-api.herokuapp.com/api/mobileWallpapers').then(res => {
+                    aruga.sendFileFromUrl(from, res.data.url, 'Desktop Wallpaper.jpeg', 'Enjoy :>', id);
+                });
+                break
+                case 'loli':
+                aruga.reply(from, mess.wait, id);
+                axios.get('http://lolis-life-api.herokuapp.com/getLoli').then(res => {
+                    aruga.sendFileFromUrl(from, res.data.url, 'loli.jpeg', "Enjoy these Lolis!", id);
+                });
+                break
+                case 'neko':
+                try {
+                    aruga.reply(from, mess.wait, id)
+                    axios.get('https://akaneko-api.herokuapp.com/api/neko').then(res => {
+                        aruga.sendFileFromUrl(from, res.data.url, 'neko.jpeg', 'Neko *Nyaa*~');
+                    });
+                } catch (err) {
+                    console.log(err);
+                    throw(err);
+                };
+                break
+                case 'waifu':
+                aruga.reply(from, mess.wait, id);
+                axios.get('https://nekos.life/api/v2/img/waifu').then(res => {
+                    aruga.sendFileFromUrl(from, res.data.url, 'Waifu UwU');
+                });
+                break
+                case 'animeavatar':
+                    aruga.reply(from, mess.wait, id);
+                    axios.get('https://nekos.life/api/v2/img/avatar').then(res => {
+                        aruga.sendFileFromUrl(from, res.data.url, 'Avatar UwU');
+                    });
+                    break;
+            case 'lolinsfw':
+                    aruga.sendText(from, mess.wait);
+                    axios.get('http://lolis-life-api.herokuapp.com/getNSFWLoli').then(res => {
+                        aruga.sendFileFromUrl(from, res.data.url, 'Pedo ;-;');
+            })
+                break
+            case 'wallpaper2':
+                aruga.reply(from, mess.wait, id);
+                axios.get('https://akaneko-api.herokuapp.com/api/wallpapers').then(res => {
+                    aruga.sendFileFromUrl(from, res.data.url, 'Desktop Wallpaper.jpeg', 'Enjoy :>', id);
+                });
+                break
+                case 'say':
+                    const says = args.join(' ')
+                    await aruga.sendText(from, `${says}`)
+                    break
+            case 'baka':
+                aruga.reply(from, mess.wait, id);
+                axios.get('https://nekos.life/api/v2/img/baka').then(res => {
+                    aruga.sendFileFromUrl(from, res.data.url, 'baka')
+                })
+                break
+                case 'cogan':
+                        const ganteng = cegan[Math.floor(Math.random() * (cegan.length))]
+                        await aruga.sendContact(from, ganteng)
+                        .then(() => aruga.sendText(from, 'nehh nomer cogann xixi'))
+                        break
+                    case 'cecan':
+                        const cantik = cecan[Math.floor(Math.random() * (cecan.length))]
+                        await aruga.sendContact(from, cantik)
+                        .then(() => aruga.sendText(from, 'nehh nomer cecann xixi'))
+                        break
+            case 'resend':
+                if (!isGroupAdmins) return aruga.reply(from, 'Gagal, Fitur ini hanya bisa digunakan oleh Admin',id)
+                if (quotedMsgObj) {
+                    let encryptMedia
+                    let replyOnReply = await aruga.getMessageById(quotedMsgObj.id)
+                    let obj = replyOnReply.quotedMsgObj
+                    if (/ptt|audio|video|image|document|sticker/.test(quotedMsgObj.type)) {
+                        encryptMedia = quotedMsgObj
+                        if (encryptMedia.animated) encryptMedia.mimetype = ''
+                    } else if (obj && /ptt|audio|video|image/.test(obj.type)) {
+                        encryptMedia = obj
+                    } else return
+                    const _mimetype = encryptMedia.mimetype
+                    const mediaData = await decryptMedia(encryptMedia)
+                    await aruga.sendFile(from, `data:${_mimetype};base64,${mediaData.toString('base64')}`, 'file', ':)', encryptMedia.id)
+                } else aruga.reply(from, config.msg.noMedia, id)
+                break
             case 'bokep': // MFARELS
             case 'randombokep': // MFARELS
             case 'bkp': // MFARELS
@@ -411,7 +518,7 @@ module.exports = HandleMsg = async (aruga, message) => {
                     await aruga.setMyName(setnem)
                     aruga.sendTextWithMentions(from, `Makasih Nama Barunya @${sender.id.replace('@c.us','')} 😘`)
                 break
-                case 'sider':
+                case 'read':
                     if (!isGroupMsg) return aruga.reply(from, `Perintah ini hanya bisa di gunakan dalam group!`, id)                
                     if (!quotedMsg) return aruga.reply(from, `Tolong Reply Pesan Bot`, id)
                     if (!quotedMsgObj.fromMe) return aruga.reply(from, `Tolong Reply Pesan Bot`, id)
