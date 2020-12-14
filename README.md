@@ -189,6 +189,20 @@ after running it you need to scan the qr
 | Penyegar Timeline|✅|
 | Google Search|✅|
 | Sider|✅|
+| Bokep|✅|
+| Bokep 2|✅|
+| Wallpaper|✅|
+| Wallpaper 2|✅|
+| Neko|✅|
+| Loli|✅|
+| Loli NSFW|✅|
+| Baka!|✅|
+| Waifu|✅|
+| Anime Avatar|✅|
+| Say!|✅|
+| Number Cogan|✅|
+| Number Cecan|✅|
+
 
 | Groups |Yes|
 | ------------- | ------------- |
@@ -205,6 +219,7 @@ after running it you need to scan the qr
 | Tagall/mentions all|✅|
 | Revoke Link Group|✅|
 | Set Group Name|✅|
+| Resend Messages|✅|
 
 
 | Owner bot |Yes|
