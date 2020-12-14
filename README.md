@@ -85,7 +85,6 @@ after running it you need to scan the qr
 | 18+ |Yes|
 | ------------- | ------------- |
 | Nekopoi |✅|
-| Random Porn|✅|
 
 | Creator |Yes|
 | ------------- | ------------- |
