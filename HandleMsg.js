@@ -247,19 +247,19 @@ module.exports = HandleMsg = async (aruga, message) => {
         // Kerang Menu
         //BUAT NOMER CEGAN/CECAN, KALIAN BISA CUSTOM SENDIRI, MAKASEH!
         const cegan = [
-            '62895334950905@c.us',
-            '6282136988960@c.us',
-            '6282341126034@c.us',
-            '6287821057464@c.us',
+            '@c.us',
+            '@c.us',
+            '@c.us',
+            '@c.us',
         ]
         const cecan = [
-            '628985945421@c.us',
-            '6283819609238@c.us',
-            '6281332494577@c.us',
-            '6281275200288@c.us',
-            '6281262787974@c.us',
-            '6281907437429@c.us',
-            '6285798480581@c.us'
+            '@c.us',
+            '@c.us',
+            '@c.us',
+            '@c.us',
+            '@c.us',
+            '@c.us',
+            '@c.us'
         ]
 
 
