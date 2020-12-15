@@ -248,7 +248,7 @@ module.exports = HandleMsg = async (aruga, message) => {
                         const mediaData = await decryptMedia(message)
                         const imageBase64 = `data:${mimetype};base64,${mediaData.toString('base64')}`
                         await aruga.setProfilePic(imageBase64)
-                        aruga.sendTextWithMentions(`Makasih @${sender.id.replace('@c.us','')} Foto Profilenya 😘`)
+                        aruga.sendTextWithMentions(`Makasih @${sender.id.replace('@c.us','')} Foto Profilenye..`)
                     } else if (quotedMsg && quotedMsg.type == 'image') {
                         const mediaData = await decryptMedia(quotedMsg)
                         const imageBase64 = `data:${quotedMsg.mimetype};base64,${mediaData.toString('base64')}`
@@ -1588,7 +1588,7 @@ _Desc di update oleh : @${chat.groupMetadata.descOwner.replace('@c.us','')} pada
                         aruga.sendText(from, kata)
                     }
                     break
-                case 'mock':
+                case 'nyenye':
                     if(!isGroupMsg) return aruga.reply(from, 'Fitur ini hanya bisa digunakan didalam Grup!', id)
                     if (!args.length >= 1) return aruga.reply(from, `kirim ${prefix}mock kalimat\ncontoh: ${prefix}mock nisa cantik', id`)
                     const teksnya = body.slice(6)
