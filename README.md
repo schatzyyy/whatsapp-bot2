@@ -198,9 +198,12 @@ after running it you need to scan the qr
 | Baka!|✅|
 | Waifu|✅|
 | Anime Avatar|✅|
+| Say List|✅|
+| Add Say!|✅|
 | Say!|✅|
-| Number Cogan|✅|
-| Number Cecan|✅|
+| Bacot List|✅|
+| Add Bacot|✅|
+| Bacot|✅|
 
 
 | Groups |Yes|
