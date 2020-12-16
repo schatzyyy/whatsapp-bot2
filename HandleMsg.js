@@ -241,6 +241,7 @@ module.exports = HandleMsg = async (aruga, message) => {
         }
         // Kerang Menu
         //BUAT NOMER CEGAN/CECAN, KALIAN BISA CUSTOM SENDIRI, MAKASEH!
+
         const cegan = [
             "https://i.ibb.co/JmVx5bJ/Cogan.jpg",
             "https://i.ibb.co/JmVx5bJ/Cogan.jpghttps://i.ibb.co/3pGT2PT/Cogan-1.jpg",
@@ -288,7 +289,7 @@ module.exports = HandleMsg = async (aruga, message) => {
             }
         ]
         
-        const estetik = [
+        const estetek = [
             "https://i.ibb.co/Xk1kggV/Aesthetic-Wallpaper-for-Phone.jpg",
             "https://i.ibb.co/wBNyv8X/image.jpg",
             "https://i.ibb.co/hgcJbg7/Leaving-Facebook.jpg",
@@ -509,8 +510,8 @@ module.exports = HandleMsg = async (aruga, message) => {
                 })
                 break
                 case 'aesthetic':
-                    const anjayani = estetik[Math.floor(Math.random() * estetik.length)]
-                    await aruga.sendImage(from,anjayani)
+                    const anjayani = estetek[Math.floor(Math.random() * estetek.length)]
+                    await aruga.sendImage(from,anjayani, id)
                     .then(() => aruga.sendText(from, 'nehh buat wallpaper lu'))
                     break
                 case 'pictcogan':
