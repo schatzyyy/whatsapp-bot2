@@ -39,7 +39,8 @@
     "remove.bg": "^1.3.0",
     "request": "^2.88.2",
     "sastrawijs": "^1.0.3",
-    "sharp": "^0.26.1"
+    "sharp": "^0.26.1",
+    "translatte": "^3.0.0"
   },
   "devDependencies": {
     "babel-eslint": "^10.1.0",

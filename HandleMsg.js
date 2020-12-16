@@ -7,10 +7,12 @@ const axios = require('axios')
 const os = require('os')
 const speed = require('performance-now')
 const fetch = require('node-fetch')
+const translatte = require('translatte')
 
 const appRoot = require('app-root-path')
 const low = require('lowdb')
 const google = require('google-it')
+const { stdout } = require('process');
 const Math_js = require('mathjs')
 const FileSync = require('lowdb/adapters/FileSync')
 const db_group = new FileSync(appRoot+'/lib/data/group.json')
@@ -116,7 +118,7 @@ module.exports = HandleMsg = async (aruga, message) => {
         const isQuotedVideo = quotedMsg && quotedMsg.type === 'video'
 		
         // [IDENTIFY]
-        const ownerNumber = "62895334950905@c.us"
+        const ownerNumber = "6282136988960@c.us"
         const isOwnerBot = ownerNumber.includes(pengirim)
         const isOwner = ownerNumber.includes(pengirim)
         const isOwnerB = ownerNumber.includes(pengirim)
@@ -167,19 +169,19 @@ module.exports = HandleMsg = async (aruga, message) => {
         // Kerang Menu
         //BUAT NOMER CEGAN/CECAN, KALIAN BISA CUSTOM SENDIRI, MAKASEH!
         const cegan = [
-            '@c.us',
-            '@c.us',
-            '@c.us',
-            '@c.us',
+            '62895334950905@c.us',
+            '6282136988960@c.us',
+            '6282341126034@c.us',
+            '6287821057464@c.us',
         ]
         const cecan = [
-            '@c.us',
-            '@c.us',
-            '@c.us',
-            '@c.us',
-            '@c.us',
-            '@c.us',
-            '@c.us'
+            '628985945421@c.us',
+            '6283819609238@c.us',
+            '6281332494577@c.us',
+            '6281275200288@c.us',
+            '6281262787974@c.us',
+            '6281907437429@c.us',
+            '6285798480581@c.us'
         ]
 
 
@@ -230,6 +232,10 @@ module.exports = HandleMsg = async (aruga, message) => {
 	// Filter Banned People
         if (isBanned) {
             return console.log(color('[BAN]', 'red'), color(moment(t * 1000).format('DD/MM/YY HH:mm:ss'), 'yellow'), color(`${command} [${args.length}]`), 'from', color(pushname))
+        }
+
+        if (body == 'Bot'){
+            aruga.reply(from, 'Naonn euyy', id)
         }
 		
         switch (command) {
@@ -298,7 +304,7 @@ module.exports = HandleMsg = async (aruga, message) => {
             break
         case 'ownerbot':
             await aruga.sendContact(from, ownerNumber)
-            .then(() => aruga.sendText(from, 'Hayuuu mutualann'))
+            .then(() => aruga.sendText(from, 'Gausah banyak tanya, ini bukan StackOverFlow!'))
             break
             case 'bokep2':
 			    rugaapi.bokep2()
@@ -560,29 +566,24 @@ module.exports = HandleMsg = async (aruga, message) => {
                 aruga.reply(from, 'Usage :\n!brainly [pertanyaan] [.jumlah]\n\nEx : \n!brainly NKRI .2', id)
             }
             break
-        case 'stickergif':
-        case 'stikergif':
-        case 'sgif':
-            if (isMedia || isQuotedVideo) {
-                if (mimetype === 'video/mp4' && message.duration < 10 || mimetype === 'image/gif' && message.duration < 10) {
-                    var mediaData = await decryptMedia(message, uaOverride)
-                    aruga.reply(from, '[WAIT] Sedang di proses⏳ silahkan tunggu ± 1 min!', id)
-                    var filename = `./media/stickergif.${mimetype.split('/')[1]}`
-                    await fs.writeFileSync(filename, mediaData)
-                    await exec(`gify ${filename} ./media/stickergf.gif --fps=30 --scale=240:240`, async function (error, stdout, stderr) {
-                        var gif = await fs.readFileSync('./media/stickergf.gif', { encoding: "base64" })
-                        await aruga.sendImageAsSticker(from, `data:image/gif;base64,${gif.toString('base64')}`)
-                        .catch(() => {
-                            aruga.reply(from, 'Maaf filenya terlalu besar!', id)
-                        })
-                    })
-                  } else {
-                    aruga.reply(from, `[❗] Kirim gif dengan caption *${prefix}stickergif* max 10 sec!`, id)
-                   }
-                } else {
-		    aruga.reply(from, `[❗] Kirim gif dengan caption *${prefix}stickergif*`, id)
-	        }
-            break
+            case 'stickergif':
+                case 'stikergif':
+                case 'sgif':
+                    if (isMedia) {
+                        if (mimetype === 'video/mp4' && message.duration < 10 || mimetype === 'image/gif' && message.duration < 10) {
+                            const mediaData = await decryptMedia(message, uaOverride)
+                            aruga.reply(from, '[WAIT] In progress⏳ please wait ± 1 min!', id)
+                            const filename = `./media/aswu.${mimetype.split('/')[1]}`
+                            await fs.writeFileSync(filename, mediaData)
+                            await exec(`gify ${filename} ./media/output.gif --fps=30 --scale=240:240 --time 6`, async function (error, stdout, stderr) {
+                                const gif = await fs.readFileSync('./media/output.gif', { encoding: "base64" })
+                                await aruga.sendImageAsSticker(from, `data:image/gif;base64,${gif.toString('base64')}`)
+                            })
+                        } else (
+                            aruga.reply(from, `[❗] Kirim video pake caption *${prefix}stickergif* max 10 sec!`, id)
+                        )
+                    }
+                    break
         case 'stikergiphy':
         case 'stickergiphy':
             if (args.length !== 1) return aruga.reply(from, `Maaf, format pesan salah.\nKetik pesan dengan ${prefix}stickergiphy <link_giphy>`, id)
@@ -1329,10 +1330,10 @@ module.exports = HandleMsg = async (aruga, message) => {
             if (!isGroupMsg) return aruga.reply(from, 'Maaf, perintah ini hanya dapat dipakai didalam grup!', id)
             if (!isGroupAdmins) return aruga.reply(from, 'Gagal, perintah ini hanya dapat digunakan oleh admin grup!', id)
             const textInfo = body.slice(8)
-            const naxlol = name
+            const namagcnih = name
             const memchu = chat.groupMetadata.participants.length
             const groupMem = await aruga.getGroupMembers(groupId)
-            let hehex = `Name Group : *${naxlol}*\n\nTotal Members : *${memchu}*\n\n╔══✪〘 Mention All 〙✪══\n\n`
+            let hehex = `Name Group : *${namagcnih}*\n\nTotal Members : *${memchu}*\n\n╔══✪〘 Mention All 〙✪══\n\n`
             for (let i = 0; i < groupMem.length; i++) {
                 hehex += '╠➥'
                 hehex += ` @${groupMem[i].id.replace(/@c.us/g, '')}\n`
