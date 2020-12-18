@@ -201,10 +201,23 @@ after running it you need to scan the qr
 | Say List|✅|
 | Add Say!|✅|
 | Say!|✅|
+| Delete Say|✅|
 | Bacot List|✅|
 | Add Bacot|✅|
 | Bacot|✅|
+| Delete Bacot|✅|
+| Tag|✅|
+| Get User Picture|✅|
+| Jadian|✅|
+| Tolol|✅|
 
+| Images |Yes|
+| --------------- | ----------- |
+| Aesthetic|✅|
+| Amelia Andani|✅|
+| Alin Fauziah|✅|
+| Random Cecan|✅|
+| Random Cogan|✅|
 
 | Groups |Yes|
 | ------------- | ------------- |
@@ -222,7 +235,8 @@ after running it you need to scan the qr
 | Revoke Link Group|✅|
 | Set Group Name|✅|
 | Resend Messages|✅|
-
+| Anti Link|✅|
+| Anti Spam Stiker|✅|
 
 | Owner bot |Yes|
 | ------------- | ------------- |
