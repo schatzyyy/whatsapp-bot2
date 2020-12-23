@@ -163,60 +163,6 @@ module.exports = HandleMsg = async (aruga, message) => {
             }
         }
 
-        function isStickerMsg(id){
-            if (isOwner) {return false;}
-            let found = false;
-            for (let i of stickerspam){
-                if(i.id === id){
-                    if (i.msg >= 7) {
-                        found === true 
-                        aruga.reply(from, '*[ANTI STICKER SPAM]*\nKamu telah SPAM STICKER di grup, kamu akan di kick otomatis oleh bot', message.id).then(() => {
-                            aruga.removeParticipant(groupId, id)
-                        }).then(() => {
-                            const cus = id
-                            var found = false
-                            Object.keys(stickerspam).forEach((i) => {
-                                if(stickerspam[i].id == cus){
-                                    found = i
-                                }
-                            })
-                            if (found !== false) {
-                                stickerspam[found].msg = 1;
-                                const result = '✅ DB Sticker Spam has been reset'
-                                console.log(stickerspam[found])
-                                fs.writeFileSync('./lib/helper/stickerspam.json',JSON.stringify(stickerspam));
-                                aruga.sendText(from, result)
-                            } else {
-                                    aruga.reply(from, `${monospace(`Di database ngga ada nomer itu ngab`)}`, id)
-                            }
-                        })
-                        return true;
-                    }else{
-                        found === true
-                        return false;
-                    }   
-                }
-            }
-            if (found === false){
-                let obj = {id: `${id}`, msg:1};
-                stickerspam.push(obj);
-                fs.writeFileSync('./lib/helper/stickerspam.json',JSON.stringify(stickerspam));
-                return false;
-            }  
-        }
-        function addStickerCount(id){
-            if (isOwner) {return;}
-            var found = false
-            Object.keys(stickerspam).forEach((i) => {
-                if(stickerspam[i].id == id){
-                    found = i
-                }
-            })
-            if (found !== false) {
-                stickerspam[found].msg += 1;
-                fs.writeFileSync('./lib/helper/stickerspam.json',JSON.stringify(stickerspam));
-            }
-        }
 
         //fitur anti link
         if (isGroupMsg && GroupLinkDetector && !isGroupAdmins && !isOwner){
@@ -232,13 +178,6 @@ module.exports = HandleMsg = async (aruga, message) => {
             }
         }
 
-
-        if (isGroupMsg && AntiStickerSpam && !isGroupAdmins && !isOwner){
-            if(stickermsg === true){
-                if(isStickerMsg(serial)) return
-                addStickerCount(serial)
-            }
-        }
         // Kerang Menu
         //BUAT NOMER CEGAN/CECAN, KALIAN BISA CUSTOM SENDIRI, MAKASEH!
 
@@ -1402,14 +1341,14 @@ module.exports = HandleMsg = async (aruga, message) => {
             if (args.length == 0) return aruga.reply(from, `Untuk mencari lagu dari youtube\n\nPenggunaan: ${prefix}play judul lagu`, id)
             axios.get(`https://arugaytdl.herokuapp.com/search?q=${body.slice(6)}`)
             .then(async (res) => {
-                await aruga.sendFileFromUrl(from, `${res.data[0].thumbnail}`, ``, `Lagu ditemukan\n\nJudul: ${res.data[0].title}\nDurasi: ${res.data[0].duration}detik\nUploaded: ${res.data[0].uploadDate}\nView: ${res.data[0].viewCount}\n\nsedang dikirim`, id)
-				rugaapi.ytmp3(`https://youtu.be/${res.data[0].id}`)
+                await aruga.sendFileFromUrl(from, `${res.data[0].thumbnail}`, ``, `*「 PLAY 」*\n\n•Judul: ${res.data[0].title}\n•Durasi: ${res.data[0].duration}detik\n•Uploaded: ${res.data[0].uploadDate}\n•View: ${res.data[0].viewCount}\n\n*Mohon Tunggu Sebentar Urbae Lagi Ngirim Audionya*`, id)
+				arugaapi.ymp3(`https://youtu.be/${res.data[0].id}`)
 				.then(async(res) => {
 					if (res.status == 'error') return aruga.sendFileFromUrl(from, `${res.link}`, '', `${res.error}`)
-					await aruga.sendFileFromUrl(from, `${res.thumb}`, '', `Lagu ditemukan\n\nJudul ${res.title}\n\nSabar lagi dikirim`, id)
-					await aruga.sendFileFromUrl(from, `${res.link}`, '', '', id)
+					await aruga.sendFileFromUrl(from, `${res.result}`, '', '', id)
 					.catch(() => {
-						aruga.reply(from, `URL Ini ${args[0]} Sudah pernah di Download sebelumnya. URL akan di Reset setelah 1 Jam/60 Menit`, id)
+					console.log(err)
+					aruga.reply(from, `ERROR! MAAF JUDUL YANG KAMU CARI TIDAK DI TEMUKAN`, id)
 					})
 				})
             })
@@ -1765,8 +1704,7 @@ module.exports = HandleMsg = async (aruga, message) => {
                     var time = moment(timestp * 1000).format('HH:mm:ss')
                     var ownerwoi = chat.groupMetadata.owner
                     var grplink = antilink.includes(chat.id)
-                    var stckr = antisticker.includes(chat.id)
-                    var botadmin = isBotGroupAdmins ? 'Iya' : 'Tidak'
+                    var botadmin = isBotGroupAdmins ? 'Admin' : 'Member'
                     var grouppic = await aruga.getProfilePicFromServer(chat.id)
                     if (grouppic == undefined) {
                          var pfp = errorurl
@@ -1781,7 +1719,6 @@ Group ini didirikan sejak *${date}* Pukul *${time}* oleh @${ownerwoi.replace('@c
 
 *➸ Members : ${totalMem}*
 *➸ Antilink Status : ${grplink ? 'On' : 'Off'}*
-*➸ Anti Spam Sticker : ${stckr ? 'On' : 'Off'}*
 *➸ Bot Group Status : ${botadmin}*
 *➸ Group Description* 
 ${desc}
