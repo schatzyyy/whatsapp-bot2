@@ -61,7 +61,6 @@ const setting = JSON.parse(fs.readFileSync('./settings/setting.json'))
 let dbcot = JSON.parse(fs.readFileSync('./lib/database/bacot.json'))
 let dsay = JSON.parse(fs.readFileSync('./lib/database/say.json'))
 let _autostiker = JSON.parse(fs.readFileSync('./lib/helper/antisticker.json'))
-let _afk = JSON.parse(fs.readFileSync('./lib/helper/stickerspam.json'))
 let antilink = JSON.parse(fs.readFileSync('./lib/helper/antilink.json'))
 
 
@@ -145,69 +144,7 @@ module.exports = HandleMsg = async (aruga, message) => {
         if (isCmd && !isGroupMsg) { console.log(color('[EXEC]'), color(moment(t * 1000).format('DD/MM/YY HH:mm:ss'), 'yellow'), color(`${command} [${args.length}]`), 'from', color(pushname)) }
         if (isCmd && isGroupMsg) { console.log(color('[EXEC]'), color(moment(t * 1000).format('DD/MM/YY HH:mm:ss'), 'yellow'), color(`${command} [${args.length}]`), 'from', color(pushname), 'in', color(name || formattedTitle)) }
 
-      const addAfkUser = (userId, time, reason) => {
-            const obj = {id: `${userId}`, time: `${time}`, reason: `${reason}`}
-            _afk.push(obj)
-            fs.writeFileSync('./lib/helper/stickerspam.json', JSON.stringify(_afk))
-        }
-
-        const checkAfkUser = (userId) => {
-            let status = false
-            Object.keys(_afk).forEach((i) => {
-                if (_afk[i].id === userId) {
-                    status = true
-                }
-            })
-            return status
-        }
-
-        const getAfkReason = (userId) => {
-            let position = false
-            Object.keys(_afk).forEach((i) => {
-                if (_afk[i].id === userId) {
-                    position = i
-                }
-            })
-            if (position !== false) {
-                return _afk[position].reason
-            }
-        }
-
-        const getAfkTime = (userId) => {
-            let position = false
-            Object.keys(_afk).forEach((i) => {
-                if (_afk[i].id === userId) {
-                    position = i
-                }
-            })
-            if (position !== false) {
-                return _afk[position].time
-            }
-        }
-
-        const getAfkId = (userId) => {
-            let position = false
-            Object.keys(_afk).forEach((i) => {
-                if (_afk[i].id === userId) {
-                    position = i
-                }
-            })
-            if (position !== false) {
-                return _afk[position].id
-            }
-        }
-
-        const getAfkPosition = (userId) => {
-            let position = false
-            Object.keys(_afk).forEach((i) => {
-                if (_afk[i].id === userId) {
-                    position = i
-                }
-            })
-            return position
-        }
-        
-       const isAfkOn = checkAfkUser(sender.id)
+      
 
 
         const mess = {
@@ -243,22 +180,7 @@ module.exports = HandleMsg = async (aruga, message) => {
             }
         }
         
-        // AFK
-        if (isGroupMsg) {
-            for (let ment of mentionedJidList) {
-                if (checkAfkUser(ment)) {
-                    const getId = getAfkId(ment)
-                    const getReason = getAfkReason(getId)
-                    const getTime = getAfkTime(getId)
-                    await aruga.reply(from, `*「 AFK MODE 」*\n\nSssttt! Orangnya lagi AFK, jangan diganggu!\n➸ *Alasan*: ${getReason}\n➸ *Sejak*: ${getTime}`, id)
-                }
-            }
-            if (checkAfkUser(sender.id) && !isCmd) {
-                _afk.splice(getAfkPosition(sender.id), 1)
-                fs.writeFileSync('./lib/helper/stickerspam.json', JSON.stringify(_afk))
-                await aruga.sendText(from, `*${pushname}* sekarang tidak AFK!*)
-            }
-        }
+        
         
         if (isGroupMsg && isAutoStikerOn && isMedia && isImage && !isCmd) {
             const mediaData = await decryptMedia(uaOverride)
@@ -432,13 +354,6 @@ module.exports = HandleMsg = async (aruga, message) => {
             break
         case 'tnc':
             await aruga.sendText(from, menuId.textTnC())
-            break
-case 'afk':
-                if (!isGroupMsg) return await aruga.reply(from, 'Fitur ini hanya bisa digunakan didalam Grup!',id)
-                if (isAfkOn) return await aruga.reply(from, `*${pushname} Sekarang AFK!*\n\n*Alasan*: ${reason}`, id)
-                const reason = q ? q : 'Nothing.'
-                addAfkUser(sender.id, time, reason)
-                await aruga.reply(from, `*${pushname} Sekarang AFK!*\n\n*Alasan*: ${reason}`, id)
             break
         case 'help':
             const bots = `Hi minna, this is Urbae Bot, to find out the commands menu, type *${prefix}menu* , *${prefix}p*`
