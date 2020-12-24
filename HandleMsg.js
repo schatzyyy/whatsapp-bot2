@@ -1338,24 +1338,24 @@ module.exports = HandleMsg = async (aruga, message) => {
             })
             break
         case 'play'://silahkan kalian custom sendiri jika ada yang ingin diubah
-            if (args.length == 0) return aruga.reply(from, `Untuk mencari lagu dari youtube\n\nPenggunaan: ${prefix}play judul lagu`, id)
-            axios.get(`https://arugaytdl.herokuapp.com/search?q=${body.slice(6)}`)
-            .then(async (res) => {
-                await aruga.sendFileFromUrl(from, `${res.data[0].thumbnail}`, ``, `*「 PLAY 」*\n\n•Judul: ${res.data[0].title}\n•Durasi: ${res.data[0].duration}detik\n•Uploaded: ${res.data[0].uploadDate}\n•View: ${res.data[0].viewCount}\n\n*Mohon Tunggu Sebentar Urbae Lagi Ngirim Audionya*`, id)
-				arugaapi.ymp3(`https://youtu.be/${res.data[0].id}`)
-				.then(async(res) => {
-					if (res.status == 'error') return aruga.sendFileFromUrl(from, `${res.link}`, '', `${res.error}`)
-					await aruga.sendFileFromUrl(from, `${res.result}`, '', '', id)
-					.catch(() => {
-					console.log(err)
-					aruga.reply(from, `ERROR! MAAF JUDUL YANG KAMU CARI TIDAK DI TEMUKAN`, id)
-					})
-				})
-            })
-            .catch(() => {
-                aruga.reply(from, 'Ada yang Error!', id)
-            })
-            break
+if (args.length == 0) return aruga.reply(from, `Untuk mencari lagu dari youtube\n\nPenggunaan: ${prefix}play judul lagu`, id)
+axios.get(`https://arugaytdl.herokuapp.com/search?q=${body.slice(6)}`)
+.then(async (res) => {
+    await aruga.sendFileFromUrl(from, `${res.data[0].thumbnail}`, ``, `*「 *PLAY* 」*\n\n•Judul: ${res.data[0].title}\n•Durasi: ${res.data[0].duration}detik\n•Uploaded: ${res.data[0].uploadDate}\n•View: ${res.data[0].viewCount}\n\n*Mohon Tunggu Sebentar Urbae Lagi Ngirim Audionya*`, id)
+    rugaapi.ytmp3(`https://youtu.be/${res.data[0].id}`)
+    .then(async(res) => {
+        if (res.status == 'error') return aruga.sendFileFromUrl(from, `${res.link}`, '', `${res.error}`)
+        await aruga.sendFileFromUrl(from, `${res.result}`, '', '', id)
+        .catch(() => {
+        console.log(err)
+        aruga.reply(from, `ERROR! MAAF JUDUL YANG KAMU CARI TIDAK DI TEMUKAN`, id)
+        })
+    })
+})
+.catch(() => {
+    aruga.reply(from, 'Ada yang Error!', id)
+})
+break
 		case 'movie':
 			if (args.length == 0) return aruga.reply(from, `Untuk mencari suatu movie dari website sdmovie.fun\nketik: ${prefix}movie judulnya`, id)
 			rugaapi.movie((body.slice(7)))
