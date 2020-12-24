@@ -61,7 +61,7 @@ const setting = JSON.parse(fs.readFileSync('./settings/setting.json'))
 let dbcot = JSON.parse(fs.readFileSync('./lib/database/bacot.json'))
 let dsay = JSON.parse(fs.readFileSync('./lib/database/say.json'))
 let _autostiker = JSON.parse(fs.readFileSync('./lib/helper/antisticker.json'))
-let stickerspam = JSON.parse(fs.readFileSync('./lib/helper/stickerspam.json'))
+let _afk = JSON.parse(fs.readFileSync('./lib/helper/stickerspam.json'))
 let antilink = JSON.parse(fs.readFileSync('./lib/helper/antilink.json'))
 
 
@@ -91,6 +91,8 @@ const inArray = (needle, haystack) => {
     }
     return false;
 }
+
+
 
 const errorurl = 'https://steamuserimages-a.akamaihd.net/ugc/954087817129084207/5B7E46EE484181A676C02DFCAD48ECB1C74BC423/?imw=512&&ima=fit&impolicy=Letterbox&imcolor=%23000000&letterbox=false'
 
@@ -127,7 +129,7 @@ module.exports = HandleMsg = async (aruga, message) => {
         const isQuotedVideo = quotedMsg && quotedMsg.type === 'video'
 		
         // [IDENTIFY]
-        const ownerNumber = "6281332494577@c.us"
+        const ownerNumber = "62895334950905@c.us"
         const isOwnerBot = ownerNumber.includes(pengirim)
         const isOwner = ownerNumber.includes(pengirim)
         const isOwnerB = ownerNumber.includes(pengirim)
@@ -143,7 +145,69 @@ module.exports = HandleMsg = async (aruga, message) => {
         if (isCmd && !isGroupMsg) { console.log(color('[EXEC]'), color(moment(t * 1000).format('DD/MM/YY HH:mm:ss'), 'yellow'), color(`${command} [${args.length}]`), 'from', color(pushname)) }
         if (isCmd && isGroupMsg) { console.log(color('[EXEC]'), color(moment(t * 1000).format('DD/MM/YY HH:mm:ss'), 'yellow'), color(`${command} [${args.length}]`), 'from', color(pushname), 'in', color(name || formattedTitle)) }
 
-        if (body == 'Bot') return aruga.reply(from, `Hi, what up!, I'm Urbae Bot, to find out commands menu, type *${prefix}p* , *${prefix}menu*\n\nalso don't forget to check my whatsapp-bot project on github\nhttps://github.com/thoriqazzikra/whatsapp-bot2`, id)
+      const addAfkUser = (userId, time, reason) => {
+            const obj = {id: `${userId}`, time: `${time}`, reason: `${reason}`}
+            _afk.push(obj)
+            fs.writeFileSync('./lib/helper/stickerspam.json', JSON.stringify(_afk))
+        }
+
+        const checkAfkUser = (userId) => {
+            let status = false
+            Object.keys(_afk).forEach((i) => {
+                if (_afk[i].id === userId) {
+                    status = true
+                }
+            })
+            return status
+        }
+
+        const getAfkReason = (userId) => {
+            let position = false
+            Object.keys(_afk).forEach((i) => {
+                if (_afk[i].id === userId) {
+                    position = i
+                }
+            })
+            if (position !== false) {
+                return _afk[position].reason
+            }
+        }
+
+        const getAfkTime = (userId) => {
+            let position = false
+            Object.keys(_afk).forEach((i) => {
+                if (_afk[i].id === userId) {
+                    position = i
+                }
+            })
+            if (position !== false) {
+                return _afk[position].time
+            }
+        }
+
+        const getAfkId = (userId) => {
+            let position = false
+            Object.keys(_afk).forEach((i) => {
+                if (_afk[i].id === userId) {
+                    position = i
+                }
+            })
+            if (position !== false) {
+                return _afk[position].id
+            }
+        }
+
+        const getAfkPosition = (userId) => {
+            let position = false
+            Object.keys(_afk).forEach((i) => {
+                if (_afk[i].id === userId) {
+                    position = i
+                }
+            })
+            return position
+        }
+        
+       const isAfkOn = checkAfkUser(sender.id)
 
 
         const mess = {
@@ -176,6 +240,23 @@ module.exports = HandleMsg = async (aruga, message) => {
                         aruga.removeParticipant(groupId, sender.id)
                     })
                 }
+            }
+        }
+        
+        // AFK
+        if (isGroupMsg) {
+            for (let ment of mentionedJidList) {
+                if (checkAfkUser(ment)) {
+                    const getId = getAfkId(ment)
+                    const getReason = getAfkReason(getId)
+                    const getTime = getAfkTime(getId)
+                    await aruga.reply(from, `*「 AFK MODE 」*\n\nSssttt! Orangnya lagi AFK, jangan diganggu!\n➸ *Alasan*: ${getReason}\n➸ *Sejak*: ${getTime}`, id)
+                }
+            }
+            if (checkAfkUser(sender.id) && !isCmd) {
+                _afk.splice(getAfkPosition(sender.id), 1)
+                fs.writeFileSync('./lib/helper/stickerspam.json', JSON.stringify(_afk))
+                await aruga.sendText(from, `*${pushname}* sekarang tidak AFK!*)
             }
         }
         
@@ -352,6 +433,13 @@ module.exports = HandleMsg = async (aruga, message) => {
         case 'tnc':
             await aruga.sendText(from, menuId.textTnC())
             break
+case 'afk':
+                if (!isGroupMsg) return await aruga.reply(from, 'Fitur ini hanya bisa digunakan didalam Grup!',id)
+                if (isAfkOn) return await aruga.reply(from, `*${pushname} Sekarang AFK!*\n\n*Alasan*: ${reason}`, id)
+                const reason = q ? q : 'Nothing.'
+                addAfkUser(sender.id, time, reason)
+                await aruga.reply(from, `*${pushname} Sekarang AFK!*\n\n*Alasan*: ${reason}`, id)
+            break
         case 'help':
             const bots = `Hi minna, this is Urbae Bot, to find out the commands menu, type *${prefix}menu* , *${prefix}p*`
             await aruga.reply(from, bots , id)
@@ -361,31 +449,7 @@ module.exports = HandleMsg = async (aruga, message) => {
             await aruga.sendText(from, menuId.textMenu(pushname))
             .then(() => ((isGroupMsg) && (isGroupAdmins)) ? aruga.sendText(from, `Menu Admin Grup: *${prefix}menuadmin*`) : null)
             break
-            case 'resetstiker':
-                case 'resetsticker':{
-                    if (!isGroupAdmins) return aruga.reply(from, 'Command ini hanya dapat digunakan oleh admin grup')  
-                    if (!args.length >= 1) return aruga.reply(from, `Masukkan nomornya, *GUNAKAN AWALAN 62*\ncontoh: ${prefix}resetsticker 62852262236155 / #resetsticker @member`) 
-                    const nomer = args[0]
-                    let text = nomer.replace(/[-\s+@c.us]/g,'')
-                    const cus = text + '@c.us'
-                        var found = false
-                        Object.keys(stickerspam).forEach((i) => {
-                            if(stickerspam[i].id == cus){
-                                found = i
-                            }
-                        })
-                        if (found !== false) {
-                            stickerspam[found].msg = 1;
-                            const result = 'DB Sticker Spam has been reset'
-                            console.log(stickerspam[found])
-                            fs.writeFileSync('./lib/helper/stickerspam.json',JSON.stringify(stickerspam));
-                            aruga.reply(from, result, from)
-                            limitAdd(serial)
-                        } else {
-                                aruga.reply(from, `${monospace(`Di database ngga ada nomer itu ngab`)}`, id)
-                        }
-                    }
-                break
+            
         case 'menuadmin':
             if (!isGroupMsg) return aruga.reply(from, 'Maaf, perintah ini hanya dapat dipakai didalam grup!', id)
             if (!isGroupAdmins) return aruga.reply(from, 'Gagal, inget lu itu Member bukan Admin', id)
@@ -1053,6 +1117,24 @@ module.exports = HandleMsg = async (aruga, message) => {
                     }
                     break;
         //Media 
+        case 'ytmp3':
+                if (!isUrl(url) && !url.includes('youtu.be')) return await aruga.reply(from, 'Format Salah', id)
+                await bocchi.reply(from, 'Sabar ngab, lagi ngirim lagunya' , id)
+                downloader.ytdl(url)
+                    .then(async (res) => {
+                        if (res.status === 'error') {
+                            return await bocchi.reply(from, 'Ada yang error', id)
+                        } else {
+                            await aruga.sendFileFromUrl(from, res.thumbnail, `${res.title}.jpg`, ind.ytFound(res), id)
+                            await aruga.sendFileFromUrl(from, res.url_audio, `${res.title}.mp3`, '', id)
+                                .then(() => console.log('Success sending YouTube audio!'))
+                        }
+                    })
+                    .catch(async (err) => {
+                        console.error(err)
+                        await bocchi.reply(from, `Error!\n${err}`, id)
+                    })
+            break
         case 'ytmp4':
             if (args.length == 0) return aruga.reply(from, `Untuk mendownload lagu dari youtube\nketik: ${prefix}ytmp3 [link_yt]`, id)
             const linkmp4 = args[0].replace('https://youtu.be/','').replace('https://www.youtube.com/watch?v=','')
