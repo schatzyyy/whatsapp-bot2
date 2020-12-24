@@ -180,7 +180,7 @@ module.exports = HandleMsg = async (aruga, message) => {
         }
         
         if (isGroupMsg && isAutoStikerOn && isMedia && isImage && !isCmd) {
-            const mediaData = await decryptMedia(message, uaOverride)
+            const mediaData = await decryptMedia(uaOverride)
             const imageBase64 = `data:${mimetype};base64,${mediaData.toString('base64')}`
             await aruga.sendImageAsSticker(from, imageBase64)
                 .then(async () => {
@@ -421,12 +421,12 @@ module.exports = HandleMsg = async (aruga, message) => {
             case 'autosticker':
 	        case 'autostiker':
             case 'autostik':
-                if (ar[0] === 'enable') {
+                if (args[0] === 'enable') {
                     if (isAutoStikerOn) return await aruga.reply(from, ind.autoStikOnAlready(), id)
                     _autostiker.push(chat.id)
                     fs.writeFileSync('./lib/helper/antisticker.json', JSON.stringify(_autostiker))
                     await aruga.reply(from, 'Fitur berhasil diaktifkan' , id)
-                } else if (ar[0] === 'disable') {
+                } else if (args[0] === 'disable') {
                     _autostiker.splice(chat.id, 1)
                     fs.writeFileSync('./lib/helper/antisticker.json', JSON.stringify(_autostiker))
                     await aruga.reply(from, 'Fitur berhasil dinonaktifkan' , id)
