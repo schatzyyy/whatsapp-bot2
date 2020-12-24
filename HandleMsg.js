@@ -60,7 +60,7 @@ const setting = JSON.parse(fs.readFileSync('./settings/setting.json'))
 
 let dbcot = JSON.parse(fs.readFileSync('./lib/database/bacot.json'))
 let dsay = JSON.parse(fs.readFileSync('./lib/database/say.json'))
-let antisticker = JSON.parse(fs.readFileSync('./lib/helper/antisticker.json'))
+let _autostiker = JSON.parse(fs.readFileSync('./lib/helper/antisticker.json'))
 let stickerspam = JSON.parse(fs.readFileSync('./lib/helper/stickerspam.json'))
 let antilink = JSON.parse(fs.readFileSync('./lib/helper/antilink.json'))
 
@@ -112,7 +112,6 @@ module.exports = HandleMsg = async (aruga, message) => {
         const blockNumber = await aruga.getBlockedIds()
         const groupMembers = isGroupMsg ? await aruga.getGroupMembersId(groupId) : ''
         const GroupLinkDetector = antilink.includes(chatId)
-        const AntiStickerSpam = antisticker.includes(chatId)
         const stickermsg = message.type === 'sticker'
 
         // Bot Prefix
@@ -136,6 +135,8 @@ module.exports = HandleMsg = async (aruga, message) => {
 		const isSimi = simi.includes(chatId)
 		const isNgegas = ngegas.includes(chatId)
         const isKasar = await cariKasar(chats)
+        const isAutoStikerOn = isGroupMsg ? _autostiker.includes(chat.id) : false
+        const isImage = type === 'image'
         
         //
         if(!isCmd && isKasar && isGroupMsg) { console.log(color('[BADW]', 'orange'), color(moment(t * 1000).format('DD/MM/YY HH:mm:ss'), 'yellow'), color(`${argx}`), 'from', color(pushname), 'in', color(name || formattedTitle)) }
@@ -176,6 +177,19 @@ module.exports = HandleMsg = async (aruga, message) => {
                     })
                 }
             }
+        }
+        
+        if (isGroupMsg && isAutoStikerOn && isMedia && isImage && !isCmd) {
+            const mediaData = await decryptMedia(message, uaOverride)
+            const imageBase64 = `data:${mimetype};base64,${mediaData.toString('base64')}`
+            await aruga.sendImageAsSticker(from, imageBase64)
+                .then(async () => {
+                    console.log(`Sticker processed for ${processTime(t, moment())} seconds`)
+                })
+                .catch(async (err) => {
+                    console.error(err)
+                    await aruga.reply(from, `Error!\n${err}`, id)
+                })
         }
 
         // Kerang Menu
@@ -404,6 +418,22 @@ module.exports = HandleMsg = async (aruga, message) => {
                     aruga.sendFileFromUrl(from, res.data.url, 'loli.jpeg', "Enjoy these Lolis!", id);
                 });
                 break
+            case 'autosticker':
+	        case 'autostiker':
+            case 'autostik':
+                if (ar[0] === 'enable') {
+                    if (isAutoStikerOn) return await aruga.reply(from, ind.autoStikOnAlready(), id)
+                    _autostiker.push(chat.id)
+                    fs.writeFileSync('./lib/helper/antisticker.json', JSON.stringify(_autostiker))
+                    await aruga.reply(from, 'Fitur berhasil diaktifkan' , id)
+                } else if (ar[0] === 'disable') {
+                    _autostiker.splice(chat.id, 1)
+                    fs.writeFileSync('./lib/helper/antisticker.json', JSON.stringify(_autostiker))
+                    await aruga.reply(from, 'Fitur berhasil dinonaktifkan' , id)
+                } else {
+                    await aruga.reply(from, 'Format salah' , id)
+                }
+            break
                 case 'neko':
                 try {
                     aruga.reply(from, mess.wait, id)
@@ -558,33 +588,7 @@ module.exports = HandleMsg = async (aruga, message) => {
                     const sapa = `Cieee... @${aku.replace(/[@c.us]/g, '')} (💘) @${kamu.replace(/[@c.us]/g, '')} baru jadian nih\nBagi pj nya dong`
                     await aruga.sendTextWithMentions(from, sapa)
                     break     
-                    case 'antisticker':
-                    if (!isGroupMsg) return aruga.reply(from, 'Maaf, perintah ini hanya dapat dipakai didalam grup!', id)
-                    if (!isGroupAdmins) return aruga.reply(from, 'Gagal, perintah ini hanya dapat digunakan oleh admin grup!', id)
-                    if (!isBotGroupAdmins) return aruga.reply(from, 'Wahai admin, jadikan saya sebagai admin grup dahulu :)', id)
-                    if (args[0] == 'on') {
-                        var cek = antisticker.includes(chatId);
-                        if(cek){
-                            return aruga.reply(from, '*Anti Spam Sticker Detector* sudah aktif di grup ini', id) //if number already exists on database
-                        } else {
-                            antisticker.push(chatId)
-                            fs.writeFileSync('./lib/helper/antisticker.json', JSON.stringify(antisticker))
-                            aruga.reply(from, '*[Anti Sticker SPAM]* telah di aktifkan\nSetiap member grup yang spam sticker lebih dari 7 akan di kick oleh bot!', id)
-                        }
-                    } else if (args[0] == 'off') {
-                        var cek = antilink.includes(chatId);
-                        if(cek){
-                            return aruga.reply(from, '*Anti Spam Sticker Detector* sudah non-aktif di grup ini', id) //if number already exists on database
-                        } else {
-                            let nixx = antisticker.indexOf(chatId)
-                            antisticker.splice(nixx, 1)
-                            fs.writeFileSync('./lib/helper/antisticker.json', JSON.stringify(antisticker))
-                            aruga.reply(from, '*[Anti Sticker SPAM]* telah di nonaktifkan\n', id)
-                        }
-                    } else {
-                        aruga.reply(from, `pilih on / off\n\n*[Anti Sticker SPAM]*\nSetiap member grup yang spam sticker akan di kick oleh bot!`, id)
-                    }
-                    break          
+                
             case 'resend':
                 if (!isGroupAdmins) return aruga.reply(from, 'Gagal, Fitur ini hanya bisa digunakan oleh Admin',id)
                 if (quotedMsgObj) {
