@@ -136,7 +136,7 @@ module.exports = HandleMsg = async (aruga, message) => {
 		const isSimi = simi.includes(chatId)
 		const isNgegas = ngegas.includes(chatId)
         const isKasar = await cariKasar(chats)
-        const isAutoStikerOn = isGroupMsg ? _autostiker.includes(chat.id) : false
+        const isAutoStikerOn = _autostiker.includes(chat.id) : false
         const isImage = type === 'image'
         
         //
@@ -182,8 +182,8 @@ module.exports = HandleMsg = async (aruga, message) => {
         
         
         
-        if (isGroupMsg && isAutoStikerOn && isMedia && isImage && !isCmd) {
-            const mediaData = await decryptMedia(uaOverride)
+        if (isAutoStikerOn && isMedia && isImage) {
+            const mediaData = await decryptMedia(message, uaOverride)
             const imageBase64 = `data:${mimetype};base64,${mediaData.toString('base64')}`
             await aruga.sendImageAsSticker(from, imageBase64)
                 .then(async () => {
@@ -401,14 +401,14 @@ module.exports = HandleMsg = async (aruga, message) => {
 	        case 'autostiker':
             case 'autostik':
                 if (args[0] === 'enable') {
-                    if (isAutoStikerOn) return await aruga.reply(from, ind.autoStikOnAlready(), id)
+                    if (isAutoStikerOn) return await aruga.reply(from, 'Fitur auto stiker sudah diaktifkan', id)
                     _autostiker.push(chat.id)
                     fs.writeFileSync('./lib/helper/antisticker.json', JSON.stringify(_autostiker))
-                    await aruga.reply(from, 'Fitur berhasil diaktifkan' , id)
+                    await aruga.reply(from, 'Fitur autosticker berhasil diaktifkan' , id)
                 } else if (args[0] === 'disable') {
                     _autostiker.splice(chat.id, 1)
                     fs.writeFileSync('./lib/helper/antisticker.json', JSON.stringify(_autostiker))
-                    await aruga.reply(from, 'Fitur berhasil dinonaktifkan' , id)
+                    await aruga.reply(from, 'Fitur autostiker berhasil dinonaktifkan' , id)
                 } else {
                     await aruga.reply(from, 'Format salah' , id)
                 }
@@ -1393,7 +1393,7 @@ case 'ytsearch':
 if (args.length == 0) return aruga.reply(from, `Untuk mencari lagu dari youtube\n\nPenggunaan: ${prefix}play judul lagu`, id)
 axios.get(`http://128.199.72.121:81/search?q=${body.slice(6)}`)
 .then(async (res) => {
-    await aruga.sendFileFromUrl(from, `${res.data[0].thumbnail}`, ``, `*「 *PLAY* 」*\n\n•Judul: ${res.data[0].title}\n•Durasi: ${res.data[0].duration}detik\n•Uploaded: ${res.data[0].uploadDate}\n•View: ${res.data[0].viewCount}\n\n*Mohon Tunggu Sebentar Urbae Lagi Ngirim Audionya*`, id)
+    await aruga.sendFileFromUrl(from, `${res.data[0].thumbnail}`, ``, `*「 PLAY 」*\n\n•Judul: ${res.data[0].title}\n•Durasi: ${res.data[0].duration}detik\n•Uploaded: ${res.data[0].uploadDate}\n•View: ${res.data[0].viewCount}\n\n*Mohon Tunggu Sebentar Urbae Lagi Ngirim Audionya*`, id)
     rugaapi.ytmp3(`https://youtu.be/${res.data[0].id}`)
     .then(async(res) => {
         if (res.status == 'error') return aruga.sendFileFromUrl(from, `${res.link}`, '', `${res.error}`)
