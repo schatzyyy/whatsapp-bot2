@@ -1052,13 +1052,13 @@ module.exports = HandleMsg = async (aruga, message) => {
       break
 case 'ig':
         case 'instagram':
-            if (args.length !== 1) return aruga.reply(from, 'Maaf, format pesan salah silahkan periksa menu. [Wrong Format]', id)
-            if (!isUrl(url) && !url.includes('instagram.com')) return aruga.reply(from, 'Maaf, link yang kamu kirim tidak valid. [Invalid Link]', id)
-            await aruga.reply(from, `_Scraping Metadata..._\n\n_Tunggu Sebentar..._`, id)
-            rugaaapi.insta(url).then(async (data) => {
+            if (args.length !== 1) return aruga.reply(from, 'Maaf, format pesan salah silahkan periksa menu.', id)
+            if (!is.Url(url) && !url.includes('instagram.com')) return aruga.reply(from, 'Maaf, link yang kamu kirim tidak valid.', id)
+            await aruga.reply(from, `_Scraping Metadata..._ \n\n_Tunggu Sebentar_`, id)
+            rugaapi.insta(url).then(async (data) => {
                 if (data.type == 'GraphSidecar') {
                     if (data.image.length != 0) {
-                        data.image.map((x) => aruga.sendFileFromUrl(from, x, 'photo.jpg', '', null, null, true))
+                        data.image.map((x) => client.sendFileFromUrl(from, x, 'photo.jpg', '', null, null, true))
                             .then((serialized) => console.log(`Sukses Mengirim File dengan id: ${serialized} diproses selama ${processTime(t, moment())}`))
                             .catch((err) => console.error(err))
                     }
@@ -1078,6 +1078,7 @@ case 'ig':
                 }
             })
                 .catch((err) => {
+                    console.log(err)
                     if (err === 'Not a video') { return aruga.reply(from, 'Error, tidak ada video di link yang kamu kirim. [Invalid Link]', id) }
                     aruga.reply(from, 'Error, user private atau link salah [Private or Invalid Link]', id)
                 })
