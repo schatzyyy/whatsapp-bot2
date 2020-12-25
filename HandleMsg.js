@@ -1392,7 +1392,7 @@ case 'ytsearch':
             break
         case 'play'://silahkan kalian custom sendiri jika ada yang ingin diubah
 if (args.length == 0) return aruga.reply(from, `Untuk mencari lagu dari youtube\n\nPenggunaan: ${prefix}play judul lagu`, id)
-axios.get(`http://128.199.72.121/ytdl.php?key=PandaEver&title=${body.slice(6)}`)
+axios.get(`http://128.199.72.121/=${body.slice(6)}`)
 .then(async (res) => {
     await aruga.sendFileFromUrl(from, `${res.data[0].thumbnail}`, ``, `*「 PLAY 」*\n\n•Judul: ${res.data[0].title}\n•Durasi: ${res.data[0].duration}detik\n•Uploaded: ${res.data[0].uploadDate}\n•View: ${res.data[0].viewCount}\n\n*Mohon Tunggu Sebentar Urbae Lagi Ngirim Audionya*`, id)
     rugaapi.ytmp3(`https://youtu.be/${res.data[0].id}`)
@@ -1411,7 +1411,7 @@ axios.get(`http://128.199.72.121/ytdl.php?key=PandaEver&title=${body.slice(6)}`)
 break
 case 'play2'://silahkan kalian custom sendiri jika ada yang ingin diubah
 if (args.length == 0) return aruga.reply(from, `Untuk mencari lagu dari youtube\n\nPenggunaan: ${prefix}play judul lagu`, id)
-axios.get(`http://128.199.72.121/ytdl.php?key=PandaEver&title=${body.slice(6)}`)
+axios.get(`http://128.199.72.121/${body.slice(6)}`)
 .then(async (res) => {
     await aruga.sendFileFromUrl(from, `${res.data[0].thumbnail}`, ``, `*「 PLAY 」*\n\n•Judul: ${res.data[0].title}\n•Durasi: ${res.data[0].duration}detik\n•Uploaded: ${res.data[0].uploadDate}\n•View: ${res.data[0].viewCount}\n\n*Mohon Tunggu Sebentar Urbae Lagi Ngirim Videonya*`, id)
     rugaapi.ymp4(`https://youtu.be/${res.data[0].id}`)
