@@ -136,7 +136,7 @@ module.exports = HandleMsg = async (aruga, message) => {
 		const isSimi = simi.includes(chatId)
 		const isNgegas = ngegas.includes(chatId)
         const isKasar = await cariKasar(chats)
-        const isAutoStikerOn = _autostiker.includes(chat.id) : false
+        const isAutoStikerOn = isGroupMsg ? _autostiker.includes(chat.id) : false
         const isImage = type === 'image'
         
         //
