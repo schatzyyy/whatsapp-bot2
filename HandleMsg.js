@@ -1798,12 +1798,12 @@ _Desc di update oleh : @${chat.groupMetadata.descOwner.replace('@c.us','')} pada
 
                     break
                     case 'grupbot':
-                        const ch = `https://chat.whatsapp.com/FGpQw0yyafW9jqBLboQ6cf\n\nSkuy join grup Bot niscaya mendapatkan Doi`
+                        const ch = `https://chat.whatsapp.com/Lt96VeJbmMHFeB1QDDGtPM\n\nSkuy join grup Bot niscaya mendapatkan Doi`
                         await aruga.sendText(from, ch, id)
                         break
                     case 'mtk':
                         if (args.length === 3) return aruga.reply(from, `[❗] Kirim perintah *#math [ Angka ]*\nContoh : ${prefix}math 12 * 12\n*NOTE* :\n- Untuk Perkalian Menggunakan *\n- Untuk Pertambahan Menggunakan +\n- Untuk Pengurangan Mennggunakan -\n- Untuk Pembagian Menggunakan /`)
-                        const mtk = body.slice(6)
+                        const mtk = body.slice(5)
                         if (typeof Math_js.evaluate(mtk) !== "number") {
                         aruga.reply(from, `"${mtk}", bukan angka!\n[❗] Kirim perintah *${prefix}math [ Angka ]*\nContoh : ${prefix}math 12 * 12\n*NOTE* :\n- Untuk Perkalian Menggunakan *\n- Untuk Pertambahan Menggunakan +\n- Untuk Pengurangan Mennggunakan -\n- Untuk Pembagian Menggunakan /`, id)
                     } else {
@@ -1893,7 +1893,7 @@ _Desc di update oleh : @${chat.groupMetadata.descOwner.replace('@c.us','')} pada
                 case 'nyenye':
                     if(!isGroupMsg) return aruga.reply(from, 'Fitur ini hanya bisa digunakan didalam Grup!', id)
                     if (args.length >= 1) return aruga.reply(from, `kirim ${prefix}nyenye kalimat\ncontoh: ${prefix}nyenye nisa cantik', id`)
-                    const teksnya = body.slice(6)
+                    const teksnya = body.slice(8)
                     const mcok = teksnya.replace((/[aueo]/gi),'i')
                     aruga.sendText(from, mcok)
                     break               
