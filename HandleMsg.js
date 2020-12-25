@@ -2017,10 +2017,8 @@ _Desc di update oleh : @${chat.groupMetadata.descOwner.replace('@c.us','')} pada
             const allChatso = await aruga.getAllChatIds()
             const loadedx = await aruga.getAmountOfLoadedMessages()
             const allGroupq = await aruga.getAllGroups()
-            const groupslo = await aruga.getAllGroups()
-            const groupsIn = groups.filter(x => x.groupMetadata.participants.map(x => [botNumber, '@c.us'].includes(x.id._serialized)).includes(true))
-            for (let gclist of allGroupz) {
-                await aruga.sendText(gclist.contact.id, `Maaf bot sedang pembersihan,\n- Total Chat Aktif : *${allChatso.length}*\n- Group Joined : *${groupsIn.length}*\n- Total Group Chats*${groups.length}*\n- Loaded Messages : *${loadedx}*\n- Personal Chat Aktif : *${allChatso.length - groups.length - groupsIn.length}*\n\n\nSilahkan invite bot lagi jika dibutuhkan`)
+            for (let gclist of allGroupq) {
+                await aruga.sendText(gclist.contact.id, `Maaf bot sedang pembersihan,\n- Total Chat Aktif : *${allChatso.length}*\n- Loaded Messages : *${loadedx}*\n\nSilahkan invite bot lagi jika dibutuhkan`)
                 await aruga.leaveGroup(gclist.contact.id)
                 await aruga.deleteChat(gclist.contact.id)
             }
