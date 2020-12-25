@@ -2006,10 +2006,13 @@ _Desc di update oleh : @${chat.groupMetadata.descOwner.replace('@c.us','')} pada
             if (args.length == 0) return aruga.reply(from, `Untuk broadcast ke semua chat ketik:\n${prefix}bc [isi chat]`)
             let msg = body.slice(4)
             const chatz = await aruga.getAllChatIds()
+            if(quotedMsg && quotedMsg.type == 'image'){
+            const mediaData = await decryptMedia(quotedMsg)
+            const imageBase64 = `data:${quotedMsg.mimetype};base64,${mediaData.toString('base64')}`
             for (let idk of chatz) {
                 var cvk = await aruga.getChatById(idk)
-                if (!cvk.isReadOnly) aruga.sendText(idk, `〘 *U R B A E  B O T* 〙\n\n${msg}`)
-                if (cvk.isReadOnly) aruga.sendText(idk, `〘 *U R B A E  B O T* 〙\n\n${msg}`)
+                if (!cvk.isReadOnly) aruga.sendImage(idk, imageBase64, 'gambar.jpeg', `〘 *U R B A E  B O T* 〙\n\n${msg}`)
+                if (cvk.isReadOnly) aruga.sendImage(idk, imageBase64, 'gambar.jpeg', `〘 *U R B A E  B O T* 〙\n\n${msg}`)
             }
             aruga.reply(from, 'Broadcast Success!', id)
             break
