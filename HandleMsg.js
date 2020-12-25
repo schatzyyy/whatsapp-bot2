@@ -773,10 +773,10 @@ module.exports = HandleMsg = async (aruga, message) => {
                         if (mimetype === 'video/mp4' && message.duration < 10 || mimetype === 'image/gif' && message.duration < 10) {
                             const mediaData = await decryptMedia(message, uaOverride)
                             aruga.reply(from, '[WAIT] In progress⏳ please wait ± 1 min!', id)
-                            const filename = `./media/aswu.${mimetype.split('/')[1]}`
+                            const filename = `./media/stickergif.${mimetype.split('/')[1]}`
                             await fs.writeFileSync(filename, mediaData)
-                            await exec(`gify ${filename} ./media/stickergif.mp4 --fps=30 --scale=240:240 --time 6`, async function (error, stdout, stderr) {
-                                const gif = await fs.readFileSync('./media/stickergif.mp4', { encoding: "base64" })
+                            await exec(`gify ${filename} ./media/stickergf.gif --fps=30 --scale=240:240 --time 6`, async function (error, stdout, stderr) {
+                                const gif = await fs.readFileSync('./media/stickergf.gif', { encoding: "base64" })
                                 await aruga.sendImageAsSticker(from, `data:image/gif;base64,${gif.toString('base64')}`)
                             })
                         } else (
@@ -1054,7 +1054,7 @@ case 'ig':
         case 'instagram':
             if (args.length !== 1) return aruga.reply(from, 'Maaf, format pesan salah silahkan periksa menu. [Wrong Format]', id)
             if (!isUrl(url) && !url.includes('instagram.com')) return aruga.reply(from, 'Maaf, link yang kamu kirim tidak valid. [Invalid Link]', id)
-            await aruga.reply(from, `_Scraping Metadata..._/,n/n_Tunggu Sebentar..._`, id)
+            await aruga.reply(from, `_Scraping Metadata..._\n\n_Tunggu Sebentar..._`, id)
             rugaaapi.insta(url).then(async (data) => {
                 if (data.type == 'GraphSidecar') {
                     if (data.image.length != 0) {
