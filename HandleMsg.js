@@ -2011,15 +2011,15 @@ _Desc di update oleh : @${chat.groupMetadata.descOwner.replace('@c.us','')} pada
             await aruga.reply(from, hih, id)
             break
         case 'bc':
-            if (!isOwner) return aruga.reply(from, `Perintah ini hanya untuk Owner Elaina`, id)
+            if (!isOwnerB) return aruga.reply(from, `Perintah ini hanya untuk Owner Elaina`, id)
                 bctxt = body.slice(4)
-                txtbc = `*「 URBAE BROADCAST 」*\n\n${bctxt}`
+                txtbc = `〘 *U R B A E  B O T* 〙\n\n${bctxt}`
                 const semuagrup = await aruga.getAllChatIds();
                 if(quotedMsg && quotedMsg.type == 'image'){
                     const mediaData = await decryptMedia(quotedMsg)
                     const imageBase64 = `data:${quotedMsg.mimetype};base64,${mediaData.toString('base64')}`
                     for(let grupnya of semuagrup){
-                        var cekgrup = await tobz.getChatById(grupnya)
+                        var cekgrup = await aruga.getChatById(grupnya)
                         if(!cekgrup.isReadOnly) aruga.sendImage(grupnya, imageBase64, 'gambar.jpeg', txtbc)
                     }
                     aruga.reply('Broadcast sukses!')
