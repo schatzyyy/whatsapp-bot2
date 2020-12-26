@@ -62,6 +62,7 @@ let dbcot = JSON.parse(fs.readFileSync('./lib/database/bacot.json'))
 let dsay = JSON.parse(fs.readFileSync('./lib/database/say.json'))
 let _autostiker = JSON.parse(fs.readFileSync('./lib/helper/antisticker.json'))
 let antilink = JSON.parse(fs.readFileSync('./lib/helper/antilink.json'))
+let muted = JSON.parse(fs.readFileSync('./lib/database/muted.json'))
 
 
 let { 
@@ -162,6 +163,14 @@ module.exports = HandleMsg = async (aruga, message) => {
                 Bk: '[❗] Bot tidak bisa memblockir Owner',
                 Ad: '[❗] Tidak dapat menambahkan target, mungkin karena di private',
                 Iv: '[❗] Link yang anda kirim tidak valid!'
+            }
+        }
+        
+        const isMuted = (chatId) => {
+          if(muted.includes(chatId)){
+            return false
+        }else{
+            return true
             }
         }
 
@@ -2001,22 +2010,27 @@ _Desc di update oleh : @${chat.groupMetadata.descOwner.replace('@c.us','')} pada
             }
             await aruga.reply(from, hih, id)
             break
-        case 'bc': //untuk broadcast atau promosi
-            if (!isOwnerBot) return aruga.reply(from, 'Perintah ini hanya untuk Owner bot!', id)
-            if (args.length == 0) return aruga.reply(from, `Untuk broadcast ke semua chat ketik:\n${prefix}bc [isi chat]`)
-            msg = body.slice(4)
-            txtbc = `*〘 *U R B A E  B O T* 〙*\n\n${msg}`
-            const chatz = await aruga.getAllChatIds()
-            if(quotedMsg && quotedMsg.type == 'image'){
-            const mediaData = await decryptMedia(quotedMsg)
-            const imageBase64 = `data:${quotedMsg.mimetype};base64,${mediaData.toString('base64')}`
-            for (let idk of chatz) {
-                var cvk = await aruga.getChatById(idk)
-                if (!cvk.isReadOnly) aruga.sendImage(idk, imageBase64, 'gambar.jpeg', txtbc)
-                if (!cvk.isReadOnly) aruga.sendImage(idk, imageBase64, 'gambar.jpeg', txtbc)
-            }
-            aruga.reply(from, 'Broadcast Success!', id)
-            break
+        case 'bc':
+            if (!isOwner) return aruga.reply(from, `Perintah ini hanya untuk Owner Elaina`, id)
+                bctxt = body.slice(4)
+                txtbc = `*「 URBAE BROADCAST 」*\n\n${bctxt}`
+                const semuagrup = await aruga.getAllChatIds();
+                if(quotedMsg && quotedMsg.type == 'image'){
+                    const mediaData = await decryptMedia(quotedMsg)
+                    const imageBase64 = `data:${quotedMsg.mimetype};base64,${mediaData.toString('base64')}`
+                    for(let grupnya of semuagrup){
+                        var cekgrup = await tobz.getChatById(grupnya)
+                        if(!cekgrup.isReadOnly) aruga.sendImage(grupnya, imageBase64, 'gambar.jpeg', txtbc)
+                    }
+                    aruga.reply('Broadcast sukses!')
+                }else{
+                    for(let grupnya of semuagrup){
+                        var cekgrup = await aruga.getChatById(grupnya)
+                        if(!cekgrup.isReadOnly && isMuted(grupnya)) aruga.sendText(grupnya, txtbc)
+                    }
+                            aruga.reply('Broadcast Success!')
+                }
+                break
             case 'leaveall': //mengeluarkan bot dari semua group serta menghapus chatnya
             if (!isOwnerB) return aruga.reply(from, 'Perintah ini hanya untuk Owner bot', id)
             const allChatso = await aruga.getAllChatIds()
