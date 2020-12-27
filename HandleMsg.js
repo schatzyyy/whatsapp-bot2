@@ -383,6 +383,44 @@ module.exports = HandleMsg = async (aruga, message) => {
         case 'donasi':
             await aruga.sendText(from, menuId.textDonasi())
             break
+          case 'tod':
+    aruga.reply(from, `Sebelum bermain berjanjilah akan melaksanakan apapun perintah yang diberikan.\n\nSilahkan Pilih:\n➥ ${prefix}truth\n➥ ${prefix}dare`, id)
+    break
+    case 'truth':
+    if (!isGroupMsg) return aruga.reply(from, menuId.textPrem())
+            fetch('https://raw.githubusercontent.com/AlvioAdjiJanuar/random/main/truth.txt')
+            .then(res => res.text())
+            .then(body => {
+                let truthx = body.split('\n')
+                let truthz = truthx[Math.floor(Math.random() * truthx.length)]
+                aruga.reply(from, truthz, id)
+            })
+            .catch(() => {
+                aruga.reply(from, 'Hayolohhh, ada yang error!!', id)
+            })
+            break
+    case 'dare':
+    if (!isGroupMsg) return aruga.reply(from, menuId.textPrem())
+            fetch('https://raw.githubusercontent.com/AlvioAdjiJanuar/random/main/dare.txt')
+            .then(res => res.text())
+            .then(body => {
+                let darex = body.split('\n')
+                let darez = darex[Math.floor(Math.random() * darex.length)]
+                aruga.reply(from, darez, id)
+            })
+            .catch(() => {
+                aruga.reply(from, 'Hayolohhh, ada yang error!!', id)
+            })
+            break
+         case 'kbbi':
+            if (args.length == 0) return aruga.reply(from, `Untuk mencari suatu kata dari Kamus Besar Bahasa Indonesia (KBBI)\nketik: ${prefix}kbbi [kata]`, id)
+            const kbbip = body.slice(6)
+            const kbbis = await rugaapi.kbbi(kbbip)
+            await aruga.reply(from, kbbis, id)
+            .catch(() => {
+                aruga.reply(from, 'ada yang error!!', id)
+            })
+            break
         case 'ownerbot':
             await aruga.sendContact(from, ownerNumber)
             .then(() => aruga.sendText(from, 'Gausah banyak tanya, ini bukan StackOverFlow!'))
