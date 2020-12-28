@@ -1166,20 +1166,7 @@ break
                     }
                     break;
         //Media 
-        case 'yt':
-        if (args.length == 0) return aruga.reply(from, `Untuk mendownload lagu dari youtube\nketik : ${prefix}yt linkyt`, id)
-        const testing = args[0].replace('https://youtu.be/',").replace('https://www.youtube.com/watch?v=',")
-        rugaapi.yt(`https://youtu.be/${testing}`)
-        .then(async(res) => {
-        	if (res.error) return aruga.sendFileFromUrl(from, `$res.url}`,",`${res.error}`)
-        await aruga.sendFileFromUrl(from, `${res.result}`, ", ", id)
-        .catch(() => {
-        	console.log(err)
-        aruga.reply(from, 'Error! Mungkin server sedang down!', id)
-        })
-        })
-        break
-        case 'ytmp3':
+            case 'ytmp3':
             if (args.length == 0) return aruga.reply(from, `Untuk mendownload lagu dari youtube\nketik: ${prefix}ytmp3 [link_yt]`, id)
             const linkmp3 = args[0].replace('https://youtu.be/','').replace('https://www.youtube.com/watch?v=','')
 			rugaapi.ytmp3(`https://youtu.be/${linkmp3}`)
@@ -1202,7 +1189,7 @@ case 'ig':
             if (args.length !== 1) return aruga.reply(from, 'Maaf, format pesan salah silahkan periksa menu.', id)
             if (!is.Url(url) && !url.includes('instagram.com')) return aruga.reply(from, 'Maaf, link yang kamu kirim tidak valid.', id)
             await aruga.reply(from, `_Scraping Metadata..._ \n\n_Tunggu Sebentar_`, id)
-            rugaapi.igis(url).then(async (data) => {
+            rugaapi.insta(url).then(async (data) => {
                 if (data.type == 'GraphSidecar') {
                     if (data.image.length != 0) {
                         data.image.map((x) => client.sendFileFromUrl(from, x, 'photo.jpg', '', null, null, true))
@@ -1262,18 +1249,6 @@ case 'ytsearch':
 			})
 		})
        break
-case 'ig2':
-if (args.length == 0) return aruga.reply(from, `Untuk mendownload video dari link ig\nketik: ${prefix}ig2 linkig`, id)
-rugaapi.igis(args[0])
-.then(async (res) => {
-	const awokawok = res
-if (res.status == 'error') return aruga.sendFileFrom(from, awokawok, ", 'Nehhh', id)
-await aruga.sendFileFromUrl(from, awokawok, ", 'nehh ngab', id)
-.catch(() => {
-	aruga.reply(from, 'Maaf format url tidak dapat ditemukan', id)
-	})
-	})
-	break
 		case 'fb':
 		case 'facebook':
 			if (args.length == 0) return aruga.reply(from, `Untuk mendownload video dari link facebook\nketik: ${prefix}fb [link_fb]`, id)
