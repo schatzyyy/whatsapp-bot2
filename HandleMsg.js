@@ -568,7 +568,7 @@ module.exports = HandleMsg = async (aruga, message) => {
             case 'nekonsfw':
                 if (!isGroupMsg) return aruga.reply(from, 'Fitur ini hanya bisa digunakan didalam Grup!', id)
                     aruga.sendText(from, mess.wait);
-                    axios.get('https://api.i-tech.id/anim/nsfwneko?key=fs5nZj-gkwbOg-rpX8rB-tKcRAJ-RAZ9cS').then(res => {
+                    axios.get('https://api.i-tech.id/anim/nsfwneko?key=qTOfqt-6mDbIq-8lJHaR-Q09mTR-D6pAtD').then(res => {
                         aruga.sendFileFromUrl(from, res.data.url, 'Sange kok sama 2D');
             })
                 break
@@ -943,7 +943,7 @@ module.exports = HandleMsg = async (aruga, message) => {
             break
 case 'infogempa':
 if (!isGroupMsg) return aruga.reply(from, 'Fitur ini hanya bisa digunakan didalam Grup!', id)
-const bmkg = await axios.get('https://api.i-tech.id/tools/bmkg?key=fs5nZj-gkwbOg-rpX8rB-tKcRAJ-RAZ9cS')
+const bmkg = await axios.get('https://api.i-tech.id/tools/bmkg?key=qTOfqt-6mDbIq-8lJHaR-Q09mTR-D6pAtD')
 const { tanggal, jam, coordinates, lintang, bujur, magnitude, kedalaman, _symbol, wilayah1, wilayah2, wilayah3, wilayah4, wilayah5, potensi } = bmkg.data
 const hasil = `*Tanggal* : *${tanggal}*\n*Jam* : *${jam}*\n\n*Koordinat* : *${coordinates}*\n\n*Lintang* : *${lintang}*\n*Bujur* : *${bujur}*\n*Magnitude* : *{magnitude}*\n*Kedalaman* : *${kedalaman}*\n *Simbol* : *${_symbol}*\n\nWilayah 1 : *${wilayah1}\nWilayah 2 : *${wilayah2}*\nWilayah 3 : *${wilayah3}*\nWilayah 4 : *${wilayah4}*\nWilayah 5 : *${wilayah5}*\n*Potensi* : *${potensi}*`
 aruga.sendFileFromUrl(from, hasil, id)
@@ -1906,14 +1906,14 @@ then(async(res) => {
                 case 'randomhentai':
                         if (!isGroupMsg) return aruga.reply(from, 'Perintah ini hanya bisa di gunakan dalam group!', id)
                         aruga.sendText(from, mess.wait);
-                        axios.get(`https://api.i-tech.id/anim/hentai?key=fs5nZj-gkwbOg-rpX8rB-tKcRAJ-RAZ9cS`).then(res => {
+                        axios.get(`https://api.i-tech.id/anim/hentai?key=qTOfqt-6mDbIq-8lJHaR-Q09mTR-D6pAtD`).then(res => {
                         aruga.sendFileFromUrl(from, res.data.url, 'hentai.jpg', id)
             })
                         break
                 case 'randomhug':
                         if (!isGroupMsg) return aruga.reply(from, 'Perintah ini hanya bisa di gunakan dalam group!', id)
                         aruga.sendText(from, mess.wait);
-                        axios.get(`https://api.i-tech.id/anim/hug?key=fs5nZj-gkwbOg-rpX8rB-tKcRAJ-RAZ9cS`).then(res => {
+                        axios.get(`https://api.i-tech.id/anim/hug?key=qTOfqt-6mDbIq-8lJHaR-Q09mTR-D6pAtD`).then(res => {
                         aruga.sendImage(from, res.data.url, 'hug.jpg', id)
         })
                         break
