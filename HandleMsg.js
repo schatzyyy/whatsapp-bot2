@@ -1662,13 +1662,6 @@ break
                 aruga.reply(from, 'Ada yang Error!', id)
             })
             break
-case 'ss':
-if (args.length == 0) return aruga.reply(from, `Mengscreenshot website dari google\n\ncontoh ${prefix}ss xnxx.com`, id)
-rugaapi.ssweb(body.slice(4))
-then(async(res) => {
-	await aruga.reply(from, `${res}`, id)
-	})
-	break
 		case 'bapakfont':
 			if (args.length == 0) return aruga.reply(from, `Mengubah kalimat menjadi alayyyyy\n\nketik ${prefix}bapakfont kalimat`, id)
 			rugaapi.bapakfont(body.slice(11))
