@@ -383,20 +383,6 @@ module.exports = HandleMsg = async (aruga, message) => {
         case 'donasi':
             await aruga.sendText(from, menuId.textDonasi())
             break
-case 'stalkig2':
-const txxs = body.slice(10)
-axios.get(`https://alfians-api.herokuapp.com/api/stalk?username=${txxs}`).then ((res) =>{
-    imageToBase64(res.data.Profile_pic)
-        .then(
-    (ress) => {
-    const buf = Buffer.from(ress, 'base64')
-    aruga.sendText(from, '[ WAIT ] Stalking! silahkan tunggu', id )
-    const hasil = `*>Username* : ${res.data.Username}\n*>Nama* : ${res.data.Name}\n*>Follower* : ${res.data.Jumlah_Followers}\n*>Following* : ${res.data.Jumlah_Following}\n*>Jumlah Post* : ${res.data.Jumlah_Post}\n*>Bio* : ${res.data.Biodata}\n\nFollow : https://www.instagram.com/mrf.zvx/`;
-    aruga.sendText(from buf, 'profile.jpg', hasil, id);
-    })
-})
-}
-break
           case 'tod':
     aruga.reply(from, `Sebelum bermain berjanjilah akan melaksanakan apapun perintah yang diberikan.\n\nSilahkan Pilih:\n➥ ${prefix}truth\n➥ ${prefix}dare`, id)
     break
@@ -453,8 +439,15 @@ break
             await aruga.sendContact(from, ownerNumber)
             .then(() => aruga.sendText(from, 'Gausah banyak tanya, ini bukan StackOverFlow!'))
             break
+            case 'maps':
+            if (!isGroupAdmins) return aruga.reply(from, 'cuman bisa di pake didalam grup!, id)
+            rugaapi.maps(jalan)
+            .then(async (res) => {
+            	await aruga.reply(from, `${res`, id)
+            })
+            break
             case 'bokep2':
-                if (!isOwnerB) return aruga.reply(from, 'Fitur ini hanya bisa digunakan oleh Owner Bot, karena takut penyalahgunaan', id)
+                if (!isGroupAdmins) return aruga.reply(from, 'Fitur ini hanya bisa digunakan oleh Owner Bot, karena takut penyalahgunaan', id)
 			    rugaapi.bokep2()
 			    .then(async (res) => {
 				await aruga.reply(from, `${res}`, id)
@@ -737,7 +730,7 @@ break
             case 'bokep': // MFARELS
             case 'randombokep': // MFARELS
             case 'bkp': // MFARELS
-                if (!isOwnerB) return aruga.reply(from, 'Perintah ini hanya bisa di gunakan oleh Owner Bot, karena takut penyalahgunaan', id) // MFARELS
+                if (!isGroupAdmins) return aruga.reply(from, 'Perintah ini hanya bisa di gunakan oleh Admin Grup,karena takut penyalahgunaan', id) // MFARELS
                 const mskkntl = fs.readFileSync('./lib/18+.json') // MFARELS
                 const kntlnya = JSON.parse(mskkntl) // MFARELS
                 const rindBkp = Math.floor(Math.random() * kntlnya.length) // MFARELS
@@ -957,23 +950,22 @@ break
             break
 case 'infobmkg':
 axios.get(`https://mnazria.herokuapp.com/api/bmkg-gempa`).then (res => {
-	aruga.sendText(from, mess.wait, id)
 	const inidia = `${res.data.result}\n*Saran* : ${res.data.saran}`
 	aruga.sendText(from, inidia, id)
 	})
 	break
 case 'bucin':
 axios.get(`https://arugaz.herokuapp.com/api/howbucins`).then(res => {
-	aruga.sendText(from, mess.wait, id)
 	const ayamgrg = `*Bucin Detected*\n*Persentase* : ${res.data.persen}% \n_${res.data.desc}_ `;
 	aruga.sendText(from, ayamgrg, id)
 	})
 	break
 case 'infogempa':
 if (!isGroupMsg) return aruga.reply(from, 'Fitur ini hanya bisa digunakan didalam Grup!', id)
-const bmkg = await axios.get('https://api.i-tech.id/tools/bmkg?key=qtofqt-6mdbiq-8ljhar-q09mtr-d6patd')
-const hasil = `*INFO GEMPA*\n\n*Gempa*\n*Tanggal* : *${res.data.Tanggal}*\n*Jam* : *${res.data.Jam}*\n\n*Koordinat* : *${res.data.coordinates}*\n\n*Lintang* : *${res.data.Lintang}*\n*Bujur* : *${res.data.Bujur}*\n*Magnitude* : *{res.data.Magnitude}*\n*Kedalaman* : *${res.data.Kedalaman}*\n *Simbol* : *${res.data._symbol}*\n\nWilayah 1 : *${res.data.Wilayah1}\nWilayah 2 : *${res.data.Wilayah2}*\nWilayah 3 : *${res.data.Wilayah3}*\nWilayah 4 : *${res.data.Wilayah4}*\nWilayah 5 : *${res.data.Wilayah5}*\n*Potensi* : *${res.data.Potensi}*`
+const bmkg = await axios.get('https://arugaz.herokuapp.com/api/infogempa').then(res => {
+const hasil = `*INFO GEMPA*\n*Lokasi* : _${res.data.lokasi}_\n *Kedalaman* : _${res.data.kedalaman}_\n*Koordinat* : _${res.data.koordinat}_\n*Magnitude* : _${res.data.magnitude}_\n*Waktu* : _${res.data.waktu}_\n${res.data.potensi}`;
 aruga.sendText(from, hasil, id)
+}) 
 break
         case 'meme':
             if ((isMedia || isQuotedImage) && args.length >= 2) {
@@ -1499,6 +1491,15 @@ case 'ytsearch':
                 aruga.reply(from, 'Ada yang Error!', id)
             })
             break
+case 'stalkig2':
+if (args.length == 0) return aruga.reply(from, `Untuk menstalk akun instagram seseorang\nketk ,${prefix}stalkig2 [username], id`)
+const stalker = await rugaapi.stalkig2(args[0])
+const fotone = await rugaapi.stalkig2pict(args[0]
+await aruga.sendFileFromUrk(from, fotone, ", stalker, id)
+.catch(() => {
+	aruga.reply(from, 'ada yang error sayang!', id)
+	})
+	break
         case 'stalkig':
             if (args.length == 0) return aruga.reply(from, `Untuk men-stalk akun instagram seseorang\nketik ${prefix}stalkig [username]\ncontoh: ${prefix}stalkig ini.arga`, id)
             const igstalk = await rugaapi.stalkig(args[0])
@@ -1812,20 +1813,6 @@ break
 				await aruga.sendText(from, "Klasemen telah direset.")
             }
 			break
-case 'maps':
-if (!isGroupMsg) return aruga.reply(from, 'Maaf, fitur ini hanya dapat dipakai didalam grup!', id)
-const teks = body.slice(6)
-axios.get('https://mnazria.herokuapp.com/api/maps?search='+teks')
-.then((res) => {
-	imageToBase64(res.data.gambar)
-	.then(
-	(ress) => {
-		aruga.reply(from, 'WAIT! Sedang mencari!')
-		const buf = Buffer.from(ress, 'base64')
-		aruga.sendText(from, buf, id)
-		})
-		})
-		break
 		case 'mutegrup':
 			if (!isGroupMsg) return aruga.reply(from, 'Maaf, perintah ini hanya dapat dipakai didalam grup!', id)
             if (!isGroupAdmins) return aruga.reply(from, 'Gagal, perintah ini hanya dapat digunakan oleh admin grup!', id)
