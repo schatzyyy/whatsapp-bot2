@@ -383,6 +383,20 @@ module.exports = HandleMsg = async (aruga, message) => {
         case 'donasi':
             await aruga.sendText(from, menuId.textDonasi())
             break
+case 'stalkig2':
+const txxs = body.slice(10)
+axios.get(`https://alfians-api.herokuapp.com/api/stalk?username=${txxs}`).then ((res) =>{
+    imageToBase64(res.data.Profile_pic)
+        .then(
+    (ress) => {
+    const buf = Buffer.from(ress, 'base64')
+    aruga.sendText(from, '[ WAIT ] Stalking! silahkan tunggu', id )
+    const hasil = `*>Username* : ${res.data.Username}\n*>Nama* : ${res.data.Name}\n*>Follower* : ${res.data.Jumlah_Followers}\n*>Following* : ${res.data.Jumlah_Following}\n*>Jumlah Post* : ${res.data.Jumlah_Post}\n*>Bio* : ${res.data.Biodata}\n\nFollow : https://www.instagram.com/mrf.zvx/`;
+    aruga.sendText(from buf, 'profile.jpg', hasil, id);
+    })
+})
+}
+break
           case 'tod':
     aruga.reply(from, `Sebelum bermain berjanjilah akan melaksanakan apapun perintah yang diberikan.\n\nSilahkan Pilih:\n➥ ${prefix}truth\n➥ ${prefix}dare`, id)
     break
@@ -941,12 +955,25 @@ module.exports = HandleMsg = async (aruga, message) => {
                 await aruga.reply(from, 'Maaf, command sticker giphy hanya bisa menggunakan link dari giphy.  [Giphy Only]', id)
             }
             break
+case 'infobmkg':
+axios.get(`https://mnazria.herokuapp.com/api/bmkg-gempa`).then (res => {
+	aruga.sendText(from, mess.wait, id)
+	const inidia = `${res.data.result}\n*Saran* : ${res.data.saran}`
+	aruga.sendText(from, inidia, id)
+	})
+	break
+case 'bucin':
+axios.get(`https://arugaz.herokuapp.com/api/howbucins`).then(res => {
+	aruga.sendText(from, mess.wait, id)
+	const ayamgrg = `*Bucin Detected*\n*Persentase* : ${res.data.persen}% \n_${res.data.desc}_ `;
+	aruga.sendText(from, ayamgrg, id)
+	})
+	break
 case 'infogempa':
 if (!isGroupMsg) return aruga.reply(from, 'Fitur ini hanya bisa digunakan didalam Grup!', id)
-const bmkg = await axios.get('https://api.i-tech.id/tools/bmkg?key=qTOfqt-6mDbIq-8lJHaR-Q09mTR-D6pAtD')
-const { tanggal, jam, coordinates, lintang, bujur, magnitude, kedalaman, _symbol, wilayah1, wilayah2, wilayah3, wilayah4, wilayah5, potensi } = bmkg.data
-const hasil = `*Tanggal* : *${tanggal}*\n*Jam* : *${jam}*\n\n*Koordinat* : *${coordinates}*\n\n*Lintang* : *${lintang}*\n*Bujur* : *${bujur}*\n*Magnitude* : *{magnitude}*\n*Kedalaman* : *${kedalaman}*\n *Simbol* : *${_symbol}*\n\nWilayah 1 : *${wilayah1}\nWilayah 2 : *${wilayah2}*\nWilayah 3 : *${wilayah3}*\nWilayah 4 : *${wilayah4}*\nWilayah 5 : *${wilayah5}*\n*Potensi* : *${potensi}*`
-aruga.sendFileFromUrl(from, hasil, id)
+const bmkg = await axios.get('https://api.i-tech.id/tools/bmkg?key=qtofqt-6mdbiq-8ljhar-q09mtr-d6patd')
+const hasil = `*INFO GEMPA*\n\n*Gempa*\n*Tanggal* : *${res.data.Tanggal}*\n*Jam* : *${res.data.Jam}*\n\n*Koordinat* : *${res.data.coordinates}*\n\n*Lintang* : *${res.data.Lintang}*\n*Bujur* : *${res.data.Bujur}*\n*Magnitude* : *{res.data.Magnitude}*\n*Kedalaman* : *${res.data.Kedalaman}*\n *Simbol* : *${res.data._symbol}*\n\nWilayah 1 : *${res.data.Wilayah1}\nWilayah 2 : *${res.data.Wilayah2}*\nWilayah 3 : *${res.data.Wilayah3}*\nWilayah 4 : *${res.data.Wilayah4}*\nWilayah 5 : *${res.data.Wilayah5}*\n*Potensi* : *${res.data.Potensi}*`
+aruga.sendText(from, hasil, id)
 break
         case 'meme':
             if ((isMedia || isQuotedImage) && args.length >= 2) {
@@ -1305,7 +1332,7 @@ case 'ytsearch':
             break
 	      case 'urgay':
         		if (args.length == 0) return aruga.reply(from, `Untuk mengetahui seberapa gay seseorang gunakan ${prefix}howgay namanya\n\nContoh: ${prefix}howgay burhan`, id)
-            fetch('https://raw.githubusercontent.com/MrPawNO/howgay/main/howgay.txt')
+            fetch('https://arugaz.herokuapp.com/api/howgay')
             .then(res => res.text())
             .then(body => {
                 let splithowgay = body.split('\n')
@@ -1785,6 +1812,20 @@ break
 				await aruga.sendText(from, "Klasemen telah direset.")
             }
 			break
+case 'maps':
+if (!isGroupMsg) return aruga.reply(from, 'Maaf, fitur ini hanya dapat dipakai didalam grup!', id)
+const teks = body.slice(6)
+axios.get('https://mnazria.herokuapp.com/api/maps?search='+teks')
+.then((res) => {
+	imageToBase64(res.data.gambar)
+	.then(
+	(ress) => {
+		aruga.reply(from, 'WAIT! Sedang mencari!')
+		const buf = Buffer.from(ress, 'base64')
+		aruga.sendText(from, buf, id)
+		})
+		})
+		break
 		case 'mutegrup':
 			if (!isGroupMsg) return aruga.reply(from, 'Maaf, perintah ini hanya dapat dipakai didalam grup!', id)
             if (!isGroupAdmins) return aruga.reply(from, 'Gagal, perintah ini hanya dapat digunakan oleh admin grup!', id)
@@ -1882,7 +1923,7 @@ break
                         if (!isGroupMsg) return aruga.reply(from, 'Perintah ini hanya bisa di gunakan dalam group!', id)
                         aruga.sendText(from, mess.wait);
                         axios.get(`https://api.i-tech.id/anim/hug?key=qTOfqt-6mDbIq-8lJHaR-Q09mTR-D6pAtD`).then(res => {
-                        aruga.sendImage(from, res.data.url, 'hug.jpg', id)
+                        aruga.sendFileFromUrl(from, res.data.url, 'hug.jpg', id)
         })
                         break
             case 'ptl':
