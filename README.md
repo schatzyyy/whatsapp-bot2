@@ -82,9 +82,25 @@ after running it you need to scan the qr
 
 ## Features
 
-| 18+ |Yes|
+| 18+ Anime |Yes|
 | ------------- | ------------- |
 | Nekopoi |✅|
+| Random Hentai|✅|
+| Random Hug|✅|
+| Random Blowjob|✅|
+| Random Baka|✅|
+| Rhentai|✅|
+| Random Pussy|✅|
+| Random Slap|✅|
+| Random Waifu|✅|
+| Random Nsfw|✅|
+| Random Kiss|✅|
+| Random Cum|✅|
+| Gif Hentai|✅|
+| Neko NSFW|✅|
+| Random Neko|✅|
+| Boobs|✅|
+
 
 | Creator |Yes|
 | ------------- | ------------- |
@@ -183,8 +199,6 @@ after running it you need to scan the qr
 | How Much in Group|✅|
 | Group Bot|✅|
 | WP Anime|✅|
-| Random Hentai|✅|
-| Random Hug|✅|
 | Penyegar Timeline|✅|
 | Google Search|✅|
 | Sider|✅|
@@ -209,13 +223,15 @@ after running it you need to scan the qr
 | Tag|✅|
 | Get User Picture|✅|
 | Jadian|✅|
-| Tolol|✅|
+| Ava|✅|
+| KBBI|✅|
+| Logo Pornhub|✅|
+| Truth or Dare|✅|
 
 | Images |Yes|
 | --------------- | ----------- |
 | Aesthetic|✅|
 | Amelia Andani|✅|
-| Alin Fauziah|✅|
 | Random Cecan|✅|
 | Random Cogan|✅|
 
@@ -236,7 +252,6 @@ after running it you need to scan the qr
 | Set Group Name|✅|
 | Resend Messages|✅|
 | Anti Link|✅|
-| Anti Spam Stiker|✅|
 
 | Owner bot |Yes|
 | ------------- | ------------- |
@@ -246,6 +261,7 @@ after running it you need to scan the qr
 | Banned user|✅|
 | Set Status Bot|✅|
 | Set Name Bot|✅|
+| Screenshot Session|✅|
 
 
 ## To-Do
