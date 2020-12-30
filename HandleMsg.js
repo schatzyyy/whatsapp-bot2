@@ -500,7 +500,7 @@ break
                 };
                 break
                 case 'boobs':
-                aruga.rey(from, mess.wait, id);
+                aruga.reply(from, mess.wait, id);
                 axios.get('https://nekos.life/api/v2/img/boobs').then(res => {
                 	arug.sendFileFromUrl(from, res.data.url, 'bakaaa hentaii>~<');
                 });
