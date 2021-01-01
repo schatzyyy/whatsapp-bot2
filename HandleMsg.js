@@ -412,6 +412,20 @@ module.exports = HandleMsg = async (aruga, message) => {
                 aruga.reply(from, 'Hayolohhh, ada yang error!!', id)
             })
             break
+     case 'citacita'://Piyobot
+     if (!isGroupMsg) return aruga.reply(from, menuId.textPrem())
+            fetch('https://raw.githubusercontent.com/AlvioAdjiJanuar/citacita/main/citacita.txt')
+            .then(res => res.text())
+            .then(body => {
+            let cita = body.split('\n')
+            let raya = cita[Math.floor(Math.random() * cita.length)]
+            aruga.sendFileFromUrl(from, raya, 'citacita.mp3', id)
+                .then(() => console.log('Success sending cita'))
+              })
+             .catch(() => {
+            aruga.reply(from, 'Ada yang Error!', id)
+             })
+             break
          case 'kbbi':
             if (args.length == 0) return aruga.reply(from, `Untuk mencari suatu kata dari Kamus Besar Bahasa Indonesia (KBBI)\nketik: ${prefix}kbbi [kata]`, id)
             const kbbip = body.slice(6)
