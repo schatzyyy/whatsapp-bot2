@@ -443,7 +443,7 @@ module.exports = HandleMsg = async (aruga, message) => {
             if (!isGroupAdmins) return aruga.reply(from, 'Fitur ini hanya bisa digunakan didalam grup!', id)
             rugaapi.maps(jalan)
             .then(async (res) => {
-            	await aruga.reply(from, `${res`, id)
+            	await aruga.reply(from, `${res}`, id)
             })
             break
             case 'bokep2':
