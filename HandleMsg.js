@@ -440,7 +440,7 @@ module.exports = HandleMsg = async (aruga, message) => {
             .then(() => aruga.sendText(from, 'Gausah banyak tanya, ini bukan StackOverFlow!'))
             break
             case 'maps':
-            if (!isGroupAdmins) return aruga.reply(from, 'cuman bisa di pake didalam grup!', id)
+            if (!isGroupAdmins) return aruga.reply(from, 'Fitur ini hanya bisa digunakan didalam grup!', id)
             rugaapi.maps(jalan)
             .then(async (res) => {
             	await aruga.reply(from, `${res`, id)
