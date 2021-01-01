@@ -67,7 +67,7 @@ Run the Whatsapp bot
 after running it you need to scan the qr
 
 ### Information
-- Change ownerNumber on [this section](https://github.com/thoriqazzikra/whatsapp-bot2/blob/master/settings/setting.json#L2)
+- Change ownerNumber on [this section](https://github.com/thoriqazzikra/whatsapp-bot2/blob/master/HandleMsg.js#L136)
 - Change groupLimit on [this section](https://github.com/thoriqazzikra/whatsapp-bot2/blob/master/settings/setting.json#L3)
 - Change memberLimit on [this section](https://github.com/thoriqazzikra/whatsapp-bo2t/blob/master/settings/setting.json#L4)
 - Change prefix on [this section](https://github.com/thoriqazzikra/whatsapp-bot2/blob/master/settings/setting.json#L5)
