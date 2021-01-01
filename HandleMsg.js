@@ -1492,10 +1492,10 @@ case 'ytsearch':
             })
             break
 case 'stalkig2':
-if (args.length == 0) return aruga.reply(from, `Untuk menstalk akun instagram seseorang\nketk ,${prefix}stalkig2 [username], id`)
+if (args.length == 0) return aruga.reply(from, `Untuk menstalk akun instagram seseorang\nketk ,${prefix}stalkig2 [username]`, id)
 const stalker = await rugaapi.stalkig2(args[0])
-const fotone = await rugaapi.stalkig2pict(args[0]
-await aruga.sendFileFromUrk(from, fotone, ", stalker, id)
+const fotone = await rugaapi.stalkig2pict(args[0])
+await aruga.sendFileFromUrl(from, fotone, ' ', stalker, id)
 .catch(() => {
 	aruga.reply(from, 'ada yang error sayang!', id)
 	})
