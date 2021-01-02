@@ -67,7 +67,7 @@ Run the Whatsapp bot
 after running it you need to scan the qr
 
 ### Information
-- Change ownerNumber on [this section](https://github.com/thoriqazzikra/whatsapp-bot2/blob/master/settings/setting.json#L2)
+- Change ownerNumber on [this section](https://github.com/thoriqazzikra/whatsapp-bot2/blob/main/HandleMsg.js#L136)
 - Change groupLimit on [this section](https://github.com/thoriqazzikra/whatsapp-bot2/blob/master/settings/setting.json#L3)
 - Change memberLimit on [this section](https://github.com/thoriqazzikra/whatsapp-bo2t/blob/master/settings/setting.json#L4)
 - Change prefix on [this section](https://github.com/thoriqazzikra/whatsapp-bot2/blob/master/settings/setting.json#L5)
@@ -76,7 +76,6 @@ after running it you need to scan the qr
 - Change all apiKey on [this section](https://github.com/thoriqazzikra/whatsapp-bot2/blob/master/settings/api.json)
 - Get Api NoBackground on [this website](https://www.remove.bg/)
 - Get Api ScreenShot on [this website](https://apiflash.com/)
-- Get Api Simi-simi on [this website](https://workshop.simsimi.com/en/), masih limit api simi-siminya? [cek ini](https://github.com/ArugaZ/whatsapp-bot/issues/38#issuecomment-726981060)
 
 ---
 
