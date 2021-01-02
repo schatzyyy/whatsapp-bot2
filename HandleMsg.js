@@ -84,6 +84,10 @@ function formatin(duit){
     return ribuan;
 }
 
+const sleep = async (ms) => {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 const inArray = (needle, haystack) => {
     let length = haystack.length;
     for(let i = 0; i < length; i++) {
@@ -1768,10 +1772,23 @@ break
                 if (!quotedMsgObj.fromMe) return aruga.reply(from, `Maaf, format pesan salah silahkan.\nReply pesan bot dengan caption ${prefix}del`, id)
                 aruga.deleteMessage(quotedMsgObj.chatId, quotedMsgObj.id, false)
                 break
+        case 'edotensei':
+            if (!isGroupMsg) return aruga.reply(from, 'Fitur ini hanya bisa di gunakan dalam group', id)
+            if (!isGroupAdmins) return aruga.reply(from, 'Perintah ini hanya bisa di gunakan oleh Owner group', id)
+            if (!isBotGroupAdmins) return aruga.reply(from, 'Perintah ini hanya bisa di gunakan ketika bot menjadi admin', id)
+            if (mentionedJidList.length === 0) return aruga.reply(from, 'Fitur untuk menghapus member lalu menambahkan member kembali,kirim perintah ${prefix}edotensei @tagmember', id)
+            for (let i = 0; i < mentionedJidList.length; i++) {
+                if (groupAdmins.includes(mentionedJidList[i])) return aruga.reply(from, mess.error.Ki, id)
+                await aruga.removeParticipant(groupId, mentionedJidList[i])
+                await sleep(3000)
+                await aruga.addParticipant(from,`${mentionedJidList}`)
+                aruga.sendText(from, 'akwkwkwo ter-prank')
+            } 
+            break
         case 'infoall':
         case 'everyone':
             if (!isGroupMsg) return aruga.reply(from, 'Maaf, perintah ini hanya dapat dipakai didalam grup!', id)
-            if (!isGroupAdmins) return aruga.reply(from, 'Gagal, perintah ini hanya dapat digunakan oleh admin grup!', id)
+            if (!isGroupAdmins & !isOwnerB) return aruga.reply(from, 'Gagal, perintah ini hanya dapat digunakan oleh admin grup!', id)
             const textInfo = body.slice(8)
             const namagcnih = name
             const memchu = chat.groupMetadata.participants.length
