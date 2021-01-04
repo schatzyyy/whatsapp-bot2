@@ -1816,7 +1816,7 @@ case 'ytsearch':
             axios.get(`https://arugaytdl.herokuapp.com/search?q=${body.slice(6)}`)
             .then(async (res) => {
                 await aruga.sendFileFromUrl(from, `${res.data[0].thumbnail}`, ``, `Video Ditemukan\n\nJudul: ${res.data[0].title}\nDurasi: ${res.data[0].duration}detik\nUploaded: ${res.data[0].uploadDate}\nView: ${res.data[0].viewCount}\n\n*_Wait, Urbae lagi ngirim Videonya_*`, id)
-				rugaapi.ymp4(`https://youtu.be/${res.data[0].id}`)
+				rugaapi.ytmp4(`https://youtu.be/${res.data[0].id}`)
 				.then(async(res) => {
 					if (res.status == 'error') return aruga.sendFileFromUrl(from, `${res.link}`, '', `${res.error}`)
 					await aruga.sendFileFromUrl(from, `${res.result}`, '', '', id)
