@@ -113,6 +113,8 @@ after running it you need to scan the qr
 | Make a meme from photo|✅|
 | Quotes maker result pict|✅|
 | Nulis Bot|✅|
+| Glitch Text Maker|✅|
+| Harta Tahta|✅|
 
 | Islam |Yes|
 | ------------- | ------------- |
@@ -128,11 +130,15 @@ after running it you need to scan the qr
 | Youtube Music |✅|
 | Youtube Video |✅|
 | Facebook |✅|
+| Instagram |✅|
 
 | Fun Group! |Yes|
 | ------------- | ------------- |
 | Simi-simi BOT|✅|
 | Anti kata kasar|✅|
+| Family 100|✅|
+| Cak Lontong|✅|
+| Tebak Gambar|✅|
 
 | Primbon |Yes|
 | ------------- | ------------- |
@@ -226,6 +232,16 @@ after running it you need to scan the qr
 | KBBI|✅|
 | Logo Pornhub|✅|
 | Truth or Dare|✅|
+| Distance|✅|
+| Shopee|✅|
+| Play Store|✅|
+| YouTube Search|✅|
+| Play Youtube Video|✅|
+| Simi|✅|
+| Kusonime|✅|
+| Arti Mimpi|✅|
+| Emoji To Sticker|✅|
+| Asupan|✅|
 
 | Images |Yes|
 | --------------- | ----------- |
