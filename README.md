@@ -5,21 +5,21 @@
 <a href="#"><img title="Whatsapp-Bot" src="https://img.shields.io/badge/Whatsapp Bot-green?colorA=%23ff0000&colorB=%23017e40&style=for-the-badge"></a>
 </p>
 <p align="center">
-<a href="https://github.com/thoriqazzikra"><img title="Author" src="https://img.shields.io/badge/AUTHOR-Thoriq-blue.svg?style=for-the-badge&logo=github"></a>
+<a href="https://github.com/Urbaee"><img title="Author" src="https://img.shields.io/badge/AUTHOR-Thoriq-blue.svg?style=for-the-badge&logo=github"></a>
 <p align="center">
-<a href="https://github.com/thoriqazzikra/followers"><img title="Followers" src="https://img.shields.io/github/followers/thoriqazzikra?color=blue&style=flat-square"></a>
-<a href="https://github.com/thoriqazzikra/whatsapp-bot2/stargazers/"><img title="Stars" src="https://img.shields.io/github/stars/thoriqazzikra/whatsapp-bot2?color=red&style=flat-square"></a>
-<a href="https://github.com/thoriqazzikra/whatsapp-bot2/network/members"><img title="Forks" src="https://img.shields.io/github/forks/thoriqazzikra/whatsapp-bot2?color=red&style=flat-square"></a>
-<a href="https://github.com/thoriqazzikra/whatsapp-bot2/watchers"><img title="Watching" src="https://img.shields.io/github/watchers/thoriqazzikra/whatsapp-bot2?label=Watchers&color=blue&style=flat-square"></a>
-<a href="https://hits.seeyoufarm.com"><img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Fthoriqazzikra&count_bg=%2379C83D&title_bg=%23555555&icon=&icon_color=%23E7E7E7&title=hits&edge_flat=false"/></a>
+<a href="https://github.com/Urbaee/followers"><img title="Followers" src="https://img.shields.io/github/followers/Urbaee?color=blue&style=flat-square"></a>
+<a href="https://github.com/Urbaee/whatsapp-bot2/stargazers/"><img title="Stars" src="https://img.shields.io/github/stars/Urbaee/whatsapp-bot2?color=red&style=flat-square"></a>
+<a href="https://github.com/Urbaee/whatsapp-bot2/network/members"><img title="Forks" src="https://img.shields.io/github/forks/Urbaee/whatsapp-bot2?color=red&style=flat-square"></a>
+<a href="https://github.com/Urbaee/whatsapp-bot2/watchers"><img title="Watching" src="https://img.shields.io/github/watchers/Urbaee/whatsapp-bot2?label=Watchers&color=blue&style=flat-square"></a>
+<a href="https://hits.seeyoufarm.com"><img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2FUrbaee%2Fwhatsapp-bot2&count_bg=%232396FF&title_bg=%23555555&icon=meteor.svg&icon_color=%23F5F9FF&title=visitor&edge_flat=false"/></a>
 </p>
 
   
   
   
 <p align="left">
-<a href="https://github.com/thoriqazzikra/whatsapp-bot2">
- <img align="center" src="https://github-readme-stats.vercel.app/api/pin/?username=thoriqazzikra&repo=whatsapp-bot2&theme=dark" />
+<a href="https://github.com/Urbaee/whatsapp-bot2">
+ <img align="center" src="https://github-readme-stats.vercel.app/api/pin/?username=Urbaee&repo=whatsapp-bot2&theme=dark" />
   </p>
 
   
@@ -46,7 +46,7 @@ This project require NodeJS v12.
 Clone this project
 
 ```bash
-> git clone https://github.com/thoriqazzikra/whatsapp-bot2.git
+> git clone https://github.com/Urbaee/whatsapp-bot2.git
 > cd whatsapp-bot2
 ```
 
@@ -113,6 +113,8 @@ after running it you need to scan the qr
 | Make a meme from photo|✅|
 | Quotes maker result pict|✅|
 | Nulis Bot|✅|
+| Glitch Text Maker|✅|
+| Harta Tahta|✅|
 
 | Islam |Yes|
 | ------------- | ------------- |
@@ -128,11 +130,15 @@ after running it you need to scan the qr
 | Youtube Music |✅|
 | Youtube Video |✅|
 | Facebook |✅|
+| Instagram |✅|
 
 | Fun Group! |Yes|
 | ------------- | ------------- |
 | Simi-simi BOT|✅|
 | Anti kata kasar|✅|
+| Family 100|✅|
+| Cak Lontong|✅|
+| Tebak Gambar|✅|
 
 | Primbon |Yes|
 | ------------- | ------------- |
@@ -226,6 +232,16 @@ after running it you need to scan the qr
 | KBBI|✅|
 | Logo Pornhub|✅|
 | Truth or Dare|✅|
+| Distance|✅|
+| Shopee|✅|
+| Play Store|✅|
+| YouTube Search|✅|
+| Play Youtube Video|✅|
+| Simi|✅|
+| Kusonime|✅|
+| Arti Mimpi|✅|
+| Emoji To Sticker|✅|
+| Asupan|✅|
 
 | Images |Yes|
 | --------------- | ----------- |

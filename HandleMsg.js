@@ -437,6 +437,20 @@ module.exports = HandleMsg = async (aruga, message) => {
                 aruga.reply(from, 'Hayolohhh, ada yang error!!', id)
             })
             break
+     case 'citacita'://Piyobot
+     if (!isGroupMsg) return aruga.reply(from, menuId.textPrem())
+            fetch('https://raw.githubusercontent.com/AlvioAdjiJanuar/citacita/main/citacita.txt')
+            .then(res => res.text())
+            .then(body => {
+            let cita = body.split('\n')
+            let raya = cita[Math.floor(Math.random() * cita.length)]
+            aruga.sendFileFromUrl(from, raya, 'citacita.mp3', id)
+                .then(() => console.log('Success sending cita'))
+              })
+             .catch(() => {
+            aruga.reply(from, 'Ada yang Error!', id)
+             })
+             break
          case 'kbbi':
             if (args.length == 0) return aruga.reply(from, `Untuk mencari suatu kata dari Kamus Besar Bahasa Indonesia (KBBI)\nketik: ${prefix}kbbi [kata]`, id)
             const kbbip = body.slice(6)
@@ -1830,11 +1844,14 @@ case 'ytsearch':
             .then(async(res) => {
 				if (res.error) return aruga.sendFileFromUrl(from, `${res.url}`, '', `${res.error}`)
 				await aruga.sendFileFromUrl(from, `${res.imgUrl}`, 'img.jpg', `*Video ditemukan*\n\n*Judul :* ${res.title}\n*Size :* ${res.size}\n*Execute :* ${res.ext}\n\n*_Sabar, Urbae lagi ngirim videonya_*`, id)
-				await aruga.sendFileFromUrl(from, `${res.UrlVideo}`, '', '', id)
+				await aruga.sendFileFromUrl(from, `${res.UrlVideo}`, '', `*${res.title}\n*${res.size}\n*${res.ext}`, id)
 				.catch(() => {
 					aruga.reply(from, `Error ngab`, id)
 				})
-			})
+            })
+            .catch(() => {
+                aruga.reply(from, 'Error...', id)
+            })
             break
             case 'play'://silahkan kalian custom sendiri jika ada yang ingin diubah
             if (args.length == 0) return aruga.reply(from, `Untuk mencari lagu dari youtube\n\nPenggunaan: ${prefix}play judul lagu`, id)
@@ -1867,20 +1884,17 @@ case 'ytsearch':
             })
             break
             case 'play2'://silahkan kalian custom sendiri jika ada yang ingin diubah
-            if (args.length == 0) return aruga.reply(from, `Untuk mencari dan mendownload video dari youtube\n\nPenggunaan: ${prefix}play judul lagu`, id)
-            axios.get(`https://arugaytdl.herokuapp.com/search?q=${body.slice(6)}`)
+            if (args.length == 0) return aruga.reply(from, `Untuk mencari lagu dari youtube\n\nPenggunaan: ${prefix}play judul lagu`, id)
+            axios.get(`https://arugaytdl.herokuapp.com/search?q=${body.slice(7)}`)
             .then(async (res) => {
-                await aruga.sendFileFromUrl(from, `${res.data[0].thumbnail}`, ``, `*_Video Ditemukan_*\n\nJudul: ${res.data[0].title}\nDurasi: ${res.data[0].duration}detik\nUploaded: ${res.data[0].uploadDate}\nView: ${res.data[0].viewCount}\n\n*_Wait, Urbae lagi ngirim Videonya_*`, id)
-				rugaapi.ymp4(`https://youtu.be/${res.data[0].id}`)
+                await aruga.sendFileFromUrl(from, `${res.data[0].thumbnail}`, ``, `*_Lagu ditemukan_*\n\nJudul: ${res.data[0].title}\nDurasi: ${res.data[0].duration}detik\nUploaded: ${res.data[0].uploadDate}\nView: ${res.data[0].viewCount}\n\n*_Wait, Urbae lagi ngirim lagunya_*`, id)
+				rugaapi.ytmp4(`https://youtu.be/${res.data[0].id}`)
 				.then(async(res) => {
-					await aruga.sendFileFromUrl(from, `${res.UrlVideo}`, '', '', id)
+					await aruga.sendFileFromUrl(from, `${res.UrlVideo}`, '', `*${res.title}*\n*${res.size}*\n*${res.ext}*`, id)
 					.catch(() => {
 						aruga.reply(from, `Error ngab...`, id)
 					})
 				})
-            })
-            .catch(() => {
-                aruga.reply(from, 'Ada yang Error!', id)
             })
             break
 		case 'movie':
