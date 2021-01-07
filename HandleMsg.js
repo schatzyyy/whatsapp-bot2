@@ -79,7 +79,6 @@ let _autostiker = JSON.parse(fs.readFileSync('./lib/helper/antisticker.json'))
 let antilink = JSON.parse(fs.readFileSync('./lib/helper/antilink.json'))
 let muted = JSON.parse(fs.readFileSync('./lib/database/muted.json'))
 
-
 let { 
     ownerNumber, 
     groupLimit, 
@@ -171,7 +170,6 @@ module.exports = HandleMsg = async (aruga, message) => {
         if (isCmd && isGroupMsg) { console.log(color('[EXEC]'), color(moment(t * 1000).format('DD/MM/YY HH:mm:ss'), 'yellow'), color(`${command} [${args.length}]`), 'from', color(pushname), 'in', color(name || formattedTitle)) }
 
       
-
 
         const mess = {
             wait: '[ WAIT ] Sedang di proses⏳ silahkan tunggu sebentar',
@@ -635,7 +633,7 @@ module.exports = HandleMsg = async (aruga, message) => {
                 case 'boobs':
                 aruga.reply(from, mess.wait, id);
                 axios.get('https://nekos.life/api/v2/img/boobs').then(res => {
-                	arug.sendFileFromUrl(from, res.data.url, 'bakaaa hentaii>~<');
+                	aruga.sendFileFromUrl(from, res.data.url, 'bakaaa hentaii>~<');
                 });
                 break
                 case 'gifhentai':
