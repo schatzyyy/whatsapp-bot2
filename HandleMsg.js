@@ -1449,11 +1449,11 @@ break
                     break
                     case 'ig':
                         case 'instagram':
-                            if (args.length == 0) return aruga.reply(from, `Kirim perintah *${prefix}ig [linkIg]*`, id)
+                           if (args.length == 0) return aruga.reply(from, `Kirim perintah *${prefix}ig [linkIg]*`, id)
                             const igUrl = body.split(' ')[1]
                             if (!igUrl.startsWith('https://www.instagram.com')) return aruga.reply(from, 'Maaf, ini bukan link instagram!')
                             aruga.reply(from, mess.wait, id)
-                            if (isGroupMsg) {
+                             {
                                 request.get({
                                     url: `http://keepsaveit.com/api?api_key=${keepSave}&url=${igUrl}`,
                                     json: true,
@@ -1472,14 +1472,14 @@ break
                                         const regexIg = /\\\//gi;
                                         const thisUrlIg = url.replace(regexIg, '/')
                                         if (ext === 'mp4') {
-                                            aruga.sendFileFromUrl(from, thisUrlIg, 'KZ0-IGDL.mp4', `*From:* ${title.split(' on')[0]}\n*Size:* ${size}\n*Resolusi :* ${resolution}`,  id)
-                                        } else if (ext === 'jpg') {
-                                            aruga.sendFileFromUrl(from, thisUrlIg, 'KZ0-IGDL.jpg', `*From:* ${title.split(' on')[0]}\n*Size:* ${size}\n*Resolusi :* ${resolution}`, id)
+                                            aruga.sendFileFromUrl(from, thisUrlIg, 'KZ0-IGDL.mp4', `*From :* ${title.split(' on')[0]}\n*Size :* ${size}\n*Resolusi :* ${resolution}`, id)
+                                        } else {
+                                            aruga.sendFileFromUrl(from, thisUrlIg, 'KZ0-IGDL.mp3', `*From:* ${title.split(' on')[0]}\n*Size:* ${size}`, id)
                                         }
                                     }
-                                })
-                            }
-                            break
+                            })
+                        }
+                                break
                             case 'asupan':
                                 if (!isGroupMsg) return await aruga.reply(from, 'Fitur ini hanya bisa digunakan didalam grup!', id)
                                 await aruga.reply(from, mess.wait, id)
