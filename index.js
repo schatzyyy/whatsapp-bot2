@@ -55,7 +55,7 @@ const start = (aruga = new Client()) => {
         // kondisi ketika seseorang dikick/keluar dari group
         if (event.action === 'remove' && event.who !== host) {
             const zchat = await aruga.getProfilePicFromServer(event.who)
-            const aigo = `eh @${event.who.replace('@c.us', '')} udah dipungut malah mau jadi anak pungut lagi.`
+            const aigo = `eh @${event.who.replace('@c.us', '')} malah keluar:(`
             await aruga.sendFileFromUrl(event.chat, zchat, 'profile.jpg', aigo)
         }
     })
@@ -90,5 +90,5 @@ const start = (aruga = new Client()) => {
 
 //create session
 create(options(true, start))
-    .then((aruga) => start(aruga))
+    .then((Urbae) => start(Urbae))
     .catch((err) => new Error(err))
