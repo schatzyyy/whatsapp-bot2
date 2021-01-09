@@ -1,5 +1,5 @@
 <p align="center">
-<img src="https://avatars.githubusercontent.com/thoriqazzikra" width="225" height="225"/>
+<img src="https://avatars.githubusercontent.com/Urbaee" width="225" height="225"/>
 </p>
 <p align="center">
 <a href="#"><img title="Whatsapp-Bot" src="https://img.shields.io/badge/Whatsapp Bot-green?colorA=%23ff0000&colorB=%23017e40&style=for-the-badge"></a>
@@ -76,7 +76,7 @@ after running it you need to scan the qr
 - Change all apiKey on [this section](https://github.com/thoriqazzikra/whatsapp-bot2/blob/master/settings/api.json)
 - Get Api NoBackground on [this website](https://www.remove.bg/)
 - Get Api ScreenShot on [this website](https://apiflash.com/)
-
+- `vhtear`: VHTear API token. You can get it [here](https://api.vhtear.com/) by purchasing his API key.
 ---
 
 ## Features

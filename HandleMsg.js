@@ -1618,7 +1618,7 @@ break
                     break
                     case 'ig':
                         case 'instagram':
-                            if (args.length == 0) return aruga.reply(from, `Kirim perintah *${prefix}ig [linkIg]*`, id)
+                           if (args.length == 0) return aruga.reply(from, `Kirim perintah *${prefix}ig [linkIg]*`, id)
                             const igUrl = body.split(' ')[1]
                             if (!igUrl.startsWith('https://www.instagram.com')) return aruga.reply(from, 'Maaf, ini bukan link instagram!')
                             aruga.reply(from, mess.wait, id)
@@ -1649,6 +1649,7 @@ break
                             })
                         }
                                 break
+<<<<<<< HEAD
                             case 'nhpdf':
                                 if (args.length == 0)return aruga.reply(from, `Kode nuklir tidak ditemukan\nUsage : ${prefix}nhpdf 20935`, id)
                                 rugaapi.nhpdf(args)
@@ -1659,6 +1660,8 @@ break
                                     aruga.reply(from, 'Error', id)
                                 })
                                 break
+=======
+>>>>>>> 4d603d20e7163a0fd0b00be808fd12c93b0d4b31
                             case 'asupan':
                                 if (!isGroupMsg) return await aruga.reply(from, 'Fitur ini hanya bisa digunakan didalam grup!', id)
                                 await aruga.reply(from, mess.wait, id)
