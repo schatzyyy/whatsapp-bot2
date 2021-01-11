@@ -131,6 +131,8 @@ after running it you need to scan the qr
 | Youtube Video |✅|
 | Facebook |✅|
 | Instagram |✅|
+| Twitter|✅|
+| Tiktok Video|✅|
 
 | Fun Group! |Yes|
 | ------------- | ------------- |
@@ -242,6 +244,14 @@ after running it you need to scan the qr
 | Arti Mimpi|✅|
 | Emoji To Sticker|✅|
 | Asupan|✅|
+| Stalk Twitter|✅|
+| IG Story|✅|
+| Find Sticker|✅|
+| GSM Arena|✅|
+| Detail City||✅|
+| Info Alamat|✅|
+| More++|✅|
+
 
 | Images |Yes|
 | --------------- | ----------- |
@@ -277,6 +287,8 @@ after running it you need to scan the qr
 | Set Status Bot|✅|
 | Set Name Bot|✅|
 | Screenshot Session|✅|
+| Add Premium|✅|
+| Delete Premium|✅|
 
 
 ## To-Do
