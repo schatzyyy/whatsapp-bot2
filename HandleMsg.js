@@ -73,7 +73,6 @@ const simi = JSON.parse(fs.readFileSync('./settings/simi.json'))
 const ngegas = JSON.parse(fs.readFileSync('./settings/ngegas.json'))
 const setting = JSON.parse(fs.readFileSync('./settings/setting.json'))
 const prem = JSON.parse(fs.readFileSync('./lib/database/prem.json'))
-const muted = JSON.parse(fs.readFileSync('./lib/database/muted.json'))
 
 let dbcot = JSON.parse(fs.readFileSync('./lib/database/bacot.json'))
 let dsay = JSON.parse(fs.readFileSync('./lib/database/say.json'))
@@ -2635,23 +2634,6 @@ case 'ytsearch':
         break
 
         //Owner Bot
-        case 'mute':
-            if (!isGroupAdmins) return aruga.reply(from, 'Perintah ini hanya bisa digunakan oleh Admin Grup!', id)
-            if (!isMuted(chatId) == true) {
-                muted.push(chatId)
-                fs.writeFileSync('./lib/database/muted.json', JSON.stringify(muted, null, 2))
-                aruga.reply(from, 'Bot berhasil dimute pada Grup ini!', id)
-            }
-            break
-        case 'unmute':
-            if (!isGroupAdmins) return aruga.reply(from, 'Perintah ini hanya bisa digunakan oleh Admin Grup!', id)
-            if (!isMuted(chatId) == false) {
-                let index = muted.indexOf(chatId);
-                muted.splice(index, 1)
-                fs.writeFileSync('./lib/database/muted.json', JSON.stringify(muted, null, 2))
-                aruga.reply(from, 'Bot berhasil di unmute pada Grup ini!', id)
-            }
-            break
         case 'addprem':
             if (!isOwnerB) return aruga.reply(from, 'Perintah ini hanya bisa digunakan oleh Owner Bot!', id)
             if (args.length == 0) return aruga.reply(from, `Untuk menambah seseorang menjadi member premium`, id)
