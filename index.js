@@ -90,5 +90,5 @@ const start = (aruga = new Client()) => {
 
 //create session
 create(options(true, start))
-    .then((Urbae) => start(Urbae))
+    .then((aruga) => start(aruga))
     .catch((err) => new Error(err))
