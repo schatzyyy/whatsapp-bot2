@@ -248,7 +248,7 @@ after running it you need to scan the qr
 | IG Story|✅|
 | Find Sticker|✅|
 | GSM Arena|✅|
-| Detail City||✅|
+| Detail City|✅|
 | Info Alamat|✅|
 | More++|✅|
 
