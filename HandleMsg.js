@@ -1,4 +1,4 @@
-require('dotenv').config()
+﻿require('dotenv').config()
 const { decryptMedia } = require('@open-wa/wa-automate')
 
 const moment = require('moment-timezone')
@@ -1024,7 +1024,6 @@ module.exports = HandleMsg = async (aruga, message) => {
             case 'randombokep': // MFARELS
             case 'bkp': // MFARELS
                 if (!isPrem) return aruga.reply(from, 'Command Premium\nChat owner buat mendaftar', id)
-                if (!isGroupAdmins) return aruga.reply(from, 'Perintah ini hanya bisa di gunakan oleh Admin Grup,karena takut penyalahgunaan', id) // MFARELS
                 const mskkntl = fs.readFileSync('./lib/18+.json') // MFARELS
                 const kntlnya = JSON.parse(mskkntl) // MFARELS
                 const rindBkp = Math.floor(Math.random() * kntlnya.length) // MFARELS
@@ -2169,7 +2168,7 @@ case 'ytsearch':
                 rugaapi.nowm(args)
                 .then(async(res) => {
                     if (res.error) return aruga.sendFileFromUrl(from `${res.url}`, '', `${res.error}`)
-                    await aruga.sendFileFromUrl(from, `${res.image}`, 'image.jpg', `*「 TIKTOK 」*\n\n*Name :* ${res.nameInfo}\n*Upload Date :* ${res.timeInfo}\n*Caption :* ${res.textInfo}`)
+                    await aruga.sendFileFromUrl(from, `${res.image}`, 'image.jpg', `*「 TIKTOK 」*\n\n*Name :* ${res.nameInfo}\n*Upload Date :* ${res.timeInfo}\n*Caption :* ${res.textInfo}`, id)
                     await aruga.sendFileFromUrl(from, `${res.mp4direct}`, '', '', id)
                     .catch(() => {
                         aruga.reply(from, 'Error ngab...', id)
@@ -2182,8 +2181,8 @@ case 'ytsearch':
 			rugaapi.ytmp4(`https://youtu.be/${linkmp4}`)
             .then(async(res) => {
 				if (res.error) return aruga.sendFileFromUrl(from, `${res.url}`, '', `${res.error}`)
-				await aruga.sendFileFromUrl(from, `${res.thumbnail}`, 'img.jpg', `*「 YOUTUBE MP4 」*\n\n*Judul :* ${res.title}\n*Size :* ${res.size}\n*Durasi :* ${res.duration}\n*Deskripsi :* ${res.desc}\n\n*_Sabar, Urbae lagi ngirim videonya_*`, id)
-				await aruga.sendFileFromUrl(from, `${res.url_video}`, '', `*${res.title}*\n*${res.size}*\n*${res.duration}*`, id)
+				await aruga.sendFileFromUrl(from, `${res.imgUrl}`, 'img.jpg', `*「 YOUTUBE MP4 」*\n\n*Judul :* ${res.title}\n*Size :* ${res.size}\n*ID :* ${res.id}\n*Execute :* ${res.ext}\n\n*_Sabar, Urbae lagi ngirim videonya_*`, id)
+				await aruga.sendFileFromUrl(from, `${res.UrlVideo}`, '', `*${res.title}*\n*${res.size}*\n*${res.ext}*`, id)
 				.catch(() => {
 					aruga.reply(from, `Error ngab`, id)
 				})
@@ -2200,7 +2199,7 @@ case 'ytsearch':
 				rugaapi.ytmp3(`https://youtu.be/${res.data[0].id}`)
 				.then(async(res) => {
 					if (res.status == 'error') return aruga.sendFileFromUrl(from, `${res.link}`, '', `${res.error}`)
-					await aruga.sendFileFromUrl(from, `${res.getAudio}`, '', '', id)
+					await aruga.sendFileFromUrl(from, `${res.link}`, '', '', id)
 					.catch(() => {
 						aruga.reply(from, `Error ngab...`, id)
 					})
@@ -2478,7 +2477,7 @@ case 'ytsearch':
              if (!jreng) return aruga.reply(from, `Kirim perintah *${prefix}tahta [teks]*\n\nContoh *${prefix}tahta elaina*`, id)
              if (jreng.length > 7) return aruga.reply(from, 'Maksimal 7 Huruf!', id)
              aruga.sendText(from, '_Sedang diproses, mohon tunggu sebentar!..._', id)
-             await aruga.sendFileFromUrl(from, `https://api.i-tech.id/tools/tahta?key=${iTechApi}&teks1=${jreng}&teks2=${jreng}&teks3=${jreng}`,`${jreng}.jpg`,`Harta Tahta ${jreng}`, id)        
+             await aruga.sendFileFromUrl(from, `https://api.vhtear.com/hartatahta?text=${jreng}&apikey=${vhtearkey}`,`${jreng}.jpg`,`Harta Tahta ${jreng}`, id)        
              break
         case 'family100':
             if (!isGroupMsg) return aruga.reply(from, 'Perintah ini hanya bisa di gunakan dalam group!', id)
@@ -2619,7 +2618,6 @@ case 'ytsearch':
         //Owner Group
         case 'kickall': //mengeluarkan semua member
         if (!isGroupMsg) return aruga.reply(from, 'Maaf, perintah ini hanya dapat dipakai didalam grup!', id)
-        let isOwner = chat.groupMetadata.owner == pengirim
         if (!isOwner) return aruga.reply(from, 'Maaf, perintah ini hanya dapat dipakai oleh owner grup!', id)
         if (!isBotGroupAdmins) return aruga.reply(from, 'Gagal, silahkan tambahkan bot sebagai admin grup!', id)
             const allMem = await aruga.getGroupMembers(groupId)
