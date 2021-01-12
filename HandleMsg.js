@@ -1,4 +1,4 @@
-require('dotenv').config()
+﻿require('dotenv').config()
 const { decryptMedia } = require('@open-wa/wa-automate')
 
 const moment = require('moment-timezone')
@@ -73,7 +73,6 @@ const simi = JSON.parse(fs.readFileSync('./settings/simi.json'))
 const ngegas = JSON.parse(fs.readFileSync('./settings/ngegas.json'))
 const setting = JSON.parse(fs.readFileSync('./settings/setting.json'))
 const prem = JSON.parse(fs.readFileSync('./lib/database/prem.json'))
-const muted = JSON.parse(fs.readFileSync('./lib/database/muted.json'))
 
 let dbcot = JSON.parse(fs.readFileSync('./lib/database/bacot.json'))
 let dsay = JSON.parse(fs.readFileSync('./lib/database/say.json'))
@@ -1025,7 +1024,6 @@ module.exports = HandleMsg = async (aruga, message) => {
             case 'randombokep': // MFARELS
             case 'bkp': // MFARELS
                 if (!isPrem) return aruga.reply(from, 'Command Premium\nChat owner buat mendaftar', id)
-                if (!isGroupAdmins) return aruga.reply(from, 'Perintah ini hanya bisa di gunakan oleh Admin Grup,karena takut penyalahgunaan', id) // MFARELS
                 const mskkntl = fs.readFileSync('./lib/18+.json') // MFARELS
                 const kntlnya = JSON.parse(mskkntl) // MFARELS
                 const rindBkp = Math.floor(Math.random() * kntlnya.length) // MFARELS
@@ -2207,7 +2205,7 @@ case 'ytsearch':
                 rugaapi.nowm(args)
                 .then(async(res) => {
                     if (res.error) return aruga.sendFileFromUrl(from `${res.url}`, '', `${res.error}`)
-                    await aruga.sendFileFromUrl(from, `${res.image}`, 'image.jpg', `*「 TIKTOK 」*\n\n*Name :* ${res.nameInfo}\n*Upload Date :* ${res.timeInfo}\n*Caption :* ${res.textInfo}`)
+                    await aruga.sendFileFromUrl(from, `${res.image}`, 'image.jpg', `*「 TIKTOK 」*\n\n*Name :* ${res.nameInfo}\n*Upload Date :* ${res.timeInfo}\n*Caption :* ${res.textInfo}`, id)
                     await aruga.sendFileFromUrl(from, `${res.mp4direct}`, '', '', id)
                     .catch(() => {
                         aruga.reply(from, 'Error ngab...', id)
@@ -2660,7 +2658,6 @@ case 'ytsearch':
         //Owner Group
         case 'kickall': //mengeluarkan semua member
         if (!isGroupMsg) return aruga.reply(from, 'Maaf, perintah ini hanya dapat dipakai didalam grup!', id)
-        let isOwner = chat.groupMetadata.owner == pengirim
         if (!isOwner) return aruga.reply(from, 'Maaf, perintah ini hanya dapat dipakai oleh owner grup!', id)
         if (!isBotGroupAdmins) return aruga.reply(from, 'Gagal, silahkan tambahkan bot sebagai admin grup!', id)
             const allMem = await aruga.getGroupMembers(groupId)
@@ -2675,23 +2672,6 @@ case 'ytsearch':
         break
 
         //Owner Bot
-        case 'mute':
-            if (!isGroupAdmins) return aruga.reply(from, 'Perintah ini hanya bisa digunakan oleh Admin Grup!', id)
-            if (!isMuted(chatId) == true) {
-                muted.push(chatId)
-                fs.writeFileSync('./lib/database/muted.json', JSON.stringify(muted, null, 2))
-                aruga.reply(from, 'Bot berhasil dimute pada Grup ini!', id)
-            }
-            break
-        case 'unmute':
-            if (!isGroupAdmins) return aruga.reply(from, 'Perintah ini hanya bisa digunakan oleh Admin Grup!', id)
-            if (!isMuted(chatId) == false) {
-                let index = muted.indexOf(chatId);
-                muted.splice(index, 1)
-                fs.writeFileSync('./lib/database/muted.json', JSON.stringify(muted, null, 2))
-                aruga.reply(from, 'Bot berhasil di unmute pada Grup ini!', id)
-            }
-            break
         case 'addprem':
             if (!isOwnerB) return aruga.reply(from, 'Perintah ini hanya bisa digunakan oleh Owner Bot!', id)
             if (args.length == 0) return aruga.reply(from, `Untuk menambah seseorang menjadi member premium`, id)
