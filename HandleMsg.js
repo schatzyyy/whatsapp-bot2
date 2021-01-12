@@ -152,7 +152,7 @@ module.exports = HandleMsg = async (aruga, message) => {
         const isQuotedVideo = quotedMsg && quotedMsg.type === 'video'
 		
         // [IDENTIFY]
-        const ownerNumber = "62895334950905@c.us"
+        const ownerNumber = "628985749687@c.us"
         const isOwnerBot = ownerNumber.includes(pengirim)
         const isOwner = ownerNumber.includes(pengirim)
         const isOwnerB = ownerNumber.includes(pengirim)
@@ -2156,8 +2156,7 @@ case 'ytsearch':
                 aruga.reply(from, '_Scrapping Metadata...._', id)
                 rugaapi.fb(args)
                 .then(async(res) => {
-                    if (res.error) return aruga.sendFileFromUrl(from, `${res.url}`, '', `${res.error}`)
-                    await aruga.sendFileFromUrl(from, `${res.VideoUrl}`, 'fb.mp4', '', id)
+                    await aruga.sendFileFromUrl(from, `${res.result.VideoUrl}`, '', '', id)
                     .catch(() => {
                         aruga.reply(from, `Error...`, id)
                     })
@@ -2214,6 +2213,7 @@ case 'ytsearch':
             break
             case 'ytmp4':
             if (args.length == 0) return aruga.reply(from, `Untuk mendownload lagu dari youtube\nketik: ${prefix}ytmp4 [link_yt]`, id)
+		if (!isPrem) return aruga.reply(from, 'Command Premium\nChat owner buat mendaftar', id)
             const linkmp4 = args[0].replace('https://youtu.be/','').replace('https://www.youtube.com/watch?v=','')
 			rugaapi.ytmp4(`https://youtu.be/${linkmp4}`)
             .then(async(res) => {
@@ -2229,13 +2229,12 @@ case 'ytsearch':
             })
             break
             case 'play'://silahkan kalian custom sendiri jika ada yang ingin diubah
-            if (args.length == 0) return aruga.reply(from, `Untuk mencari lagu dari youtube\n\nPenggunaan: ${prefix}play judul lagu`, id)
-            axios.get(`https://docs-jojo.herokuapp.com/api/yt-play?q=${body.slice(6)}`)
+           if (args.length == 0) return aruga.reply(from, `Untuk mencari lagu dari youtube\n\nPenggunaan: ${prefix}play judul lagu`, id)
+            axios.get(`https://arugaytdl.herokuapp.com/search?q=${body.slice(6)}`)
             .then(async (res) => {
-                await aruga.sendFileFromUrl(from, `${res.data.thumb}`, ``, `*「 PLAY 」*\n\n*Judul :* ${res.data.title}\n*From Channel :* ${res.data.channel}\n*Uploaded :* ${res.data.uploaded}\n*Duration :* ${res.data.duration}\n*View :* ${res.data.total_view}\n*Size :* ${res.data.filesize}\n\n*_Sabar, Urbae lagi ngirim Audionya_*`, id)
-				rugaapi.ytmp3(`https://youtu.be/${res.data.id}`)
+                await aruga.sendFileFromUrl(from, `${res.data[0].thumbnail}`, ``, `*「 PLAY 」*\n\n*Judul :* ${res.data[0].title}\n*Durasi :* ${res.data[0].duration}detik\n*Uploaded :* ${res.data[0].uploadDate}\n*View :* ${res.data[0].viewCount}\n\n_*Wait, Urbae lagi ngirim lagunya*_`, id)
+				rugaapi.ytmp3(`https://youtu.be/${res.data[0].id}`)
 				.then(async(res) => {
-					if (res.status == 'error') return aruga.sendFileFromUrl(from, `${res.link}`, '', `${res.error}`)
 					await aruga.sendFileFromUrl(from, `${res.link}`, '', '', id)
 					.catch(() => {
 						aruga.reply(from, `Error ngab...`, id)
