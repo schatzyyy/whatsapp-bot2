@@ -2088,7 +2088,7 @@ case 'ytsearch':
                 const igstalkpict = await rugaapi.stalkigpict(args[0])
                 await aruga.sendFileFromUrl(from, igstalkpict, '', igstalk, id)
                 .catch(() => {
-                    aruga.reply(from, 'Ada yang Error!', id)
+                    aruga.reply(from, 'Akun tidak dapat ditemukan...', id)
                 })
                 break
         case 'wiki':
