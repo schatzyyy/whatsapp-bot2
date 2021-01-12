@@ -1551,8 +1551,8 @@ break
                 rugaapi.ytmp3(`https://youtu.be/${linkmp3}`)
                 .then(async(res) => {
                     if (res.error) return aruga.sendFileFromUrl(from, `${res.url}`, '', `${res.error}`)
-                    await aruga.sendFileFromUrl(from, `${res.imgUrl}`, 'image.jpg', `*「 YOUTUBE MP3 」*\n\n*Judul :* ${res.title}\n*Id :* ${res.id}\n*Size :* ${res.size}\n*Execute :* ${res.ext}\n*Source :* ${res.url}\n\n*_Sabar, Urbae lagi ngirim Audionya_*`, id)
-                    await aruga.sendFileFromUrl(from, `${res.UrlMp3}`, '', '', id)
+                    await aruga.sendFileFromUrl(from, `${res.thumb}`, 'image.jpg', `*「 YOUTUBE MP3 」*\n\n*Judul :* ${res.title}\n*From Channel :* ${res.channel}\n*Uploaded :* ${res.uploaded}\n*Duration :* ${res.duration}\n*View :* ${res.total_view}\n*Size :* ${res.filesize}\n\n*_Sabar, Urbae lagi ngirim Audionya_*`, id)
+                    await aruga.sendFileFromUrl(from, `${res.link}`, '', '', id)
                     .catch(() => {
                 aruga.reply(from, `Error ngab`, id)
             })
@@ -2037,6 +2037,43 @@ case 'ytsearch':
                     aruga.reply(from, 'Maaf, Jenis Handphone yang anda cari tidak dapat kami temukan', id)
                 })
                 break
+            case 'darkjokes':
+                aruga.reply(from, mess.wait, id)
+                 await axios.get(`https://api.zeks.xyz/api/darkjokes?apikey=benbenz`).then(res => {
+                    aruga.sendFileFromUrl(from, `${res.data.result}`, 'image.jpg', id)
+                    console.log('Success')
+                    .catch(() => {
+                        aruga.reply(from, 'Error')
+                    })
+                })
+                .catch(() => {
+                    aruga.reply(from, 'Error ngabb...', id)
+                })
+                break
+            case 'goldpb':
+                if (args.length == 0) return aruga.reply(from, `Bot akan mengirimkan Gold Play Button dengan nama yang kalian custom sendiri\nContoh : ${prefix}goldpb Urbaee`, id)
+                const yuza = body.slice(8)
+                await axios.get(`https://api.zeks.xyz/api/gplaybutton?text=${yuza}&apikey=benbenz`).then(res => {
+                    console.log('Getting Picture');
+                    aruga.sendFileFromUrl(from, `${res.data.result}`, 'image.jpg', 'Congratsss for 1 Million Subscribers', id)
+                    })
+                .catch(() => {
+                    aruga.reply(from, 'Error....', id)
+                })
+                break
+            case 'silverpb':
+                if (args.length == 0) return aruga.reply(from, `Bot akan mengirimkan Silver Play Button dengan kata yang anda masukkan\nContoh : ${prefix}silverpb Urbaee`, id)
+                const yuzu = body.slice(10)
+                await axios.get(`https://api.zeks.xyz/api/splaybutton?text=${yuzu}&apikey=benbenz`).then(res => {
+                    aruga.sendFileFromUrl(from, `${res.data.result}`, 'image.jpg', 'Congratss!!', id)
+                    .catch(() => {
+                        aruga.reply(from, 'Error ngab', id)
+                    })
+                })
+                .catch(() => {
+                    aruga.reply(from, 'Error ngab...', id)
+                })
+                break
             case 'stalktwit':
             case 'stalktwitter':
                 if (args.length == 0) return aruga.reply(from, `Untuk men-stalk akun Burung Biru/Twitter seseorang\nketik ${prefix}stalktwit [username]\ncontoh : ${prefix}twitter anakbabi123`, id)
@@ -2183,8 +2220,8 @@ case 'ytsearch':
 			rugaapi.ytmp4(`https://youtu.be/${linkmp4}`)
             .then(async(res) => {
 				if (res.error) return aruga.sendFileFromUrl(from, `${res.url}`, '', `${res.error}`)
-				await aruga.sendFileFromUrl(from, `${res.thumbnail}`, 'img.jpg', `*「 YOUTUBE MP4 」*\n\n*Judul :* ${res.title}\n*Size :* ${res.size}\n*Durasi :* ${res.duration}\n*Deskripsi :* ${res.desc}\n\n*_Sabar, Urbae lagi ngirim videonya_*`, id)
-				await aruga.sendFileFromUrl(from, `${res.url_video}`, '', `*${res.title}*\n*${res.size}*\n*${res.duration}*`, id)
+				await aruga.sendFileFromUrl(from, `${res.imgUrl}`, 'img.jpg', `*「 YOUTUBE MP4 」*\n\n*Judul :* ${res.title}\n*Size :* ${res.size}\n*ID Video :* ${res.id}\n*Execute :* ${res.ext}\n\n*_Sabar, Urbae lagi ngirim videonya_*`, id)
+				await aruga.sendFileFromUrl(from, `${res.UrlVideo}`, '', `*${res.title}*\n*${res.size}*\n*${res.ext}*`, id)
 				.catch(() => {
 					aruga.reply(from, `Error ngab`, id)
 				})
@@ -2195,13 +2232,13 @@ case 'ytsearch':
             break
             case 'play'://silahkan kalian custom sendiri jika ada yang ingin diubah
             if (args.length == 0) return aruga.reply(from, `Untuk mencari lagu dari youtube\n\nPenggunaan: ${prefix}play judul lagu`, id)
-            axios.get(`https://arugaytdl.herokuapp.com/search?q=${body.slice(6)}`)
+            axios.get(`https://docs-jojo.herokuapp.com/api/yt-play?q=${body.slice(6)}`)
             .then(async (res) => {
-                await aruga.sendFileFromUrl(from, `${res.data[0].thumbnail}`, ``, `*「 PLAY 」*\n\n*Judul :* ${res.data[0].title}\n*Durasi :* ${res.data[0].duration}detik\n*Uploaded :* ${res.data[0].uploadDate}\n*View :* ${res.data[0].viewCount}\n\n*_Wait, Urbae lagi ngirim lagunya_*`, id)
-				rugaapi.ytmp3(`https://youtu.be/${res.data[0].id}`)
+                await aruga.sendFileFromUrl(from, `${res.data.thumb}`, ``, `*「 PLAY 」*\n\n*Judul :* ${res.data.title}\n*From Channel :* ${res.data.channel}\n*Uploaded :* ${res.data.uploaded}\n*Duration :* ${res.data.duration}\n*View :* ${res.data.total_view}\n*Size :* ${res.data.filesize}\n\n*_Sabar, Urbae lagi ngirim Audionya_*`, id)
+				rugaapi.ytmp3(`https://youtu.be/${res.data.id}`)
 				.then(async(res) => {
 					if (res.status == 'error') return aruga.sendFileFromUrl(from, `${res.link}`, '', `${res.error}`)
-					await aruga.sendFileFromUrl(from, `${res.getAudio}`, '', '', id)
+					await aruga.sendFileFromUrl(from, `${res.link}`, '', '', id)
 					.catch(() => {
 						aruga.reply(from, `Error ngab...`, id)
 					})
@@ -2479,7 +2516,10 @@ case 'ytsearch':
              if (!jreng) return aruga.reply(from, `Kirim perintah *${prefix}tahta [teks]*\n\nContoh *${prefix}tahta elaina*`, id)
              if (jreng.length > 7) return aruga.reply(from, 'Maksimal 7 Huruf!', id)
              aruga.sendText(from, '_Sedang diproses, mohon tunggu sebentar!..._', id)
-             await aruga.sendFileFromUrl(from, `https://api.i-tech.id/tools/tahta?key=${iTechApi}&teks1=${jreng}&teks2=${jreng}&teks3=${jreng}`,`${jreng}.jpg`,`Harta Tahta ${jreng}`, id)        
+             await aruga.sendFileFromUrl(from, `https://api.vhtear.com/hartatahta?text=${jreng}&apikey=${vhtearkey}`,`${jreng}.jpg`,`Harta Tahta ${jreng}`, id)
+             .catch(() => {
+                 aruga.reply(from, 'Error', id)
+             })
              break
         case 'family100':
             if (!isGroupMsg) return aruga.reply(from, 'Perintah ini hanya bisa di gunakan dalam group!', id)
