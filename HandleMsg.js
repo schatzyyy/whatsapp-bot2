@@ -1550,7 +1550,7 @@ break
                 .then(async(res) => {
                     if (res.error) return aruga.sendFileFromUrl(from, `${res.url}`, '', `${res.error}`)
                     await aruga.sendFileFromUrl(from, `${res.thumb}`, 'image.jpg', `*「 YOUTUBE MP3 」*\n\n*Judul :* ${res.title}\n*From Channel :* ${res.channel}\n*Uploaded :* ${res.uploaded}\n*Duration :* ${res.duration}\n*View :* ${res.total_view}\n*Size :* ${res.filesize}\n\n*_Sabar, Urbae lagi ngirim Audionya_*`, id)
-                    await aruga.sendFileFromUrl(from, `${res.link}`, '', '', id)
+                    await aruga.sendFileFromUrl(from, `${res.link}`, '', id)
                     .catch(() => {
                 aruga.reply(from, `Error ngab`, id)
             })
