@@ -2633,7 +2633,7 @@ case 'ytsearch':
 	case 'bot':
 		if (args.length == 0) return aruga.replu(from, `Kirim perintah ${prefix}bot [teks]\nContoh : ${prefix}bot halo`, id)
 		const arbu = body.slice(5)
-		axios.get(`https://tobz-api.herokuapp.com/api/simsimi?text=${arbu}&apikey=BotWeA`).then(res => {
+		axios.get(`https://tobz-api.herokuapp.com/api/simsimi?text=${arbu}&apikey=apikey`).then(res => {
 		console.log(arbu)
 		const segey = `${res.data.result}`
 		aruga.reply(from, segey, id)
