@@ -1036,7 +1036,7 @@ module.exports = HandleMsg = async (aruga, message) => {
             let islink = linkgrup.match(/(https:\/\/chat.whatsapp.com)/gi)
             let chekgrup = await aruga.inviteInfo(linkgrup)
             if (!islink) return aruga.reply(from, 'Maaf link group-nya salah! silahkan kirim link yang benar', id)
-            if (isOwnerBot) {
+            if (isPrem) {
                 await aruga.joinGroupViaLink(linkgrup)
                       .then(async () => {
                           await aruga.sendText(from, 'Berhasil join grup via link!')
@@ -1244,29 +1244,29 @@ module.exports = HandleMsg = async (aruga, message) => {
                     }
                 }
                 break
-            case 'stickergif':
-                case 'stikergif':
-                case 'sgif':
-                    if (isMedia || isQuotedVideo) {
-                        if (mimetype === 'video/mp4' && message.duration < 20 || mimetype === 'image/gif' && message.duration < 20) {
-                            var mediaData = await decryptMedia(message, uaOverride)
-                            aruga.reply(from, '[WAIT] Sedang di proses⏳ silahkan tunggu ± 1 min!', id)
-                            var filename = `./media/stickergif.${mimetype.split('/')[1]}`
-                            await fs.writeFileSync(filename, mediaData)
-                            await exec(`gify ${filename} ./media/stickergif.mp4 --fps=30 --scale=240:240`, async function (error, stdout, stderr) {
-                                var gif = await fs.readFileSync('./media/stickergif.mp4', { encoding: "base64" })
-                                await aruga.sendImageAsSticker(from, `data:image/gif;base64,${gif.toString('base64')}`)
-                                .catch(() => {
-                                    aruga.reply(from, 'Maaf filenya terlalu besar!', id)
-                                })
-                            })
-                          } else {
-                            aruga.reply(from, `[❗] Kirim gif dengan caption *${prefix}stickergif* max 10 sec!`, id)
-                           }
-                        } else {
-                    aruga.reply(from, `[❗] Kirim gif dengan caption *${prefix}stickergif*`, id)
-                    }
-                    break
+           case 'stickergif':
+        case 'stikergif':
+	case 'sgif':
+            if (isMedia || isQuotedVideo) {
+                if (mimetype === 'video/mp4' && message.duration < 10 || mimetype === 'image/gif' && message.duration < 10) {
+                    var mediaData = await decryptMedia(message, uaOverride)
+                    aruga.reply(from, '[WAIT] Sedang di proses⏳ silahkan tunggu ± 1 min!', id)
+                    var filename = `./media/stickergif.${mimetype.split('/')[1]}`
+                    await fs.writeFileSync(filename, mediaData)
+                    await exec(`gify ${filename} ./media/stickergif.mp4 --fps=30 --scale=240:240`, async function (error, stdout, stderr) {
+                        var gif = await fs.readFileSync('./media/stickergif.mp4', { encoding: "base64" })
+                        await aruga.sendImageAsSticker(from, `data:image/gif;base64,${gif.toString('base64')}`)
+                        .catch(() => {
+                            aruga.reply(from, 'Maaf filenya terlalu besar!', id)
+                        })
+                    })
+                  } else {
+                    aruga.reply(from, `[❗] Kirim gif dengan caption *${prefix}stickergif* max 10 sec!`, id)
+                   }
+                } else {
+		    aruga.reply(from, `[❗] Kirim gif dengan caption *${prefix}stickergif*`, id)
+	        }
+            break
         case 'stikergiphy':
         case 'stickergiphy':
             if (args.length !== 1) return aruga.reply(from, `Maaf, format pesan salah.\nKetik pesan dengan ${prefix}stickergiphy <link_giphy>`, id)
@@ -2259,10 +2259,17 @@ case 'ytsearch':
             break
             case 'play'://silahkan kalian custom sendiri jika ada yang ingin diubah
            if (args.length == 0) return aruga.reply(from, `Untuk mencari lagu dari youtube\n\nPenggunaan: ${prefix}play judul lagu`, id)
-            axios.get(`https://docs-jojo.herokuapp.com/api/yt-play?q=${body.slice(6)}`)
+             axios.get(`https://arugaytdl.herokuapp.com/search?q=${body.slice(6)}`)
             .then(async (res) => {
-                await aruga.sendFileFromUrl(from, `${res.data.thumb}`, ``, `*「 PLAY 」*\n\n*Judul :* ${res.data.title}\n*Channel :* ${res.data.channel}\n*Durasi :* ${res.data.duration}detik\n*Size :* ${res.data.filesize}\n*Uploaded :* ${res.data.uploaded}\n*View :* ${res.data.total_view}\n\n_*Wait, Urbae lagi ngirim lagunya*_`, id)
-		await aruga.sendFileFromUrl(from, `${res.data.link}`, '', '', id)
+                await aruga.sendFileFromUrl(from, `${res.data[0].thumbnail}`, ``, `「 *PLAY* 」\n\nJudul: ${res.data[0].title}\nDurasi: ${res.data[0].duration}detik\nUploaded: ${res.data[0].uploadDate}\nView: ${res.data[0].viewCount}\n\n*_Wait, Urbae lagi ngirim Filenya_*`, id)
+				rugaapi.ytmp3(`https://youtu.be/${res.data[0].id}`)
+				.then(async(res) => {
+					if (res.status == 'error') return aruga.sendFileFromUrl(from, `${res.link}`, '', `${res.error}`)
+					await aruga.sendFileFromUrl(from, `${res.getAudio}`, '', '', id)
+					.catch(() => {
+						aruga.reply(from, `Error ngab...`, id)
+					})
+				})
             })
             break
 		case 'trendingtwit':
@@ -2282,23 +2289,6 @@ case 'ytsearch':
                             await aruga.reply(from, 'Error!', id)
                         })
                         break 
-		case 'trendingtwit':
-                    case 'trendtwit':
-                        await aruga.reply(from, mess.wait, id)
-                        rugaapi.trend()
-                        .then(async ({ result }) => {
-                            let trend = '-----[ *TRENDING TWITTER* ]-----'
-                            for (let i = 0; i < result.length; i++) {
-                                trend += `\n\n➸ *Hashtag :* ${result[i].hastag}\n➸ *Trending Number :* ${result[i].rank}\n➸ *Jumlah Tweets :* ${result[i].tweet}\n➸ *Link :* ${result[i].link}\n\n=_=_=_=_=_=_=_=_=_=_=_=_=`
-                            }
-                            await aruga.reply(from, trend, id)
-                            console.log('Success sending Trending Tweets')
-                        })
-                        .catch(async (err) => {
-                            console.error(err)
-                            await aruga.reply(from, 'Error!', id)
-                        })
-                        break
             case 'play3'://silahkan kalian custom sendiri jika ada yang ingin diubah
             if (args.length == 0) return aruga.reply(from, `Untuk mencari lagu dari youtube\n\nPenggunaan: ${prefix}play judul lagu`, id)
             axios.get(`https://arugaytdl.herokuapp.com/search?q=${body.slice(6)}`)
@@ -2633,9 +2623,9 @@ case 'ytsearch':
 	case 'bot':
 		if (args.length == 0) return aruga.replu(from, `Kirim perintah ${prefix}bot [teks]\nContoh : ${prefix}bot halo`, id)
 		const arbu = body.slice(5)
-		axios.get(`https://tobz-api.herokuapp.com/api/simsimi?text=${arbu}&apikey=apikey`).then(res => {
+		axios.get(`http://videfikri.com/api/simsimi/?teks=${arbu}`).then(res => {
 		console.log(arbu)
-		const segey = `${res.data.result}`
+		const segey = `${res.data.jawaban}`
 		aruga.reply(from, segey, id)
 		console.log(segey)
 	})
@@ -2756,7 +2746,7 @@ case 'ytsearch':
             aruga.reply(from, 'success add', id)
             break
         case 'ban':
-            if (!isOwnerB) return aruga.reply(from, 'Perintah ini hanya untuk Owner bot!', id)
+            if (!isOwnerB && !isPrem) return aruga.reply(from, 'Perintah ini hanya untuk Owner bot!', id)
             if (args.length == 0) return aruga.reply(from, `Untuk banned seseorang agar tidak bisa menggunakan commands\n\nCaranya ketik: \n${prefix}ban add 628xx --untuk mengaktifkan\n${prefix}ban del 628xx --untuk nonaktifkan\n\ncara cepat ban banyak digrup ketik:\n${prefix}ban @tag @tag @tag`, id)
             if (args[0] == 'add') {
                 banned.push(args[1]+'@c.us')
