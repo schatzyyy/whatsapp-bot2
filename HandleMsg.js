@@ -2257,10 +2257,10 @@ case 'ytsearch':
             break
             case 'play'://silahkan kalian custom sendiri jika ada yang ingin diubah
            if (args.length == 0) return aruga.reply(from, `Untuk mencari lagu dari youtube\n\nPenggunaan: ${prefix}play judul lagu`, id)
-             axios.get(`https://api.vhtear.com/ytmp3?query=${body.slice(6)}&apikey=punyanabil`)
+              axios.get(`https://arugaytdl.herokuapp.com/search?q=${body.slice(6)}`)
             .then(async (res) => {
-                await aruga.sendFileFromUrl(from, `${res.data.result.image}`, ``, `「 *PLAY* 」\n\nJudul: ${res.data.result.title}\nDurasi: ${res.data.result.duration}detik\nSize : ${res.data.result.size}\n\n*_Wait, Urbae lagi ngirim Filenya_*`, id)
-				rugaapi.ytmp3(`https://youtu.be/${res.data.result.id}`)
+                  await aruga.sendFileFromUrl(from, `${res.data[0].thumbnail}`, ``, `「 *PLAY* 」\n\nJudul: ${res.data[0].title}\nDurasi: ${res.data[0].duration}detik\nUploaded: ${res.data[0].uploadDate}\nView: ${res.data[0].viewCount}\n\n*_Wait, Urbae lagi ngirim Filenya_*`, id)
+				rugaapi.ytmp3(`https://youtu.be/${res.data[0].id}`)
 				.then(async(res) => {
                     await aruga.sendFileFromUrl(from, `${res.result}`, '', '', id)
 					.catch(() => {
@@ -2286,14 +2286,6 @@ case 'ytsearch':
                             await aruga.reply(from, 'Error!', id)
                         })
                         break 
-                        case 'play3'://silahkan kalian custom sendiri jika ada yang ingin diubah
-                        if (args.length == 0) return aruga.reply(from, `Untuk mencari lagu dari youtube\n\nPenggunaan: ${prefix}play judul lagu`, id)
-                          axios.get(`https://api.vhtear.com/ytmp3?query=${body.slice(6)}&apikey=punyanabil`)
-                         .then(async (res) => {
-                             await aruga.sendFileFromUrl(from, `${res.data.result.image}`, ``, `「 *PLAY* 」\n\nJudul: ${res.data.result.title}\nDurasi: ${res.data.result.duration}detik\nSize : ${res.data.result.size}\n\n*_Wait, Urbae lagi ngirim Linknya_*`, id)
-                             aruga.reply(from, `buat sementara download manual aja dlu yaa>~<\n\n ${res.data.result.mp3}`, id)
-                         })
-                         break
             case 'play2'://silahkan kalian custom sendiri jika ada yang ingin diubah
             if (args.length == 0) return aruga.reply(from, `Untuk mencari lagu dari youtube\n\nPenggunaan: ${prefix}play judul lagu`, id)
             axios.get(`https://arugaytdl.herokuapp.com/search?q=${body.slice(7)}`)
