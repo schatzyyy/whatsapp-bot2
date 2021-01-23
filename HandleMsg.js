@@ -544,6 +544,9 @@ module.exports = HandleMsg = async (aruga, message) => {
             if (!isGroupAdmins) return aruga.reply(from, 'Gagal, inget lu itu Member bukan Admin', id)
             await aruga.sendText(from, menuId.textAdmin())
             break
+            case 'kodenuklir':
+                await aruga.sendText(from, menuId.kodenuklir())
+                break
         case 'donate':
         case 'donasi':
             await aruga.sendText(from, menuId.textDonasi())
@@ -1194,8 +1197,25 @@ module.exports = HandleMsg = async (aruga, message) => {
                     }
                 }}
                 break
+				case 'movie':
+				if (args.length == 0) return aruga.reply(from, `Untuk mencari suatu film dari website Bajakan:v\n${prefix}movie the uncanny counter`, id)
+				await aruga.reply(from, mess.wait, id)
+				rugaapi.movie(args)
+				.then(async ({ result }) => {
+					let mov = '*-----「 MOVIE 」-----*'
+					for (let i = 0; i < result.length; i++) {
+						mov += `\n\n• *Judul :* ${result[i].title}\n• *URL Download :* ${result[i].url}\n\n=_=_=_=_=_=_=_=_=_=_=_=_=`
+					}
+					await aruga.sendFileFromUrl(from, result[0].thumb, 'thumb.jpg', mov, id)
+					console.log('Success sending Movie from query')
+				})
+				.catch(async (err) => {
+					console.error(err)
+					await aruga.reply(from, 'Error njing', id)
+				})
+				break
 	case 'filmapik':
-                        if (args.length == 0) return aruga.reply(from, `Mencari sebuah film dari Webstire Film Apik!\nContoh : ${prefix}filmapik Revolutionary Love`, id)
+                        if (args.length == 0) return aruga.reply(from, `Mencari sebuah film dari Website Film Apik!\nContoh : ${prefix}filmapik Revolutionary Love`, id)
                         await aruga.reply(from, mess.wait, id)
                         rugaapi.filmapik(args)
                         .then(async ({ result }) => {
@@ -1631,6 +1651,38 @@ break
                         await aruga.reply(from, `Wrong Format!\n[❗] Kirim perintah *${prefix}glitch [ |Teks1|Teks2 ]*, contoh *${prefix}glitch |Urbae|Dev Elaina*`, id)
                     }
                     break
+					case 'javcosplay':
+					await aruga.reply(from, mess.wait, id)
+					rugaapi.cosplay()
+					.then(async ({ result }) => {
+						let jav = '-----[ *Jav Cosplay* ]-----'
+						for (let i = 0; i < result.length; i++) {
+							jav += `\n\n• *Title :* ${result[i].title}\n• *Detail :* ${result[i].detail}\n• *URL :* ${result[i].url}\n\n=_=_=_=_=_=_=_=_=_=_=_=_=`
+						}
+						await aruga.reply(from, jav, id)
+						console.log('Succes Sending Jav Cosplay')
+					})
+					.catch(async (err) => {
+						console.error(err)
+						aruga.reply(from, 'Error....', id)
+					})
+					break
+					case 'listnekopoi':
+					await aruga.reply(from, mess.wait, id)
+					rugaapi.listnek()
+					.then (async ({ result }) => {
+						let listnekopoi = '-----[ *NEKOPOI LIST* ]-----'
+						for (let i = 0; i < result.length; i++) {
+							listnekopoi += `\n\n• *Judul :* ${result[i].title}\n• *Seri :* ${result[i].seri}\n• *URL :* ${result[i].url}=_=_=_=_=_=_=_=_=_=_=_=_=`
+						}
+						await aruga.reply(from, listnekopoi, id)
+						console.log('Succes Sending List Nekopoi')
+					})
+					.catch(async (err) => {
+						console.error(err)
+						aruga.reply(from, 'Error...', id)
+					})
+					break
                     case 'anoboy':
                         await aruga.reply(from, mess.wait, id)
                         rugaapi.anoboy()
@@ -1747,8 +1799,7 @@ break
                                         console.error(err)
                                         await aruga.reply(from, 'Error!', id)
                                     })
-                            break
-                             
+                            break        
 case 'ytsearch':
     if (args.length === 0) return aruga.reply(from, `Kirim perintah *${prefix}ytsearch [ Query ]*, Contoh : ${prefix}ytsearch alan walker alone`)
     const ytsher = body.slice(10)
@@ -1856,6 +1907,12 @@ case 'ytsearch':
                 aruga.reply(from, gayy, id)
             })
             break
+			case 'fakta2':
+			axios.get(`https://arugaz.my.id/api/random/text/faktaunik`).then(res => {
+				const faktuy = `${res.data.result}`
+				aruga.reply(from, faktuy, id)
+			})
+			break
         case 'fakta':
             fetch('https://raw.githubusercontent.com/ArugaZ/grabbed-results/main/random/faktaunix.txt')
             .then(res => res.text())
@@ -2015,22 +2072,6 @@ case 'ytsearch':
                 aruga.reply(from, 'Ada yang Error!', id)
             })
             break
-        case 'nekopoi':
-             rugapoi.getLatest()
-            .then((result) => {
-                rugapoi.getVideo(result.link)
-                .then((res) => {
-                    let heheq = '\n'
-                    for (let i = 0; i < res.links.length; i++) {
-                        heheq += `${res.links[i]}\n`
-                    }
-                    aruga.reply(from, `Title: ${res.title}\n\nLink:\n${heheq}\nmasih tester bntr :v`)
-                })
-            })
-            .catch(() => {
-                aruga.reply(from, 'Ada yang Error!', id)
-            })
-            break
             case 'stalktiktok':
             case 'stalktik':
             case 'stalktt':
@@ -2051,10 +2092,19 @@ case 'ytsearch':
                     aruga.reply(from, 'Maaf, Jenis Handphone yang anda cari tidak dapat kami temukan', id)
                 })
                 break
+				case 'memeindo':
+				await axios.get('https://api.zeks.xyz/api/memeindo?apikey=apivinz').then(res => {
+					aruga.sendFileFromUrl(from, `${res.data.result}`, 'image.jpg', 'nehh njeng', id)
+					console.log('Success')
+				})
+				.catch((err) => {
+					aruga.reply(from, err, id)
+				})
+				break
             case 'darkjokes':
                 aruga.reply(from, mess.wait, id)
-                 await axios.get(`https://api.zeks.xyz/api/darkjokes?apikey=benbenz`).then(res => {
-                    aruga.sendFileFromUrl(from, `${res.data.result}`, 'image.jpg', id)
+                 await axios.get(`https://api.zeks.xyz/api/darkjokes?apikey=apivinz`).then(res => {
+                    aruga.sendFileFromUrl(from, `${res.data.result}`, 'image.jpg', 'nehh njeng', id)
                     console.log('Success')
                     .catch(() => {
                         aruga.reply(from, 'Error', id)
@@ -2127,7 +2177,7 @@ case 'ytsearch':
             if (args.length == 0) return aruga.reply(from, `Untuk mencari lirik dari sebuah lagu\bketik: ${prefix}lirik [judul_lagu]`, id)
             rugaapi.lirik(body.slice(7))
             .then(async (res) => {
-                await aruga.reply(from, `Lirik Lagu: ${body.slice(7)}\n\n${res.result}`, id)
+                await aruga.reply(from, `Lirik Lagu: ${body.slice(7)}\n\n${res.lirik}`, id)
             })
             break
         case 'chord':
@@ -2230,9 +2280,7 @@ case 'ytsearch':
                 if (args.length == 0) return aruga.reply(from, `Kirim perintah *${prefix}tiktok [linkTiktok]*`, id)
                 rugaapi.nowm2(args)
                 .then(async(res) => {
-                    if (res.error) return aruga.sendFileFromUrl(from `${res.url}`, '', `${res.error}`)
-                    await aruga.sendFileFromUrl(from, `${res.thumbnail}`, 'image.jpg', `*「 TIKTOK 」*\n\n*Title :* ${res.title}\n*Duration :* ${res.duration}\n*Video Url :* ${res.video_url}\n*Source :* ${res.source}`, id)
-                    await aruga.sendFileFromUrl(from, `${res.result[0].url}`, '', `*Resolusi :* ${res.result[0].quality}\n*Size :* ${res.result[0].size}\n*Type :* ${res.result[0].type}`, id)
+                    await aruga.sendFileFromUrl(from, `${res.video}`, '', '', id)
                     .catch(() => {
                         aruga.reply(from, 'Error ngab...', id)
                     })
@@ -2255,18 +2303,27 @@ case 'ytsearch':
                 aruga.reply(from, 'Error...', id)
             })
             break
+			case 'nekopoi':
+			axios.get(`https://arugaz.my.id/api/anime/nekopoi/random`)
+			.then(async (res) => {
+				await aruga.sendFileFromUrl(from, `${res.data[0].image}`, '', `「 *NEKOPOI* 」\n\n*Judul :* ${res.data[0].title}\n*Link :* ${res.data[0].link}`,id)
+				.catch(() => {
+					aruga.reply(from, 'Error njing', id)
+				})
+			})
+				break
             case 'play'://silahkan kalian custom sendiri jika ada yang ingin diubah
            if (args.length == 0) return aruga.reply(from, `Untuk mencari lagu dari youtube\n\nPenggunaan: ${prefix}play judul lagu`, id)
-              axios.get(`https://arugaytdl.herokuapp.com/search?q=${body.slice(6)}`)
+			axios.get(`https://api.vhtear.com/youtube?query=${body.slice(6)}&apikey=${vhtearkey}`)
             .then(async (res) => {
-                  await aruga.sendFileFromUrl(from, `${res.data[0].thumbnail}`, ``, `「 *PLAY* 」\n\nJudul: ${res.data[0].title}\nDurasi: ${res.data[0].duration}detik\nUploaded: ${res.data[0].uploadDate}\nView: ${res.data[0].viewCount}\n\n*_Wait, Urbae lagi ngirim Filenya_*`, id)
-				rugaapi.ytmp3(`https://youtu.be/${res.data[0].id}`)
+                  await aruga.sendFileFromUrl(from, `${res.data.result[0].image}`, ``, `「 *PLAY* 」\n\n*Judul :* ${res.data.result[0].title}\n*Durasi :* ${res.data.result[0].duration} detik\n*Channel :* ${res.data.result[0].channel}\n*Viewers :* ${res.data.result[0].views}\n\n*_Wait, Urbae lagi ngirim Audionya_*`, id)
+				rugaapi.ytmp3(`https://youtu.be/${res.data.result[0].id}`)
 				.then(async(res) => {
                     await aruga.sendFileFromUrl(from, `${res.result}`, '', '', id)
 					.catch(() => {
 						aruga.reply(from, `Error ngab...`, id)
 					})
-				})
+                })
             })
             break
 		case 'trendingtwit':
@@ -2293,7 +2350,7 @@ case 'ytsearch':
                 await aruga.sendFileFromUrl(from, `${res.data[0].thumbnail}`, ``, `*「 PLAY VIDEO 」*\n\n*Judul :* ${res.data[0].title}\n*Durasi :* ${res.data[0].duration}detik\n*Uploaded :* ${res.data[0].uploadDate}\n*View :* ${res.data[0].viewCount}\n\n*_Wait, Urbae lagi ngirim videonya_*`, id)
 				rugaapi.ymp4(`https://youtu.be/${res.data[0].id}`)
 				.then(async(res) => {
-					await aruga.sendFileFromUrl(from, `${res.getVideo}`, '', '', id)
+					await aruga.sendFileFromUrl(from, `${res.result}`, '', '', id)
 					.catch(() => {
 						aruga.reply(from, `Error ngab...`, id)
 					})
@@ -2318,14 +2375,6 @@ case 'ytsearch':
                         await aruga.reply(from, 'Error!', id)
                     })
             break
-		case 'movie':
-			if (args.length == 0) return aruga.reply(from, `Untuk mencari suatu movie dari website sdmovie.fun\nketik: ${prefix}movie judulnya`, id)
-			rugaapi.movie((body.slice(7)))
-			.then(async (res) => {
-				if (res.status == 'error') return aruga.reply(from, res.hasil, id)
-				await aruga.sendFileFromUrl(from, res.link, 'movie.jpg', res.hasil, id)
-			})
-			break
         case 'whatanime':
             if (isMedia && type === 'image' || quotedMsg && quotedMsg.type === 'image') {
                 if (isMedia) {
@@ -2389,6 +2438,13 @@ case 'ytsearch':
                     aruga.reply(from, err, id)
                 }
             break
+            case 'covid19':
+            case 'corona':
+                rugaapi.corona()
+                .then(async (res) => {
+                    await aruga.reply(from, `${res}`, id)
+                })
+                break
 		case 'covidindo':
 			rugaapi.covidindo()
 			.then(async (res) => {
@@ -2578,7 +2634,7 @@ case 'ytsearch':
         case 'simi':
             if (args.length == 0) return aruga.reply(from, 'Kirim perintah */ [teks]*\nContoh : */ halo*')
             const que = body.slice(6)
-            const sigo = await axios.get(`https://st4rz.herokuapp.com/api/simsimi?kata=${que}`)
+            const sigo = await axios.get(`https://api.i-tech.id/tools/simi?key=A46cZH-iBjv3i-JR36B5-Ah3U7u-iI4snA&lang=id&kata=${que}`)
             console.log(que)
             const sigot = sigo.data
             aruga.reply(from, sigot.result, id)
