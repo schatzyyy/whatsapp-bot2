@@ -1173,7 +1173,7 @@ module.exports = HandleMsg = async (aruga, message) => {
                 const _mimetype = isQuotedImage ? quotedMsg.mimetype : mimetype
                 const mediaData = await decryptMedia(encryptMedia, uaOverride)
                 const imageBase64 = `data:${_mimetype};base64,${mediaData.toString('base64')}`
-                aruga.sendImageAsSticker(from, imageBase64)
+                aruga.sendImageAsSticker(from, imageBase64, id)
                 .then(() => {
                     aruga.reply(from, 'Here\'s your sticker')
                     console.log(`Sticker Processed for ${processTime(t, moment())} Second`)
@@ -1563,11 +1563,10 @@ break
             case 'ytmp3':
                 if (args.length == 0) return aruga.reply(from, `Untuk mendownload lagu dari youtube\nketik: ${prefix}ytmp3 [link_yt]`, id)
                 const linkmp3 = args[0].replace('https://youtu.be/','').replace('https://www.youtube.com/watch?v=','')
-                rugaapi.ymp3(`https://youtu.be/${linkmp3}`)
+                rugaapi.ytmp3(`https://youtu.be/${linkmp3}`)
                 .then(async(res) => {
-                    if (res.error) return aruga.sendFileFromUrl(from, `${res.url}`, '', `${res.error}`)
-                    await aruga.sendFileFromUrl(from, `${res.thumb}`, 'image.jpg', `*「 YOUTUBE MP3 」*\n\n*Judul :* ${res.title}\n*From Channel :* ${res.channel}\n*Uploaded :* ${res.uploaded}\n*Duration :* ${res.duration}\n*View :* ${res.total_view}\n*Size :* ${res.filesize}\n\n*_Sabar, Urbae lagi ngirim Audionya_*`, id)
-                    await aruga.sendFileFromUrl(from, `${res.link}`, '', id)
+                    await aruga.sendFileFromUrl(from, `${res.thumb}`, 'image.jpg', `*「 YOUTUBE MP3 」*\n\n*Judul :* ${res.title}\n*Size :* ${res.filesize}\n\n*_Sabar, Urbae lagi ngirim Audionya_*`, id)
+                    await aruga.sendFileFromUrl(from, `${res.result}`, '', id)
                     .catch(() => {
                 aruga.reply(from, `Error ngab`, id)
             })
@@ -2058,11 +2057,8 @@ case 'ytsearch':
                     aruga.sendFileFromUrl(from, `${res.data.result}`, 'image.jpg', id)
                     console.log('Success')
                     .catch(() => {
-                        aruga.reply(from, 'Error')
+                        aruga.reply(from, 'Error', id)
                     })
-                })
-                .catch(() => {
-                    aruga.reply(from, 'Error ngabb...', id)
                 })
                 break
             case 'goldpb':
@@ -2131,14 +2127,16 @@ case 'ytsearch':
             if (args.length == 0) return aruga.reply(from, `Untuk mencari lirik dari sebuah lagu\bketik: ${prefix}lirik [judul_lagu]`, id)
             rugaapi.lirik(body.slice(7))
             .then(async (res) => {
-                await aruga.reply(from, `Lirik Lagu: ${body.slice(7)}\n\n${res}`, id)
+                await aruga.reply(from, `Lirik Lagu: ${body.slice(7)}\n\n${res.result}`, id)
             })
             break
         case 'chord':
             if (args.length == 0) return aruga.reply(from, `Untuk mencari lirik dan chord dari sebuah lagu\bketik: ${prefix}chord [judul_lagu]`, id)
             const chordq = body.slice(7)
-            const chordp = await rugaapi.chord(chordq)
-            await aruga.reply(from, chordp, id)
+            rugaapi.chord(chordq)
+            .then(async(res) => {
+                await aruga.reply(from, `${res.result}`, id)
+            })
             .catch(() => {
                 aruga.reply(from, 'Ada yang Error!', id)
             })
@@ -2259,13 +2257,12 @@ case 'ytsearch':
             break
             case 'play'://silahkan kalian custom sendiri jika ada yang ingin diubah
            if (args.length == 0) return aruga.reply(from, `Untuk mencari lagu dari youtube\n\nPenggunaan: ${prefix}play judul lagu`, id)
-             axios.get(`https://arugaytdl.herokuapp.com/search?q=${body.slice(6)}`)
+             axios.get(`https://api.vhtear.com/ytmp3?query=${body.slice(6)}&apikey=punyanabil`)
             .then(async (res) => {
-                await aruga.sendFileFromUrl(from, `${res.data[0].thumbnail}`, ``, `「 *PLAY* 」\n\nJudul: ${res.data[0].title}\nDurasi: ${res.data[0].duration}detik\nUploaded: ${res.data[0].uploadDate}\nView: ${res.data[0].viewCount}\n\n*_Wait, Urbae lagi ngirim Filenya_*`, id)
-				rugaapi.ytmp3(`https://youtu.be/${res.data[0].id}`)
+                await aruga.sendFileFromUrl(from, `${res.data.result.image}`, ``, `「 *PLAY* 」\n\nJudul: ${res.data.result.title}\nDurasi: ${res.data.result.duration}detik\nSize : ${res.data.result.size}\n\n*_Wait, Urbae lagi ngirim Filenya_*`, id)
+				rugaapi.ytmp3(`https://youtu.be/${res.data.result.id}`)
 				.then(async(res) => {
-					if (res.status == 'error') return aruga.sendFileFromUrl(from, `${res.link}`, '', `${res.error}`)
-					await aruga.sendFileFromUrl(from, `${res.getAudio}`, '', '', id)
+                    await aruga.sendFileFromUrl(from, `${res.result}`, '', '', id)
 					.catch(() => {
 						aruga.reply(from, `Error ngab...`, id)
 					})
@@ -2289,21 +2286,14 @@ case 'ytsearch':
                             await aruga.reply(from, 'Error!', id)
                         })
                         break 
-            case 'play3'://silahkan kalian custom sendiri jika ada yang ingin diubah
-            if (args.length == 0) return aruga.reply(from, `Untuk mencari lagu dari youtube\n\nPenggunaan: ${prefix}play judul lagu`, id)
-            axios.get(`https://arugaytdl.herokuapp.com/search?q=${body.slice(6)}`)
-            .then(async (res) => {
-                await aruga.sendFileFromUrl(from, `${res.data[0].thumbnail}`, ``, `「 PLAY 」\n\nJudul: ${res.data[0].title}\nDurasi: ${res.data[0].duration}detik\nUploaded: ${res.data[0].uploadDate}\nView: ${res.data[0].viewCount}\n\n*_Wait, Urbae lagi ngirim Filenya_*`, id)
-				rugaapi.yt3(`https://youtu.be/${res.data[0].id}`)
-				.then(async(res) => {
-					if (res.status == 'error') return aruga.sendFileFromUrl(from, `${res.link}`, '', `${res.error}`)
-					await aruga.sendFileFromUrl(from, `${res.url_audio}`, `${res.title}.mp3`, '', id)
-					.catch(() => {
-						aruga.reply(from, `Error ngab...`, id)
-					})
-				})
-            })
-            break
+                        case 'play3'://silahkan kalian custom sendiri jika ada yang ingin diubah
+                        if (args.length == 0) return aruga.reply(from, `Untuk mencari lagu dari youtube\n\nPenggunaan: ${prefix}play judul lagu`, id)
+                          axios.get(`https://api.vhtear.com/ytmp3?query=${body.slice(6)}&apikey=punyanabil`)
+                         .then(async (res) => {
+                             await aruga.sendFileFromUrl(from, `${res.data.result.image}`, ``, `「 *PLAY* 」\n\nJudul: ${res.data.result.title}\nDurasi: ${res.data.result.duration}detik\nSize : ${res.data.result.size}\n\n*_Wait, Urbae lagi ngirim Linknya_*`, id)
+                             aruga.reply(from, `buat sementara download manual aja dlu yaa>~<\n\n ${res.data.result.mp3}`, id)
+                         })
+                         break
             case 'play2'://silahkan kalian custom sendiri jika ada yang ingin diubah
             if (args.length == 0) return aruga.reply(from, `Untuk mencari lagu dari youtube\n\nPenggunaan: ${prefix}play judul lagu`, id)
             axios.get(`https://arugaytdl.herokuapp.com/search?q=${body.slice(7)}`)
@@ -2406,14 +2396,6 @@ case 'ytsearch':
                 } catch (err) {
                     aruga.reply(from, err, id)
                 }
-            break
-        case 'translate':
-            if (args.length != 1) return aruga.reply(from, `Maaf, format pesan salah.\nSilahkan reply sebuah pesan dengan caption ${prefix}translate <kode_bahasa>\ncontoh ${prefix}translate id`, id)
-            if (!quotedMsg) return aruga.reply(from, `Maaf, format pesan salah.\nSilahkan reply sebuah pesan dengan caption ${prefix}translate <kode_bahasa>\ncontoh ${prefix}translate id`, id)
-            const quoteText = quotedMsg.type == 'chat' ? quotedMsg.body : quotedMsg.type == 'image' ? quotedMsg.caption : ''
-            translate(quoteText, args[0])
-                .then((result) => aruga.sendText(from, result))
-                .catch(() => aruga.sendText(from, 'Error, Kode bahasa salah.'))
             break
 		case 'covidindo':
 			rugaapi.covidindo()
@@ -2962,6 +2944,15 @@ _Desc di update oleh : @${chat.groupMetadata.descOwner.replace('@c.us','')} pada
                     aruga.reply(from, ihih, id)
                 })
                     break   
+                    case 'translate':
+                        if (args.length == 0) return aruga.reply(from, `Untuk translate kata gunakan /translate [kode bahasa] my name is udin\n\nContoh : ${prefix}translate id|my name is udin`, id)
+                            const suway1 = arg.split('|')[0]
+                            const suway2 = arg.split('|')[1]
+                            await axios.get('https://arugaz.my.id/api/edu/translate?lang='+suway1+'&text='+suway2).then(res => {
+                            const resalt = `${res.data.text}`
+                            aruga.reply(from, resalt, id)
+                        })
+                        break
                 case 'santet': //work
                     if (!isGroupMsg) return aruga.reply(from, 'Maaf, perintah ini hanya dapat dipakai didalam grup!', id)
                     if (mentionedJidList.length === 0) return aruga.reply(from, 'Tag member yang mau disantet, contoh : /santet @wahyu | karena dia gay', id)
