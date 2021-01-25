@@ -2317,10 +2317,10 @@ case 'ytsearch':
 				break
             case 'play'://silahkan kalian custom sendiri jika ada yang ingin diubah
            if (args.length == 0) return aruga.reply(from, `Untuk mencari lagu dari youtube\n\nPenggunaan: ${prefix}play judul lagu`, id)
-			axios.get(`https://api.vhtear.com/youtube?query=${body.slice(6)}&apikey=${vhtearkey}`)
+			axios.get(`axios.get(`https://arugaytdl.herokuapp.com/search?q=${body.slice(6)}`)`)
             .then(async (res) => {
-                  await aruga.sendFileFromUrl(from, `${res.data.result[0].image}`, ``, `「 *PLAY* 」\n\n*Judul :* ${res.data.result[0].title}\n*Durasi :* ${res.data.result[0].duration} detik\n*Channel :* ${res.data.result[0].channel}\n*Viewers :* ${res.data.result[0].views}\n\n*_Wait, Urbae lagi ngirim Audionya_*`, id)
-				rugaapi.ytmp3(`https://youtu.be/${res.data.result[0].id}`)
+                  await aruga.sendFileFromUrl(from, `${res.data[0].thumbnail}`, ``, `「 *PLAY* 」\n\nJudul: ${res.data[0].title}\nDurasi: ${res.data[0].duration}detik\nUploaded: ${res.data[0].uploadDate}\nView: ${res.data[0].viewCount}\n\n*_Wait, Urbae lagi ngirim Filenya_*`, id)
+				rugaapi.ytmp3(`https://youtu.be/${res.data[0].id}`)
 				.then(async(res) => {
                     await aruga.sendFileFromUrl(from, `${res.result}`, '', '', id)
 					.catch(() => {
@@ -2667,8 +2667,8 @@ case 'ytsearch':
         if (args.length == 0) return aruga.reply(from, `Fitur untuk mencari sebuah aplikasi mod dari Happymod\nContoh : ${prefix}happymod pubg\n\nusahain lower case ya jangan ada huruf kapital`, id)
         rugaapi.happymod(args)
         .then(async(res) => {
-            const textu2 = `Nama APK : ${res.result.title}\nVersion : ${res.result.version}\nSize : ${res.result.size}\nPurchase : ${res.result.purchase}\nPrice : ${res.result.price}\nLink : ${res.result.link}\nDownload : ${res.result.download}`
-            await aruga.sendFileFromUrl(from, `${res.result.image}`, 'image.jpg', textu2, id)
+            const textu2 = `Nama APK : ${res.result[0].title}\nVersion : ${res.result[0].version}\nSize : ${res.result[0].size}\nPurchase : ${res.result[0].purchase}\nPrice : ${res.result[0].price}\nLink : ${res.result[0].link}\nDownload : ${res.result[0].download}`
+            await aruga.sendFileFromUrl(from, `${res.result[0].image}`, 'image.jpg', textu2, id)
             .catch(() => {
                 aruga.reply(from, 'Apk tidak ditemukan')
             })
