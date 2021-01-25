@@ -18,6 +18,15 @@ const fetchJson = (url, options) => {
     })
 }
 
+exports.getBuffer = getBuffer = async (url) => {
+	const res = await fetch(url, {headers: { 'User-Agent': 'okhttp/4.5.0'}, method: 'GET' })
+	const anu = fs.readFileSync('./src/emror.jpg')
+	if (!res.ok) return { type: 'image/jpeg', result: anu }
+	const buff = await res.buffer()
+	if (buff)
+		return { type: res.headers.get('content-type'), result: buff }
+}
+
 /**
  * Fetch text from URL.
  * @param {String} url 
@@ -99,4 +108,4 @@ exports.fetchJson = fetchJson
 exports.fetchBase64 = fetchBase64
 exports.custom = custom;
 exports.getBase64 = getBase64;
-exports.fetchText = fetchText
+exports.fetchText = fetchText;

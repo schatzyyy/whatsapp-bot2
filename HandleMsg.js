@@ -12,6 +12,7 @@ const bent = require('bent')
 const request = require('request-promise')
 const emojiUnicode = require('emoji-unicode')
 const get = require('got')
+const { fetchJson } = require('./utils/fetcher')
 
 const appRoot = require('app-root-path')
 const low = require('lowdb')
@@ -152,7 +153,7 @@ module.exports = HandleMsg = async (aruga, message) => {
         const isQuotedVideo = quotedMsg && quotedMsg.type === 'video'
 		
         // [IDENTIFY]
-        const ownerNumber = "6289509879039@c.us"
+        const ownerNumber = "62895334950905@c.us"
         const isOwnerBot = ownerNumber.includes(pengirim)
         const isOwner = ownerNumber.includes(pengirim)
         const isOwnerB = ownerNumber.includes(pengirim)
@@ -792,7 +793,7 @@ module.exports = HandleMsg = async (aruga, message) => {
                 case 'bjanime':
                 if (!isPrem) return aruga.reply(from, 'Command Premium\nChat owner buat mendaftar', id)
                 aruga.reply(from, mess.wait, id)
-                const sblow = await axios.get('https://tobz-api.herokuapp.com/api/nsfwblowjob')
+                const sblow = await axios.get('https://tobz-api.herokuapp.com/api/nsfwblowjob?&apikey=BotWeA')
                 const rblow = sblow.data
                 aruga.sendFileFromUrl(from, rblow.result, `RandoBlow.gif`, 'Random Blowjob!', id)
                     break
@@ -813,8 +814,8 @@ module.exports = HandleMsg = async (aruga, message) => {
                case 'kissgif':
                 if (!isPrem) return aruga.reply(from, 'Command Premium\nChat owner buat mendaftar', id)
                aruga.reply(from, mess.wait, id);
-               axios.get('https://nekos.life/api/v2/img/kiss').then(res => {
-               	aruga.sendFileFromUrl(from, res.data.url);
+               axios.get('https://tobz-api.herokuapp.com/api/kiss?apikey=BotWeA').then(res => {
+               	aruga.sendFileFromUrl(from, res.data.result, `kiss.gif`, '', id)
                });
                break
                 case 'cumgif':
@@ -888,9 +889,10 @@ module.exports = HandleMsg = async (aruga, message) => {
                 })
                 break
                 case 'aesthetic':
-                    const anjayani = estetek[Math.floor(Math.random() * estetek.length)]
-                    await aruga.sendImage(from,anjayani, id)
-                    .then(() => aruga.sendText(from, 'nehh buat wallpaper lu'))
+                    const estutak = await fetchJson(`https://api.fdci.se/rep.php?gambar=aesthetic`, {method: 'get'})
+                    const n = JSON.parse(JSON.stringify(estutak));
+                    const anjayani = n[Math.floor(Math.random() * n.length)];
+                    await aruga.sendImage(from, anjayani, 'img.jpg', 'nehh wallpaper', id)
                     break
                 case 'pictcogan':
                         const ganteng = cegan[Math.floor(Math.random() * cegan.length)]
@@ -1585,7 +1587,7 @@ break
                 const linkmp3 = args[0].replace('https://youtu.be/','').replace('https://www.youtube.com/watch?v=','')
                 rugaapi.ytmp3(`https://youtu.be/${linkmp3}`)
                 .then(async(res) => {
-                    await aruga.sendFileFromUrl(from, `${res.thumb}`, 'image.jpg', `*「 YOUTUBE MP3 」*\n\n*Judul :* ${res.title}\n*Size :* ${res.filesize}\n\n*_Sabar, Urbae lagi ngirim Audionya_*`, id)
+                    await aruga.sendFileFromUrl(from, `${res.thumb}`, 'image.jpg', `*「 YOUTUBE MP3 」*\n\n*Judul :* ${res.title}\n*Execute :* ${res.ext}\n\n*_Sabar, Urbae lagi ngirim Audionya_*`, id)
                     await aruga.sendFileFromUrl(from, `${res.result}`, '', id)
                     .catch(() => {
                 aruga.reply(from, `Error ngab`, id)
@@ -2280,14 +2282,15 @@ case 'ytsearch':
                 if (args.length == 0) return aruga.reply(from, `Kirim perintah *${prefix}tiktok [linkTiktok]*`, id)
                 rugaapi.nowm2(args)
                 .then(async(res) => {
-                    await aruga.sendFileFromUrl(from, `${res.video}`, '', '', id)
+                    await aruga.sendFileFromUrl(from, `${res.thumb}`, '', `「 *TIKTOK* 」\n\n*From :* ${res.from}\n*Caption :* ${res.title}\n*Uploaded Date :* ${res.uploaded}`, id)
+                    await aruga.sendFileFromUrl(from, `${res.url}`, '', '', id)
                     .catch(() => {
                         aruga.reply(from, 'Error ngab...', id)
                     })
                 })
             break
             case 'ytmp4':
-            if (args.length == 0) return aruga.reply(from, `Untuk mendownload lagu dari youtube\nketik: ${prefix}ytmp4 [link_yt]`, id)
+            if (args.length == 0) return aruga.reply(from, `Untuk mendownload video dari youtube\nketik: ${prefix}ytmp4 [link_yt]`, id)
 		if (!isPrem) return aruga.reply(from, 'Command Premium\nChat owner buat mendaftar', id)
             const linkmp4 = args[0].replace('https://youtu.be/','').replace('https://www.youtube.com/watch?v=','')
 			rugaapi.ymp4(`https://youtu.be/${linkmp4}`)
@@ -2634,7 +2637,7 @@ case 'ytsearch':
         case 'simi':
             if (args.length == 0) return aruga.reply(from, 'Kirim perintah */ [teks]*\nContoh : */ halo*')
             const que = body.slice(6)
-            const sigo = await axios.get(`https://api.i-tech.id/tools/simi?key=A46cZH-iBjv3i-JR36B5-Ah3U7u-iI4snA&lang=id&kata=${que}`)
+            const sigo = await axios.get(`https://st4rz.herokuapp.com/api/simsimi?kata=${que}`)
             console.log(que)
             const sigot = sigo.data
             aruga.reply(from, sigot.result, id)
@@ -2650,6 +2653,27 @@ case 'ytsearch':
                     aruga.reply(from, 'Username salah, silahkan masukkan username yang benar', id)
                 })
                 break
+                case 'reverseword':
+                    if (args.length == 0) return aruga.reply(from, `Fitur untuk membalikkan huruf\nContoh : ${prefix}reverseword kok kebalik hurufnya`, id)
+                    const rev = body.slice(13)
+                    axios.get(`https://videfikri.com/api/hurufterbalik/?query=${rev}`).then(res => {
+                        console.log(rev)
+                        const balikin = `${res.data.result.kata}`
+                        aruga.reply(from, balikin, id)
+                        console.log(balikin)
+                    })
+                    break
+    case 'happymod':
+        if (args.length == 0) return aruga.reply(from, `Fitur untuk mencari sebuah aplikasi mod dari Happymod\nContoh : ${prefix}happymod pubg\n\nusahain lower case ya jangan ada huruf kapital`, id)
+        rugaapi.happymod(args)
+        .then(async(res) => {
+            const textu2 = `Nama APK : ${res.result.title}\nVersion : ${res.result.version}\nSize : ${res.result.size}\nPurchase : ${res.result.purchase}\nPrice : ${res.result.price}\nLink : ${res.result.link}\nDownload : ${res.result.download}`
+            await aruga.sendFileFromUrl(from, `${res.result.image}`, 'image.jpg', textu2, id)
+            .catch(() => {
+                aruga.reply(from, 'Apk tidak ditemukan')
+            })
+        })
+        break
 	case 'bot':
 		if (args.length == 0) return aruga.replu(from, `Kirim perintah ${prefix}bot [teks]\nContoh : ${prefix}bot halo`, id)
 		const arbu = body.slice(5)
@@ -2659,7 +2683,17 @@ case 'ytsearch':
 		aruga.reply(from, segey, id)
 		console.log(segey)
 	})
-	break
+    break
+    case 'simi2':
+        if (args.length == 0) return aruga.reply(from, `Kirim perintah ${prefix}simi2 halo anjing`, id)
+        const anjg = body.slice(7)
+        axios.get(`https://tobz-api.herokuapp.com/api/simsimi?text=${anjg}&apikey=BotWeA`).then(res => {
+            console.log(anjg)
+            const babuy = `${res.data.result}`
+            aruga.reply(from, babuy, id)
+            console.log(babuy)
+        })
+        break
         case 'edotensei':
             if (!isGroupMsg) return aruga.reply(from, 'Fitur ini hanya bisa di gunakan dalam group', id)
             if (!isGroupAdmins) return aruga.reply(from, 'Perintah ini hanya bisa di gunakan oleh Owner group', id)
@@ -2818,20 +2852,26 @@ case 'ytsearch':
                     aruga.sendText(ownerNumber, 'Google Error : ' + e);
                 })
                 break
+                case 'crygif':
+                    if (!isPrem) return aruga.reply(from, `Command Premium, hubungi owner untuk mendaftar`, id)
+                    aruga.reply(from, mess.wait, id)
+                    axios.get(`https://tobz-api.herokuapp.com/api/cry?apikey=BotWeA`).then(res => {
+                        aruga.sendFileFromUrl(from, res.data.result, `cry.gif`, '', id)
+                    })
                 case 'randomhentai':
                         if (!isGroupMsg) return aruga.reply(from, 'Perintah ini hanya bisa di gunakan dalam group!', id)
                         if (!isPrem) return aruga.reply(from, 'Command Premium\nChat owner buat mendaftar', id)
                         aruga.sendText(from, mess.wait);
-                        axios.get(`https://api.i-tech.id/anim/hentai?key=qTOfqt-6mDbIq-8lJHaR-Q09mTR-D6pAtD`).then(res => {
-                        aruga.sendFileFromUrl(from, res.data.url, 'hentai.jpg', id)
+                        axios.get(`https://tobz-api.herokuapp.com/api/hentai?apikey=BotWeA`).then(res => {
+                        aruga.sendFileFromUrl(from, res.data.result, 'hentai.jpg', id)
             })
                         break
                 case 'randomhug':
                         if (!isGroupMsg) return aruga.reply(from, 'Perintah ini hanya bisa di gunakan dalam group!', id)
                         if (!isPrem) return aruga.reply(from, 'Command Premium\nChat owner buat mendaftar', id)
                         aruga.sendText(from, mess.wait);
-                        axios.get(`https://tobz-api.herokuapp.com/api/hug`).then(res => {
-                        aruga.sendFileFromUrl(from, res.data.url, 'hug.jpg', id)
+                        axios.get(`https://tobz-api.herokuapp.com/api/hug?apikey=BotWeA`).then(res => {
+                        aruga.sendFileFromUrl(from, res.data.result, `hug.gif`, '', id)
         })
                         break
             case 'ptl':
@@ -2983,6 +3023,18 @@ _Desc di update oleh : @${chat.groupMetadata.descOwner.replace('@c.us','')} pada
                             fs.writeFileSync('./lib/database/say.json', JSON.stringify(dsay))
                             aruga.reply(from, `Success Menghapus Say!`, id)
                         break
+                        case 'iplocation':
+                            if (args.length == 0) return aruga.reply(from, `Tidak ada ip Address, silahkan masuk ip address anda\nContoh : ${prefix}iplocation 180.242.215.107`, id)
+                            axios.get(`https://ipapi.co/${body.slice(12)}/json/`)
+                            .then(async(res) => {
+                                const addr = `• *Ip :* ${res.data.ip}\n• *Ip Version :* ${res.data.version}\n• *Negara :* ${res.data.country_name}\n• *Kode Negara :* ${res.data.country_code}\n• *Ibu Kota :* ${res.data.country_capital}\n• *Wilayah :* ${res.data.region}\n• *Kode Wilayah :* ${res.data.region_code}\n• *Postal :* ${res.data.postal}\n• *Latitude :* ${res.data.latitude}\n• *Longitude :* ${res.data.longitude}\n• *Timezone :* ${res.data.timezone}\n• *Utc Offset :* ${res.data.utc_offset}\n• *Kode Panggilan Negara :* ${res.data.country_calling_code}\n• *Mata Uang :* ${res.data.currency_name}\n• *Kode Mata Uang :* ${res.data.currency}\n• *Bahasa :* ${res.data.languages}\n• *Jumlah Wilayah :* ${res.data.country_area}\n• *Populasi Negara :* ${res.data.country_population}\n• *ASN :* ${res.data.asn}\n• *Provider :* ${res.data.org}`
+                                aruga.reply(from, addr, id)
+                            })
+                            break
+                        case 'matauang':
+                            const matung = `List Currency : btc, usd, eur, gbp, aud, cad, chf, cny, jpy, sgd, nzd, pkr, hkd, krw, mxn, nok, egp, clp, ngn, brl, rub, uah, thb, pln, inr, eth, xmr, dash, doge, ltc, str, xrp`
+                            aruga.reply(from, matung, id)
+                            break
                 case 'nyenye':
                     if(!isGroupMsg) return aruga.reply(from, 'Fitur ini hanya bisa digunakan didalam Grup!', id)
                     if (args.length = 0) return aruga.reply(from, `kirim ${prefix}nyenye kalimat\ncontoh: ${prefix}nyenye nisa cantik', id`)
@@ -2992,6 +3044,15 @@ _Desc di update oleh : @${chat.groupMetadata.descOwner.replace('@c.us','')} pada
                     aruga.reply(from, ihih, id)
                 })
                     break   
+                    case 'convertduit':
+                        if (args.length == 0) return aruga.reply(from, `Untuk mengkonversi uang dari negara luar menjadi IDR\nContoh : ${prefix}convertduit usd|2000\n\nDan untuk mengecek mata uang bisa gunakan ${prefix}matauang`, id)
+                        const duit1 = arg.split('|')[0]
+                        const duit2 = arg.split('|')[1]
+                        await axios.get('https://api.terhambar.com/currency?curr='+duit1+'&bal='+duit2).then(res => {
+                            const duitnya = `Konversi mata uang ${res.data.result.currency} dari ${duit2}\n\nBalance Currency : *${res.data.result.balanceCurrency}*\n\nHasil Dirupiahkan : *${res.data.result.resultConvert}*`
+                            aruga.reply(from, duitnya, id)
+                        })
+                        break
                     case 'translate':
                         if (args.length == 0) return aruga.reply(from, `Untuk translate kata gunakan /translate [kode bahasa] my name is udin\n\nContoh : ${prefix}translate id|my name is udin`, id)
                             const suway1 = arg.split('|')[0]
