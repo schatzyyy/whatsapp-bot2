@@ -2317,7 +2317,7 @@ case 'ytsearch':
 				break
             case 'play'://silahkan kalian custom sendiri jika ada yang ingin diubah
            if (args.length == 0) return aruga.reply(from, `Untuk mencari lagu dari youtube\n\nPenggunaan: ${prefix}play judul lagu`, id)
-			axios.get(`axios.get(`https://arugaytdl.herokuapp.com/search?q=${body.slice(6)}`)`)
+			axios.get(`https://arugaytdl.herokuapp.com/search?q=${body.slice(6)}`)
             .then(async (res) => {
                   await aruga.sendFileFromUrl(from, `${res.data[0].thumbnail}`, ``, `「 *PLAY* 」\n\nJudul: ${res.data[0].title}\nDurasi: ${res.data[0].duration}detik\nUploaded: ${res.data[0].uploadDate}\nView: ${res.data[0].viewCount}\n\n*_Wait, Urbae lagi ngirim Filenya_*`, id)
 				rugaapi.ytmp3(`https://youtu.be/${res.data[0].id}`)
