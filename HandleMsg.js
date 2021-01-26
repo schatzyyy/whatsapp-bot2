@@ -2314,15 +2314,38 @@ case 'ytsearch':
 					aruga.reply(from, 'Error njing', id)
 				})
 			})
-				break
+                break
+            case 'joox':
+                if (args.length == 0) return aruga.reply(from, `Untuk mencari lagu dari Joox\n\nUsage : ${prefix}joox judul lagu\nContoh: ${prefix}joox akad`, id)
+                axios.get(`https://api.vhtear.com/music?query=${body.slice(6)}&apikey=${vhtearkey}`)
+                .then(async (res) => {
+                    await aruga.sendFileFromUrl(from, `${res.data.result[0].linkImg}`, 'img.jpg', `「 *JOOX* 」\n\n*Judul :* ${res.data.result[0].judul}\n*Penyanyi :* ${res.data.result[0].penyanyi}\n*Album :* ${res.data.result[0].album}\n*Size :* ${res.data.result[0].filesize}\n*Durasi :* ${res.data.result[0].duration}`)
+                    await aruga.sendFileFromUrl(from, `${res.data.result[0].linkMp3}`, '', '', id)
+                    const liruk = `${res.data.result[0].lirik}`
+                    aruga.reply(from, `Lirik dari ${body.slice(6)}\n\n${res.data.result[0].lirik}`)
+                    .catch(() => {
+                        aruga.reply(from, `Maaf, lagu yang anda cari tidak ditemukan, maklum joox mah ga lengkap`, id)
+                    })
+                })
+                break
+            case 'filmapikdownload':
+            if (args.length == 0) return aruga.reply(from, `Untuk mencari detail film dan link download film gunakan ${prefix}filmapikdownload link filmapik\nContoh : ${prefix}filmapikdownload http://103.194.171.18/peninsula/play`, id)
+            axios.get(`https://arugaz.my.id/api/media/filmapik/detail?url=${body.slice(18)}`)
+            .then(async (res) => {
+                await aruga.sendFileFromUrl(from, `${res.data.result.thumb}`, 'thumb.jpg', `「 *FILM APIK* 」\n\n*Judul Film :* ${res.data.result.title}\n*Detail :* ${res.data.result.detail.info}\n\n*Link Download :* ${res.data.result.link_dl}`)
+                .catch(() => {
+                    aruga.reply(from, 'Film/Url Salah...', id)
+                })
+            })
+            break
             case 'play'://silahkan kalian custom sendiri jika ada yang ingin diubah
            if (args.length == 0) return aruga.reply(from, `Untuk mencari lagu dari youtube\n\nPenggunaan: ${prefix}play judul lagu`, id)
-			axios.get(`axios.get(`https://arugaytdl.herokuapp.com/search?q=${body.slice(6)}`)`)
+           axios.get(`https://arugaz.my.id/api/media/ytsearch?query=${body.slice(6)}`)
             .then(async (res) => {
-                  await aruga.sendFileFromUrl(from, `${res.data[0].thumbnail}`, ``, `「 *PLAY* 」\n\nJudul: ${res.data[0].title}\nDurasi: ${res.data[0].duration}detik\nUploaded: ${res.data[0].uploadDate}\nView: ${res.data[0].viewCount}\n\n*_Wait, Urbae lagi ngirim Filenya_*`, id)
-				rugaapi.ytmp3(`https://youtu.be/${res.data[0].id}`)
+                await aruga.sendFileFromUrl(from, `${res.data.result[0].thumbnail}`, ``, `「 *PLAY* 」\n\nJudul: ${res.data.result[0].title}\nDurasi: ${res.data.result[0].duration}detik\nUploaded: ${res.data.result[0].uploadDate}\nView: ${res.data.result[0].viewCount}\n*Channel :* ${res.data.result[0].channel.name}\n\n*_Wait, Urbae lagi ngirim Filenya_*`, id)
+				rugaapi.ytmp3(`https://youtu.be/${res.data.result[0].id}`)
 				.then(async(res) => {
-                    await aruga.sendFileFromUrl(from, `${res.result}`, '', '', id)
+                    await aruga.sendFileFromUrl(from, `${res.url}`, '', '', id)
 					.catch(() => {
 						aruga.reply(from, `Error ngab...`, id)
 					})
@@ -2470,12 +2493,13 @@ case 'ytsearch':
             break
         case 'shortlink':
             if (args.length == 0) return aruga.reply(from, `ketik ${prefix}shortlink <url>`, id)
-            if (!isUrl(args[0])) return aruga.reply(from, 'Maaf, url yang kamu kirim tidak valid.', id)
-            const shortlink = await urlShortener(args[0])
-            await aruga.sendText(from, shortlink)
-            .catch(() => {
-                aruga.reply(from, 'Ada yang Error!', id)
-            })
+                axios.get(`https://api.vhtear.com/shortener?link=${body.slice(11)}&apikey=vhtearkey`).then(res => {
+                    const shortin = `${res.data.result.Short}`
+                    aruga.reply(from, shortin, id)
+                    .catch(() => {
+                        aruga.reply(from, 'Error njing', id)
+                    })
+                })
             break
 		case 'bapakfont':
 			if (args.length == 0) return aruga.reply(from, `Mengubah kalimat menjadi alayyyyy\n\nketik ${prefix}bapakfont kalimat`, id)
@@ -2663,16 +2687,23 @@ case 'ytsearch':
                         console.log(balikin)
                     })
                     break
+                    case 'prediksicuaca':
+                        if (args.length == 0) return aruga.reply(from, `Untuk memprediksi cuaca Kota gunakan ${prefix}prediksicuaca [namakota]\nContoh : ${prefix}prediksicuaca Pontianak`, id)
+                        const predik = await axios.get(`https://api.vhtear.com/weather?city=${body.slice(15)}&apikey=${vhtearkey}`)
+                        const iksi = predik.data.result
+                        const resil = `${iksi.weather}\n\n${iksi.location}`
+                        aruga.reply(from, resil, id)
+                        .catch(() => {
+                            return aruga.reply(from, 'Kota yang anda ketik tidak ditemukan...', id)
+                        })
+                    break
     case 'happymod':
         if (args.length == 0) return aruga.reply(from, `Fitur untuk mencari sebuah aplikasi mod dari Happymod\nContoh : ${prefix}happymod pubg\n\nusahain lower case ya jangan ada huruf kapital`, id)
-        rugaapi.happymod(args)
-        .then(async(res) => {
-            const textu2 = `Nama APK : ${res.result[0].title}\nVersion : ${res.result[0].version}\nSize : ${res.result[0].size}\nPurchase : ${res.result[0].purchase}\nPrice : ${res.result[0].price}\nLink : ${res.result[0].link}\nDownload : ${res.result[0].download}`
-            await aruga.sendFileFromUrl(from, `${res.result[0].image}`, 'image.jpg', textu2, id)
-            .catch(() => {
-                aruga.reply(from, 'Apk tidak ditemukan')
-            })
-        })
+        const happymod = await axios.get(`https://tobz-api.herokuapp.com/api/happymod?q=${body.slice(10)}&apikey=BotWeA`)
+                if (happymod.data.error) return tobz.reply(from, happymod.data.error, id)
+                const modo = happymod.data.result[0]
+                const resmod = `• *Title* : ${modo.title}\n• *Purchase* : ${modo.purchase}\n• *Size* : ${modo.size}\n• *Root* : ${modo.root}\n• *Version* : ${modo.version}\n• *Price* : ${modo.price}\n• *Link* : ${modo.link}\n• *Download* : ${modo.download}`
+                aruga.sendFileFromUrl(from, modo.image, 'HAPPYMOD.jpg', resmod, id)
         break
 	case 'bot':
 		if (args.length == 0) return aruga.replu(from, `Kirim perintah ${prefix}bot [teks]\nContoh : ${prefix}bot halo`, id)

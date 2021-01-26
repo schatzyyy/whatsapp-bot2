@@ -49,8 +49,8 @@ const start = (aruga = new Client()) => {
             const pChat = await aruga.getContact(event.who)
             const { contact, groupMetadata, name} = gChat
             const gatauih = await aruga.getProfilePicFromServer(event.who)
-            const capt = `*ey yo,what up!* *@${event.who.replace('@c.us','')}*\n\nWelcome to *${name}*\n\nThere is nothing to say, just follow the rules of ${name}* Group.\n\n*Commands bot ${prefix}menu , ${prefix}p*`
-            await aruga.sendFileFromUrl(event.chat, gatauih, 'profile.jpg', capt)
+            const capt = `*ey yo,what up!* *@${pChat.replace('@c.us','')}*\n\nWelcome to *${name}*\n\nThere is nothing to say, just follow the rules of ${name}* Group.\n\n*Commands bot /menu , /p*`
+            aruga.sendFileFromUrl(gChat, gatauih, 'profile.jpg', capt)
         }
         // kondisi ketika seseorang dikick/keluar dari group
         if (event.action === 'remove' && event.who !== host) {
