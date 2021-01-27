@@ -2343,7 +2343,7 @@ case 'ytsearch':
            axios.get(`https://arugaz.my.id/api/media/ytsearch?query=${body.slice(6)}`)
             .then(async (res) => {
                 await aruga.sendFileFromUrl(from, `${res.data.result[0].thumbnail}`, ``, `「 *PLAY* 」\n\nJudul: ${res.data.result[0].title}\nDurasi: ${res.data.result[0].duration}detik\nUploaded: ${res.data.result[0].uploadDate}\nView: ${res.data.result[0].viewCount}\n*Channel :* ${res.data.result[0].channel.name}\n\n*_Wait, Urbae lagi ngirim Filenya_*`, id)
-				rugaapi.ytmp3(`https://youtu.be/${res.data.result[0].id}`)
+				rugaapi.ymp3(`https://youtu.be/${res.data.result[0].id}`)
 				.then(async(res) => {
                     await aruga.sendFileFromUrl(from, `${res.url}`, '', '', id)
 					.catch(() => {
