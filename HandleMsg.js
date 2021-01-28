@@ -2373,15 +2373,9 @@ case 'ytsearch':
             break
             case 'play'://silahkan kalian custom sendiri jika ada yang ingin diubah
            if (args.length == 0) return aruga.reply(from, `Untuk mencari lagu dari youtube\n\nPenggunaan: ${prefix}play judul lagu`, id)
-<<<<<<< HEAD
            axios.get(`https://api.vhtear.com/youtube?query=${body.slice(6)}&apikey=${vhtearkey}`)
             .then(async (res) => {
                 await aruga.sendFileFromUrl(from, `${res.data.result[0].image}`, ``, `「 *PLAY* 」\n\n*Judul :* ${res.data.result[0].title}\n*Durasi :* ${res.data.result[0].duration} detik\n*View :* ${res.data.result[0].views}\n*Channel :* ${res.data.result[0].channel}\n\n*_Wait, Urbae lagi ngirim Filenya_*`, id)
-=======
-           axios.get(`https://api.vhtear.com/api/youtube?query=${body.slice(6)}&apikey=${vhtearkey}`)
-            .then(async (res) => {
-                await aruga.sendFileFromUrl(from, `${res.data.result[0].image}`, ``, `「 *PLAY* 」\n\nJudul: ${res.data.result[0].title}\nDurasi: ${res.data.result[0].duration} detik\nView: ${res.data.result[0].views}\n*Channel :* ${res.data.result[0].channel}\n\n*_Wait, Urbae lagi ngirim Audio_*`, id)
->>>>>>> 487e8d59028cca7b549375b5ec9dfde0b9f8dd6c
 				rugaapi.ymp3(`https://youtu.be/${res.data.result[0].id}`)
 				.then(async(res) => {
                     await aruga.sendFileFromUrl(from, `${res.url}`, '', '', id)
