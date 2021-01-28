@@ -1060,6 +1060,22 @@ module.exports = HandleMsg = async (aruga, message) => {
                       })
             }
             break
+        case 'wattpadstory':
+            if (args.length == 0) return aruga.reply(from, `Untuk mencari cerita dari wattpad! Gunakan ${prefix}wattpadstory url story\nContoh : ${prefix}wattpadstory https://www.wattpad.com/story/226120582-my-teacher-levi-x-student-reader`, id)
+            const wpstry = body.slice(14)
+            aruga.reply(from, mess.wait, id)
+            try {
+                const datplai = await axios.get(`http://docs-jojo.herokuapp.com/api/wattpad_info?url=${wpstry}`)
+                const datplay = datplai.data
+                let wtpdst =  `*「 WATTPAD 」*\n\n*Hasil Pencarian : ${wpstry}*\n`
+                for (let i = 0; i < datplay.parts.length; i++) {
+                    wtpdst += `\n─────────────────\n\n*A U T H O R :* ${datplay.author.name}\n\n• *Judul :* ${datplay.title}\n• *Dibaca :* ${datplay.reads}\n• *Votes :* ${datplay.votes}\n• *Jumlah Episode :* ${datplay.parts_count}\n• *Deskripsi :* ${datplay.desc}\n\n• *Title :* ${datplay[i].title}\n• *URL :* ${datplay[i].url}\n`
+                }
+                await aruga.sendFileFromUrl(from, datplay.thumb, 'image.jpg', wtpdst, id)
+            } catch (err){
+                console.log(err)
+            }
+            break
         case 'shopee':
             if (!isGroupMsg) return aruga.reply(from, `Perintah ini hanya bisa di gunakan dalam group!`, id)
             if (args.length === 1) return aruga.reply(from, `Kirim perintah *${prefix}shopee [ Query ]*, Contoh : *${prefix}shopee HP Samsul a20*`)
@@ -1215,7 +1231,24 @@ module.exports = HandleMsg = async (aruga, message) => {
 					console.error(err)
 					await aruga.reply(from, 'Error njing', id)
 				})
-				break
+                break
+                case 'wattpad':
+                    if (args.length == 0) return aruga.reply(from, `Untuk mencari sebuah detail dari part cerita Wattpad! Gunakan ${prefix}wattpad [query]\nContoh : ${prefix}wattpad bos birahi`, id)
+                    await aruga.reply(from, mess.wait, id)
+                    rugaapi.wp(args)
+                    .then(async ({ result }) => {
+                        let watpd = '*-----「 WATTPAD 」-----*'
+                        for (let i = 0; i < result.length; i++) {
+                            watpd += `\n\n• *Judul :* ${result[i].title}\n• *Dibaca :* ${result[i].reads}\n• *Votes :* ${result[i].votes}\n\n• *Deskripsi :* ${result[i].description}\n• *URL :* ${result[i].url}`
+                        }
+                        await aruga.sendFileFromUrl(from, `${result[0].thumb}`, 'image.jpg', watpd, id)
+                        console.log('Success Sending Detail')
+                    })
+                    .catch(async (err) => {
+                        console.error(err)
+                        await aruga.reply(from, 'Error njing', id)
+                    })
+                    break
 	case 'filmapik':
                         if (args.length == 0) return aruga.reply(from, `Mencari sebuah film dari Website Film Apik!\nContoh : ${prefix}filmapik Revolutionary Love`, id)
                         await aruga.reply(from, mess.wait, id)
@@ -2248,7 +2281,7 @@ case 'ytsearch':
                     rugaapi.ig2(args)
                     .then(async(res) => {
                         if (res.error) return aruga.reply(from, `${res.url}`, '', `${res.error}`)
-                        await aruga.sendFileFromUrl(from, `${res.result}`, '', '', id)
+                        await aruga.sendFileFromUrl(from, `${res.resource[0].url}`, '', '', id)
                         .catch(() => {
                             aruga.reply(from, 'Maaf, mungkin link tersebut berasal dari akun yang private', id)
                         })
@@ -2293,11 +2326,11 @@ case 'ytsearch':
             if (args.length == 0) return aruga.reply(from, `Untuk mendownload video dari youtube\nketik: ${prefix}ytmp4 [link_yt]`, id)
 		if (!isPrem) return aruga.reply(from, 'Command Premium\nChat owner buat mendaftar', id)
             const linkmp4 = args[0].replace('https://youtu.be/','').replace('https://www.youtube.com/watch?v=','')
-			rugaapi.ymp4(`https://youtu.be/${linkmp4}`)
+			rugaapi.ytmp4(`https://youtu.be/${linkmp4}`)
             .then(async(res) => {
 				if (res.error) return aruga.sendFileFromUrl(from, `${res.url}`, '', `${res.error}`)
-				await aruga.sendFileFromUrl(from, `${res.getImages}`, 'img.jpg', `*「 YOUTUBE MP4 」*\n\n*Judul :* ${res.titleInfo}\n\n*_Sabar, Urbae lagi ngirim videonya_*`, id)
-				await aruga.sendFileFromUrl(from, `${res.getVideo}`, '' , '', id)
+				await aruga.sendFileFromUrl(from, `${res.imgUrl}`, 'img.jpg', `*「 YOUTUBE MP4 」*\n\n*Judul :* ${res.title}\n*Size :* ${res.size}\n*Id :* ${res.id}*Execute :* ${res.ext}\n\n*_Sabar, Urbae lagi ngirim videonya_*`, id)
+				await aruga.sendFileFromUrl(from, `${res.UrlVideo}`, '' , '', id)
 				.catch(() => {
 					aruga.reply(from, `Error ngab`, id)
 				})
@@ -2340,9 +2373,15 @@ case 'ytsearch':
             break
             case 'play'://silahkan kalian custom sendiri jika ada yang ingin diubah
            if (args.length == 0) return aruga.reply(from, `Untuk mencari lagu dari youtube\n\nPenggunaan: ${prefix}play judul lagu`, id)
+<<<<<<< HEAD
            axios.get(`https://api.vhtear.com/youtube?query=${body.slice(6)}&apikey=${vhtearkey}`)
             .then(async (res) => {
                 await aruga.sendFileFromUrl(from, `${res.data.result[0].image}`, ``, `「 *PLAY* 」\n\n*Judul :* ${res.data.result[0].title}\n*Durasi :* ${res.data.result[0].duration} detik\n*View :* ${res.data.result[0].views}\n*Channel :* ${res.data.result[0].channel}\n\n*_Wait, Urbae lagi ngirim Filenya_*`, id)
+=======
+           axios.get(`https://api.vhtear.com/api/youtube?query=${body.slice(6)}&apikey=${vhtearkey}`)
+            .then(async (res) => {
+                await aruga.sendFileFromUrl(from, `${res.data.result[0].image}`, ``, `「 *PLAY* 」\n\nJudul: ${res.data.result[0].title}\nDurasi: ${res.data.result[0].duration} detik\nView: ${res.data.result[0].views}\n*Channel :* ${res.data.result[0].channel}\n\n*_Wait, Urbae lagi ngirim Audio_*`, id)
+>>>>>>> 487e8d59028cca7b549375b5ec9dfde0b9f8dd6c
 				rugaapi.ymp3(`https://youtu.be/${res.data.result[0].id}`)
 				.then(async(res) => {
                     await aruga.sendFileFromUrl(from, `${res.url}`, '', '', id)
@@ -2371,12 +2410,12 @@ case 'ytsearch':
                         break 
             case 'play2'://silahkan kalian custom sendiri jika ada yang ingin diubah
             if (args.length == 0) return aruga.reply(from, `Untuk mencari lagu dari youtube\n\nPenggunaan: ${prefix}play judul lagu`, id)
-            axios.get(`https://arugaytdl.herokuapp.com/search?q=${body.slice(7)}`)
+            axios.get(`https://api.vhtear.com/youtube?query=${body.slice(6)}&apikey=${vhtearkey}`)
             .then(async (res) => {
-                await aruga.sendFileFromUrl(from, `${res.data[0].thumbnail}`, ``, `*「 PLAY VIDEO 」*\n\n*Judul :* ${res.data[0].title}\n*Durasi :* ${res.data[0].duration}detik\n*Uploaded :* ${res.data[0].uploadDate}\n*View :* ${res.data[0].viewCount}\n\n*_Wait, Urbae lagi ngirim videonya_*`, id)
-				rugaapi.ymp4(`https://youtu.be/${res.data[0].id}`)
+                await aruga.sendFileFromUrl(from, `${res.data.result[0].image}`, ``, `「 *PLAY VIDEO* 」\n\nJudul: ${res.data.result[0].title}\nDurasi: ${res.data.result[0].duration} detik\nView: ${res.data.result[0].views}\n*Channel :* ${res.data.result[0].channel}\n\n*_Wait, Urbae lagi ngirim Videonyaa_*`, id)
+				rugaapi.ytmp4(`https://youtu.be/${res.data.result[0].id}`)
 				.then(async(res) => {
-					await aruga.sendFileFromUrl(from, `${res.result}`, '', '', id)
+					await aruga.sendFileFromUrl(from, `${res.UrlVideo}`, '', '', id)
 					.catch(() => {
 						aruga.reply(from, `Error ngab...`, id)
 					})
