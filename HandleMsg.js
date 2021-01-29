@@ -73,12 +73,12 @@ const banned = JSON.parse(fs.readFileSync('./settings/banned.json'))
 const simi = JSON.parse(fs.readFileSync('./settings/simi.json'))
 const ngegas = JSON.parse(fs.readFileSync('./settings/ngegas.json'))
 const setting = JSON.parse(fs.readFileSync('./settings/setting.json'))
-const prem = JSON.parse(fs.readFileSync('./lib/database/prem.json'))
 
 let dbcot = JSON.parse(fs.readFileSync('./lib/database/bacot.json'))
 let dsay = JSON.parse(fs.readFileSync('./lib/database/say.json'))
 let _autostiker = JSON.parse(fs.readFileSync('./lib/helper/antisticker.json'))
 let antilink = JSON.parse(fs.readFileSync('./lib/helper/antilink.json'))
+let prem = JSON.parse(fs.readFileSync('./lib/database/prem.json'))
 
 let { 
     ownerNumber, 
@@ -536,14 +536,18 @@ module.exports = HandleMsg = async (aruga, message) => {
             break
         case 'p':
         case 'menu':
-            await aruga.sendText(from, menuId.textMenu(pushname))
+            const test0 = sender.id
+            const nyoba2 = await aruga.getProfilePicFromServer(test0)
+            await aruga.sendFileFromUrl(from, nyoba2, 'image.jpg', menuId.textMenu(pushname))
             .then(() => ((isGroupMsg) && (isGroupAdmins)) ? aruga.sendText(from, `Menu Admin Grup: *${prefix}menuadmin*`) : null)
             break
             
         case 'menuadmin':
             if (!isGroupMsg) return aruga.reply(from, 'Maaf, perintah ini hanya dapat dipakai didalam grup!', id)
             if (!isGroupAdmins) return aruga.reply(from, 'Gagal, inget lu itu Member bukan Admin', id)
-            await aruga.sendText(from, menuId.textAdmin())
+            const tusta = sender.id
+            const yahaha = await aruga.getProfilePicFromServer(tusta)
+            await aruga.sendFileFromUrl(from, yahaha,'image.jpg', menuId.textAdmin(), id)
             break
             case 'kodenuklir':
                 await aruga.sendText(from, menuId.kodenuklir())
@@ -2739,7 +2743,7 @@ case 'ytsearch':
                 aruga.sendFileFromUrl(from, modo.image, 'HAPPYMOD.jpg', resmod, id)
         break
 	case 'bot':
-		if (args.length == 0) return aruga.replu(from, `Kirim perintah ${prefix}bot [teks]\nContoh : ${prefix}bot halo`, id)
+		if (args.length == 0) return aruga.reply(from, `Kirim perintah ${prefix}bot [teks]\nContoh : ${prefix}bot halo`, id)
 		const arbu = body.slice(5)
 		axios.get(`http://videfikri.com/api/simsimi/?teks=${arbu}`).then(res => {
 		console.log(arbu)
@@ -3150,9 +3154,9 @@ _Desc di update oleh : @${chat.groupMetadata.descOwner.replace('@c.us','')} pada
                             await aruga.sendFileFromUrl(from, aiquote.data, 'quote.jpg', 'FOLLOW NGAB \ :V https://www.instagram.com/_l_.lawliet_/' , id )
                         break
                 case 'ttp':
-                     axios.get(`https://st4rz.herokuapp.com/api/ttp?kata=${body.slice(5)}`)
+                     axios.get(`https://tobz-api.herokuapp.com/api/ttp?text=${body.slice(5)}&apikey=BotWeA`)
                         .then(res => {
-                        aruga.sendImageAsSticker(from, res.data.result)
+                        aruga.sendImageAsSticker(from, res.data.base64)
                      })
                     break
                  case 'kapan':
@@ -3276,14 +3280,18 @@ _Desc di update oleh : @${chat.groupMetadata.descOwner.replace('@c.us','')} pada
             aruga.reply(from, 'Success clear all chat!', id)
             break
         default:
+            if (chats.startsWith(`${prefix}`)) {
+                const slh = body.trim().split(' ')
+                aruga.reply(from, `Maaf *_${pushname}_*, Command *${slh[0]}* tidak ada didalam menu!\n\nSilahkan ketik *${prefix}menu* Untuk menampilkan command`, id)
+            }
             break
         case 'adminlist':
             if (!isGroupMsg) return aruga.reply(from, 'Perintah ini hanya bisa di gunakan dalam group!', id)
-            let mimin = ''
+            let mimin = `*LIST ADMIN FROM ${name}*\n`
             for (let admon of groupAdmins) {
                 mimin += `➸ @${admon.replace(/@c.us/g, '')}\n` 
             }
-            await aruga.sendTextWithMentions(from, mimin)
+            await aruga.sendTextWithMentions(from, mimin, id)
             break
         case 'howmuch':
             if (!isGroupMsg) return aruga.reply(from, 'Perintah ini hanya bisa digunakan dalam Grup')
