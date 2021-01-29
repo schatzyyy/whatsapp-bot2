@@ -1943,7 +1943,7 @@ case 'ytsearch':
             })
             break
 			case 'fakta2':
-			axios.get(`https://arugaz.my.id/api/random/text/faktaunik`).then(res => {
+			axios.get(`https://api.arugaz.my.id/api/random/text/faktaunik`).then(res => {
 				const faktuy = `${res.data.result}`
 				aruga.reply(from, faktuy, id)
 			})
@@ -2363,7 +2363,7 @@ case 'ytsearch':
                 break
             case 'filmapikdownload':
             if (args.length == 0) return aruga.reply(from, `Untuk mencari detail film dan link download film gunakan ${prefix}filmapikdownload link filmapik\nContoh : ${prefix}filmapikdownload http://103.194.171.18/peninsula/play`, id)
-            axios.get(`https://arugaz.my.id/api/media/filmapik/detail?url=${body.slice(18)}`)
+            axios.get(`https://api.arugaz.my.id/api/media/filmapik/detail?url=${body.slice(18)}`)
             .then(async (res) => {
                 await aruga.sendFileFromUrl(from, `${res.data.result.thumb}`, 'thumb.jpg', `「 *FILM APIK* 」\n\n*Judul Film :* ${res.data.result.title}\n*Detail :* ${res.data.result.detail.info}\n\n*Link Download :* ${res.data.result.link_dl}`)
                 .catch(() => {
@@ -3122,7 +3122,7 @@ _Desc di update oleh : @${chat.groupMetadata.descOwner.replace('@c.us','')} pada
                         if (args.length == 0) return aruga.reply(from, `Untuk translate kata gunakan /translate [kode bahasa] my name is udin\n\nContoh : ${prefix}translate id|my name is udin`, id)
                             const suway1 = arg.split('|')[0]
                             const suway2 = arg.split('|')[1]
-                            await axios.get('https://arugaz.my.id/api/edu/translate?lang='+suway1+'&text='+suway2).then(res => {
+                            await axios.get('https://api.arugaz.my.id/api/edu/translate?lang='+suway1+'&text='+suway2).then(res => {
                             const resalt = `${res.data.text}`
                             aruga.reply(from, resalt, id)
                         })
