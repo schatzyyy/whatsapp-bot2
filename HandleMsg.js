@@ -538,16 +538,19 @@ module.exports = HandleMsg = async (aruga, message) => {
         case 'menu':
             const test0 = sender.id
             const nyoba2 = await aruga.getProfilePicFromServer(test0)
-            await aruga.sendFileFromUrl(from, nyoba2, 'image.jpg', menuId.textMenu(pushname))
+            if (nyoba2 == undefined) {
+                var php2 = 'https://i.ibb.co/pbZB6z7/fc6b621c54fe.jpg'
+                } else {
+                var php2 = nyoba2
+                }
+            await aruga.sendFileFromUrl(from, php2, 'image.jpg', menuId.textMenu(pushname), id)
             .then(() => ((isGroupMsg) && (isGroupAdmins)) ? aruga.sendText(from, `Menu Admin Grup: *${prefix}menuadmin*`) : null)
             break
-            
         case 'menuadmin':
             if (!isGroupMsg) return aruga.reply(from, 'Maaf, perintah ini hanya dapat dipakai didalam grup!', id)
             if (!isGroupAdmins) return aruga.reply(from, 'Gagal, inget lu itu Member bukan Admin', id)
-            const tusta = sender.id
-            const yahaha = await aruga.getProfilePicFromServer(tusta)
-            await aruga.sendFileFromUrl(from, yahaha,'image.jpg', menuId.textAdmin(), id)
+            const php4 = 'https://i.ibb.co/pbZB6z7/fc6b621c54fe.jpg'
+            await aruga.sendFileFromUrl(from, php4,'image.jpg', menuId.textAdmin(), id)
             break
             case 'kodenuklir':
                 await aruga.sendText(from, menuId.kodenuklir())
