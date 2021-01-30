@@ -1207,20 +1207,15 @@ module.exports = HandleMsg = async (aruga, message) => {
                     console.log(`Sticker Processed for ${processTime(t, moment())} Second`)
                 })
             } else if (args[0] === 'nobg') {
-                if (isMedia === true) {
-                    try {
-                        var mediaData = await decryptMedia(message, uaOverride)
-                        var imageBase64 = `data:${mimetype};base64,${mediaData.toString('base64')}`
-                        var base64img = imageBase64
-                        var outFile = './media/img/noBg.png'
-                        //untuk api key kalian bisa dapatkan pada website remove.bg
-                        var result = await removeBackgroundFromImageBase64({ base64img, apiKey: 'VLv8PE7axMpzyc1z9QLzrbdM', size: 'auto', type: 'auto', outFile })
-                        await fs.writeFile(outFile, result.base64img)
-                        await aruga.sendImageAsSticker(from, `data:${mimetype};base64,${result.base64img}`)
-                    } catch (err) {
-                        aruga.reply(from, 'Error', id)
-                    }
-                }}
+                if (isMedia && isImage || isQuotedImage) {
+                                await aruga.reply(from, mess.wait, id)
+                                const encryptMedia = isQuotedImage ? quotedMsg : message
+                                const mediaData = await decryptMedia(encryptMedia, uaOverride)
+                                const linkImg = await uploadImages(mediaData, `${sender.id}_img`)
+                                await aruga.reply(from, linkImg, id)
+                            } else {
+                                await aruga.reply(from, 'Format pesan salah...', id)
+                            }}
                 break
 				case 'movie':
 				if (args.length == 0) return aruga.reply(from, `Untuk mencari suatu film dari website Bajakan:v\n${prefix}movie the uncanny counter`, id)
@@ -2380,9 +2375,9 @@ case 'ytsearch':
             break
             case 'play'://silahkan kalian custom sendiri jika ada yang ingin diubah
            if (args.length == 0) return aruga.reply(from, `Untuk mencari lagu dari youtube\n\nPenggunaan: ${prefix}play judul lagu`, id)
-           axios.get(`https://api.vhtear.com/youtube?query=${body.slice(6)}&apikey=${vhtearkey}`)
+           axios.get(`https://api.arugaz.my.id/api/media/ytsearch?query=${body.slice(6)}`)
             .then(async (res) => {
-                await aruga.sendFileFromUrl(from, `${res.data.result[0].image}`, ``, `「 *PLAY* 」\n\n*Judul :* ${res.data.result[0].title}\n*Durasi :* ${res.data.result[0].duration} detik\n*View :* ${res.data.result[0].views}\n*Channel :* ${res.data.result[0].channel}\n\n*_Wait, Urbae lagi ngirim Filenya_*`, id)
+                await aruga.sendFileFromUrl(from, `${res.data.result[0].thumbnail}`, ``, `「 *PLAY* 」\n\nJudul: ${res.data.result[0].title}\nDurasi: ${res.data.result[0].duration}detik\nUploaded: ${res.data.result[0].uploadDate}\nView: ${res.data.result[0].viewCount}\nChannel: ${res.data.result[0].channel.name}\n\n*_Wait, Urbae lagi ngirim Audionya_*`, id)
 				rugaapi.ymp3(`https://youtu.be/${res.data.result[0].id}`)
 				.then(async(res) => {
                     await aruga.sendFileFromUrl(from, `${res.url}`, '', '', id)
@@ -2411,12 +2406,12 @@ case 'ytsearch':
                         break 
             case 'play2'://silahkan kalian custom sendiri jika ada yang ingin diubah
             if (args.length == 0) return aruga.reply(from, `Untuk mencari lagu dari youtube\n\nPenggunaan: ${prefix}play judul lagu`, id)
-            axios.get(`https://api.vhtear.com/youtube?query=${body.slice(6)}&apikey=${vhtearkey}`)
+            axios.get(`https://api.arugaz.my.id/api/media/ytsearch?query=${body.slice(6)}`)
             .then(async (res) => {
-                await aruga.sendFileFromUrl(from, `${res.data.result[0].image}`, ``, `「 *PLAY VIDEO* 」\n\nJudul: ${res.data.result[0].title}\nDurasi: ${res.data.result[0].duration} detik\nView: ${res.data.result[0].views}\n*Channel :* ${res.data.result[0].channel}\n\n*_Wait, Urbae lagi ngirim Videonyaa_*`, id)
+                await aruga.sendFileFromUrl(from, `${res.data.result[0].thumbnail}`, ``, `「 *PLAY VIDEO* 」\n\nJudul: ${res.data.result[0].title}\nDurasi: ${res.data.result[0].duration}detik\nUploaded: ${res.data.result[0].uploadDate}\nView: ${res.data.result[0].viewCount}\nChannel: ${res.data.result[0].channel.name}\n\n*_Wait, Urbae lagi ngirim Videonya_*`, id)
 				rugaapi.ytmp4(`https://youtu.be/${res.data.result[0].id}`)
 				.then(async(res) => {
-					await aruga.sendFileFromUrl(from, `${res.UrlVideo}`, '', '', id)
+					await aruga.sendFileFromUrl(from, `${res.getVideo}`, '', '', id)
 					.catch(() => {
 						aruga.reply(from, `Error ngab...`, id)
 					})
