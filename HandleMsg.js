@@ -3173,7 +3173,7 @@ _Desc di update oleh : @${chat.groupMetadata.descOwner.replace('@c.us','')} pada
                         break
                 case 'ttp':
                      axios.get(`https://tobz-api.herokuapp.com/api/ttp?text=${body.slice(5)}&apikey=BotWeA`)
-                        .then(res => {
+                        .then(async(res) => {
                         aruga.sendImageAsSticker(from, res.data.base64)
                      })
                     break
