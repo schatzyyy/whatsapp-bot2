@@ -153,7 +153,7 @@ module.exports = HandleMsg = async (aruga, message) => {
         const isQuotedVideo = quotedMsg && quotedMsg.type === 'video'
 		
         // [IDENTIFY]
-        const ownerNumber = "62895334950905@c.us"
+        const ownerNumber = "6282329325407@c.us"
         const isOwnerBot = ownerNumber.includes(pengirim)
         const isOwner = ownerNumber.includes(pengirim)
         const isOwnerB = ownerNumber.includes(pengirim)
@@ -1251,7 +1251,24 @@ module.exports = HandleMsg = async (aruga, message) => {
                         await aruga.reply(from, 'Error njing', id)
                     })
                     break
-	case 'filmapik':
+                case 'neonime':
+                        if (args.length == 0) return aruga.reply(from, `Mencari anime dari website Neonime!\nContoh: ${prefix}neonime boruto`, id)
+                        await aruga.reply(from, mess.wait, id)
+                        rugaapi.neo(body.slice(9))
+                        .then(async ({ result }) => {
+                            let neoni = '*-----「 NEONIME 」-----*'
+                            for (let i = 0; i < result.length; i++){
+                                neoni +=`\n\n• *Judul :* ${result[i].title}\n• *Url :* ${result[i].url}\n• *Deskripsi :* ${result[i].desc}\n\n=_=_=_=_=_=_=_=_=_=_=_=_=`
+                            }
+                            await aruga.sendFileFromUrl(from, result[0].thumb, 'img.jpg', neoni, id)
+                            console.log(`Succes sending ${body.slice(9)}`)
+                        })
+                        .catch(async (err) => {
+                            console.error(err)
+                            aruga.reply(from, 'Error njing', id)
+                        })
+                        break
+                    case 'filmapik':
                         if (args.length == 0) return aruga.reply(from, `Mencari sebuah film dari Website Film Apik!\nContoh : ${prefix}filmapik Revolutionary Love`, id)
                         await aruga.reply(from, mess.wait, id)
                         rugaapi.filmapik(args)
@@ -1807,6 +1824,9 @@ break
                                             aruga.sendFileFromUrl(from, thisUrlIg, 'KZ0-IGDL.mp4', `*From :* ${title.split(' on')[0]}\n*Size :* ${size}\n*Resolusi :* ${resolution}`, id)
                                         } else {
                                             aruga.sendFileFromUrl(from, thisUrlIg, 'KZ0-IGDL.mp3', `*From:* ${title.split(' on')[0]}\n*Size:* ${size}`, id)
+                                            .catch(() => {
+                                                aruga.reply(from, 'Error, linknya ga valid tod', id)
+                                            })
                                         }
                                     }
                             })
@@ -2280,15 +2300,14 @@ case 'ytsearch':
                 case 'ig2':
                     if (args.length == 0) return aruga.reply(from, `Kirim perintah ${prefix}ig2 linkig`, id)
                     aruga.reply(from, '_Scrapping Metadataa..._', id)
-                    rugaapi.ig2(args)
-                    .then(async(res) => {
-                        if (res.error) return aruga.reply(from, `${res.url}`, '', `${res.error}`)
-                        await aruga.sendFileFromUrl(from, `${res.resource[0].url}`, '', '', id)
-                        .catch(() => {
-                            aruga.reply(from, 'Maaf, mungkin link tersebut berasal dari akun yang private', id)
-                        })
-                    })
-                    break
+                    axios.get(`http://docs-jojo.herokuapp.com/api/insta?url=${body.slice(5)}`)
+			.then(async(res) => {
+			aruga.sendFileFromUrl(from, `${res.data.resource[0].url}`, 'ig.mp4', '', id)
+			.catch(() => {
+			aruga.reply(from, 'Error njing', id)
+		})
+	})
+	break
             case 'twitter':
                 if (args.length == 0) return aruga.reply(from, `Kirim Perintah ${prefix}twitter [linktwitter]`, id)
                 aruga.reply(from, mess.wait, id)
@@ -2405,7 +2424,8 @@ case 'ytsearch':
                         })
                         break 
             case 'play2'://silahkan kalian custom sendiri jika ada yang ingin diubah
-            if (args.length == 0) return aruga.reply(from, `Untuk mencari lagu dari youtube\n\nPenggunaan: ${prefix}play judul lagu`, id)
+		if (!isPrem) return aruga.reply(from, 'Command Premium\nChat owner buat mendaftar', id)
+            if (args.length == 0) return aruga.reply(from, `Untuk mencari video dari youtube\n\nPenggunaan: ${prefix}play judul lagu`, id)
             axios.get(`https://api.arugaz.my.id/api/media/ytsearch?query=${body.slice(6)}`)
             .then(async (res) => {
                 await aruga.sendFileFromUrl(from, `${res.data.result[0].thumbnail}`, ``, `「 *PLAY VIDEO* 」\n\nJudul: ${res.data.result[0].title}\nDurasi: ${res.data.result[0].duration}detik\nUploaded: ${res.data.result[0].uploadDate}\nView: ${res.data.result[0].viewCount}\nChannel: ${res.data.result[0].channel.name}\n\n*_Wait, Urbae lagi ngirim Videonya_*`, id)
