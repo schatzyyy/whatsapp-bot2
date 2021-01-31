@@ -37,7 +37,7 @@
 </div>
 
 
-## Please Follow Tutorial Below To Not Get Error!
+## Please Follow Tutorial Below So There Is No Mistake!
 
 
 ## Getting Started
