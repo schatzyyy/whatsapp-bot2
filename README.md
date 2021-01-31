@@ -37,10 +37,7 @@
 </div>
 
 
-## Solution For Feature Sticker And Ttp Has Error :
-RUNNING THIS COMMAND IN YOUR TERMINAL:
-
-```npm i --save @open-wa/wa-automate@3.2.0```
+## Please Follow Tutorial Below To Not Get Error!
 
 
 ## Getting Started
@@ -59,7 +56,7 @@ Install the dependencies:
 
 ```bash
 > npm install 
-> npm install gify-cli -g
+> npm i --save @open-wa/wa-automate@3.2.0
 ```
 
 ### Usage
