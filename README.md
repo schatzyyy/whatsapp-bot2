@@ -36,7 +36,8 @@
 <p align="center"><a href="https://wa.me/62895334962050?text=%23menu" target="_blank">My Whatsapp BOT</a>.</p>
 </div>
 
-SOLVED FOR STICKER AND TTP ERROR :
+
+## Solution For Feature Sticker And Ttp Has Error :
 RUNNING THIS COMMAND IN YOUR TERMINAL:
 
 ```npm i --save @open-wa/wa-automate@3.2.0```
