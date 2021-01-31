@@ -1321,25 +1321,20 @@ module.exports = HandleMsg = async (aruga, message) => {
            case 'stickergif':
         case 'stikergif':
 	case 'sgif':
-            if (isMedia || isQuotedVideo) {
-                if (mimetype === 'video/mp4' && message.duration < 10 || mimetype === 'image/gif' && message.duration < 10) {
-                    var mediaData = await decryptMedia(message, uaOverride)
-                    aruga.reply(from, '[WAIT] Sedang di proses⏳ silahkan tunggu ± 1 min!', id)
-                    var filename = `./media/stickergif.${mimetype.split('/')[1]}`
-                    await fs.writeFileSync(filename, mediaData)
-                    await exec(`gify ${filename} ./media/stickergif.mp4 --fps=30 --scale=240:240`, async function (error, stdout, stderr) {
-                        var gif = await fs.readFileSync('./media/stickergif.mp4', { encoding: "base64" })
-                        await aruga.sendImageAsSticker(from, `data:image/gif;base64,${gif.toString('base64')}`)
-                        .catch(() => {
-                            aruga.reply(from, 'Maaf filenya terlalu besar!', id)
-                        })
-                    })
-                  } else {
-                    aruga.reply(from, `[❗] Kirim gif dengan caption *${prefix}stickergif* max 10 sec!`, id)
-                   }
-                } else {
-		    aruga.reply(from, `[❗] Kirim gif dengan caption *${prefix}stickergif*`, id)
-	        }
+	  aruga.reply(from, mess.wait, id)
+           if (isMedia && type === 'video' || mimetype === 'image/gif') {
+                try {
+                    const mediaData = await decryptMedia(message, uaOverride)
+                    await aruga.sendMp4AsSticker(from, mediaData, {fps: 10, startTime: `00:00:00.0`, endTime : `00:00:10.0`,loop: 0})
+                } catch (err) {
+                    aruga.reply(from, `Size media terlalu besar! mohon kurangi durasi video.`)
+                }
+            } else if (quotedMsg && quotedMsg.type == 'video' || quotedMsg && quotedMsg.mimetype == 'image/gif') {
+                const mediaData = await decryptMedia(quotedMsg, uaOverride)
+                await aruga.sendMp4AsSticker(from, mediaData, {fps: 10, startTime: `00:00:00.0`, endTime : `00:00:10.0`,loop: 0})
+            } else {
+                aruga.reply(from, `Kesalahan ⚠️ Hanya bisa video/gif apabila file media berbentuk gambar ketik /stickergif`, id)
+            } 
             break
         case 'stikergiphy':
         case 'stickergiphy':
@@ -2755,7 +2750,7 @@ case 'ytsearch':
     case 'happymod':
         if (args.length == 0) return aruga.reply(from, `Fitur untuk mencari sebuah aplikasi mod dari Happymod\nContoh : ${prefix}happymod pubg\n\nusahain lower case ya jangan ada huruf kapital`, id)
         const happymod = await axios.get(`https://tobz-api.herokuapp.com/api/happymod?q=${body.slice(10)}&apikey=BotWeA`)
-                if (happymod.data.error) return tobz.reply(from, happymod.data.error, id)
+                if (happymod.data.error) return aruga.reply(from, happymod.data.error, id)
                 const modo = happymod.data.result[0]
                 const resmod = `• *Title* : ${modo.title}\n• *Purchase* : ${modo.purchase}\n• *Size* : ${modo.size}\n• *Root* : ${modo.root}\n• *Version* : ${modo.version}\n• *Price* : ${modo.price}\n• *Link* : ${modo.link}\n• *Download* : ${modo.download}`
                 aruga.sendFileFromUrl(from, modo.image, 'HAPPYMOD.jpg', resmod, id)
@@ -3174,7 +3169,7 @@ _Desc di update oleh : @${chat.groupMetadata.descOwner.replace('@c.us','')} pada
                 case 'ttp':
                      axios.get(`https://tobz-api.herokuapp.com/api/ttp?text=${body.slice(5)}&apikey=BotWeA`)
                         .then(async(res) => {
-                        aruga.sendImageAsSticker(from, res.data.base64)
+                        aruga.sendImageAsSticker(from, res.data.base64, id)
                      })
                     break
                  case 'kapan':
