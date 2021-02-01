@@ -37,6 +37,8 @@
 </div>
 
 
+## Please Follow Tutorial Below So There Is No Mistake!
+
 
 ## Getting Started
 
@@ -54,7 +56,7 @@ Install the dependencies:
 
 ```bash
 > npm install 
-> npm install gify-cli -g
+> npm i --save @open-wa/wa-automate@3.2.0
 ```
 
 ### Usage
