@@ -1167,7 +1167,6 @@ module.exports = HandleMsg = async (aruga, message) => {
             aruga.sendText(from, `*Device Info*\n${deviceinfo}\n\nStatus :\n- *${loadedMsg}* Loaded Messages\n- *${groupsIn.length}* Group Joined\n- *${groups.length - groupsIn.length}* Groups Left\n- *${groups.length}* Group Chats\n- *${chatIds.length - groups.length}* Personal Chats\n- *${chatIds.length - groups.length - groupsIn.length}* Personal Chats Active\n- *${chatIds.length}* Total Chats\n- *${chatIds.length - groupsIn.length}* Total Chats Active`)
             break
         }
-
 	//Sticker Converter
 	case 'stikertoimg':
 	case 'stickertoimg':
@@ -2389,18 +2388,24 @@ case 'ytsearch':
             break
             case 'play'://silahkan kalian custom sendiri jika ada yang ingin diubah
            if (args.length == 0) return aruga.reply(from, `Untuk mencari lagu dari youtube\n\nPenggunaan: ${prefix}play judul lagu`, id)
-           axios.get(`https://api.arugaz.my.id/api/media/ytsearch?query=${body.slice(6)}`)
+	   const pncri = body.slice(6)
+           axios.get(`https://api.arugaz.my.id/api/media/ytsearch?query=${pncri}`)
             .then(async (res) => {
                 await aruga.sendFileFromUrl(from, `${res.data.result[0].thumbnail}`, ``, `「 *PLAY* 」\n\nJudul: ${res.data.result[0].title}\nDurasi: ${res.data.result[0].duration}detik\nUploaded: ${res.data.result[0].uploadDate}\nView: ${res.data.result[0].viewCount}\nChannel: ${res.data.result[0].channel.name}\n\n*_Wait, Urbae lagi ngirim Audionya_*`, id)
 				rugaapi.ymp3(`https://youtu.be/${res.data.result[0].id}`)
 				.then(async(res) => {
-                    await aruga.sendFileFromUrl(from, `${res.url}`, '', '', id)
-					.catch(() => {
-						aruga.reply(from, `Error ngab...`, id)
-					})
-                })
-            })
-            break
+                    		const respoonn = await fetch(res.url);
+                		const buffeer = await respoonn.buffer();
+                		await sleep(5000)
+                		//aruga.sendFileFromUrl(from, webplay.data.result.mp3, `${webplay.data.result.title}.mp3`, 'Nih...', id)
+                		await fs.writeFile(`./media/play.mp3`, buffeer)
+    				await aruga.sendFile(from,'./media/play.mp3', 'play.mp3','...', id)
+				.catch((err) => {
+				aruga.reply(from, `URL ${pncri} Sudah pernah didownload sebelumnya, Link akan direset selama 30 menit`,id)
+			 })
+			})
+		       })
+    			break
 		case 'trendingtwit':
                     case 'trendtwit':
                         await aruga.reply(from, mess.wait, id)
