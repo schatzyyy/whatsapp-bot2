@@ -2790,19 +2790,20 @@ case 'ytsearch':
             break
         case 'infoall':
         case 'everyone':
+	case 'tagall':
             if (!isGroupMsg) return aruga.reply(from, 'Maaf, perintah ini hanya dapat dipakai didalam grup!', id)
             if (!isGroupAdmins & !isOwnerB) return aruga.reply(from, 'Gagal, perintah ini hanya dapat digunakan oleh admin grup!', id)
             const textInfo = body.slice(8)
             const namagcnih = name
             const memchu = chat.groupMetadata.participants.length
             const groupMem = await aruga.getGroupMembers(groupId)
-            let hehex = `Name Group : *${namagcnih}*\n\nTotal Members : *${memchu}*\n\n╔══✪〘 Mention All 〙✪══\n\n`
+            let hehex = `Name Group : *${namagcnih}*\n\nTotal Members : *${memchu}*\n\n╔══✪〘 Mention All 〙✪══\n╠\n`
             for (let i = 0; i < groupMem.length; i++) {
-                hehex += '╠➥'
+                hehex += `╠➥`
                 hehex += ` @${groupMem[i].id.replace(/@c.us/g, '')}\n`
             }
-            hehex += '╚═〘 *U R B A E  B O T* 〙'
-            await aruga.sendTextWithMentions(from, `Info dari : ${pushname}\n` + textInfo+ '\n\n' +hehex)
+            hehex += '╠\n╚═〘 *U R B A E  B O T* 〙'
+            await aruga.sendTextWithMentions(from, `Info dari : ${pushname}\n\n` +textInfo+ '\n\n' +hehex)
             break
 		case 'katakasar':
 			if (!isGroupMsg) return aruga.reply(from, 'Maaf, perintah ini hanya dapat dipakai didalam grup!', id)
