@@ -1633,13 +1633,17 @@ break
                 const linkmp3 = args[0].replace('https://youtu.be/','').replace('https://www.youtube.com/watch?v=','')
                 rugaapi.ytmp3(`https://youtu.be/${linkmp3}`)
                 .then(async(res) => {
-                    await aruga.sendFileFromUrl(from, `${res.thumb}`, 'image.jpg', `*「 YOUTUBE MP3 」*\n\n*Judul :* ${res.title}\n*Execute :* ${res.ext}\n\n*_Sabar, Urbae lagi ngirim Audionya_*`, id)
-                    await aruga.sendFileFromUrl(from, `${res.result}`, '', id)
-                    .catch(() => {
-                aruga.reply(from, `Error ngab`, id)
-            })
-                })
-                break
+                    	const save = await fetch(res);
+                		const buffeer2 = await save.buffer();
+                		await sleep(1000)
+                		//aruga.sendFileFromUrl(from, webplay.data.result.mp3, `${webplay.data.result.title}.mp3`, 'Nih...', id)
+                		await fs.writeFile(`./media/play.mp3`, buffeer2)
+    				await aruga.sendFile(from,'./media/play.mp3', 'play.mp3','...', id)
+				.catch((err) => {
+				aruga.reply(from, `URL ${linkmp3} Sudah pernah didownload sebelumnya, Link akan direset selama 30 menit`,id)
+			 })
+			})
+    			break
             case 'jadwalbola':
                 if (!isGroupMsg) return aruga.reply(from, `Perintah ini hanya bisa di gunakan dalam group!`, id)
             aruga.reply(from, mess.wait, id)
@@ -2392,9 +2396,9 @@ case 'ytsearch':
            axios.get(`https://api.arugaz.my.id/api/media/ytsearch?query=${pncri}`)
             .then(async (res) => {
                 await aruga.sendFileFromUrl(from, `${res.data.result[0].thumbnail}`, ``, `「 *PLAY* 」\n\nJudul: ${res.data.result[0].title}\nDurasi: ${res.data.result[0].duration}detik\nUploaded: ${res.data.result[0].uploadDate}\nView: ${res.data.result[0].viewCount}\nChannel: ${res.data.result[0].channel.name}\n\n*_Wait, Urbae lagi ngirim Audionya_*`, id)
-				rugaapi.ymp3(`https://youtu.be/${res.data.result[0].id}`)
+				rugaapi.ytmp3(`https://youtu.be/${res.data.result[0].id}`)
 				.then(async(res) => {
-                    		const respoonn = await fetch(res.url);
+                    		const respoonn = await fetch(res);
                 		const buffeer = await respoonn.buffer();
                 		await sleep(5000)
                 		//aruga.sendFileFromUrl(from, webplay.data.result.mp3, `${webplay.data.result.title}.mp3`, 'Nih...', id)
