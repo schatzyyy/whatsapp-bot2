@@ -56,7 +56,6 @@ Install the dependencies:
 
 ```bash
 > npm install 
-> npm i --save @open-wa/wa-automate@3.2.0
 ```
 
 ### Usage
