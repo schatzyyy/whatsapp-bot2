@@ -1347,7 +1347,10 @@ module.exports = HandleMsg = async (aruga, message) => {
                 await aruga.sendMp4AsSticker(from, mediaData, {crop: true, fps: 30, startTime: `00:00:00.0`, endTime : `00:00:05.0`,loop: 0})
             } else {
                 aruga.reply(from, `Kesalahan ⚠️ Hanya bisa video/gif apabila file media berbentuk gambar ketik /stickergif`, id)
-            } 
+		.catch((err) => {
+			aruga.reply(from, `Error! Size media terlalu besar! Maksimal 5 detik!`, id)
+		})
+    	}
             break
         case 'stikergiphy':
         case 'stickergiphy':
@@ -1647,12 +1650,7 @@ break
                 const linkmp3 = args[0].replace('https://youtu.be/','').replace('https://www.youtube.com/watch?v=','')
                 rugaapi.ymp3(`https://youtu.be/${linkmp3}`)
                 .then(async(res) => {
-                    	const save = await fetch(res);
-                		const buffeer2 = await save.buffer();
-                		await sleep(1000)
-                		//aruga.sendFileFromUrl(from, webplay.data.result.mp3, `${webplay.data.result.title}.mp3`, 'Nih...', id)
-                		await fs.writeFile(`./media/play.mp3`, buffeer2)
-    				await aruga.sendFile(from,'./media/play.mp3', 'play.mp3','...', id)
+                      		await aruga.sendFileFromUrl(from, `${res.result}`, `${res.title}.mp3`, '', id)
 				.catch((err) => {
 				aruga.reply(from, `URL ${linkmp3} Sudah pernah didownload sebelumnya, Link akan direset selama 30 menit`,id)
 			 })
@@ -2433,12 +2431,7 @@ case 'ytsearch':
                 await aruga.sendFileFromUrl(from, `${res.data.result[0].thumbnail}`, ``, `「 *PLAY* 」\n\nJudul: ${res.data.result[0].title}\nDurasi: ${res.data.result[0].duration}detik\nUploaded: ${res.data.result[0].uploadDate}\nView: ${res.data.result[0].viewCount}\nChannel: ${res.data.result[0].channel.name}\n\n*_Wait, Urbae lagi ngirim Audionya_*`, id)
 				rugaapi.ymp3(`https://youtu.be/${res.data.result[0].id}`)
 				.then(async(res) => {
-                    		const respoonn = await fetch(res.url);
-                		const buffeer = await respoonn.buffer();
-                		await sleep(1000)
-                		//aruga.sendFileFromUrl(from, webplay.data.result.mp3, `${webplay.data.result.title}.mp3`, 'Nih...', id)
-                		await fs.writeFile(`./media/play.mp3`, buffeer)
-    				await aruga.sendFile(from,'./media/play.mp3', 'play.mp3','...', id)
+                    		await aruga.sendFileFromUrl(from, `${res.result}`, `${res.title}.mp3`, '', id)
 				.catch((err) => {
 				aruga.reply(from, `URL ${pncri} Sudah pernah didownload sebelumnya, Link akan direset selama 30 menit`,id)
 			 })
@@ -3210,9 +3203,9 @@ _Desc di update oleh : @${chat.groupMetadata.descOwner.replace('@c.us','')} pada
                             await aruga.sendFileFromUrl(from, aiquote.data, 'quote.jpg', 'FOLLOW NGAB \ :V https://www.instagram.com/_l_.lawliet_/' , id )
                         break
                 case 'ttp':
-                     axios.get(`https://tobz-api.herokuapp.com/api/ttp?text=${body.slice(5)}&apikey=BotWeA`)
+                     axios.get(`https://st4rz.herokuapp.com/api/ttp?kata=${body.slice(5)}`)
                         .then(async(res) => {
-                        aruga.sendImageAsSticker(from, res.data.base64, id)
+                        aruga.sendImageAsSticker(from, res.data.result, id)
                      })
                     break
                  case 'kapan':
