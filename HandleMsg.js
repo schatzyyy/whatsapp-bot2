@@ -1331,16 +1331,8 @@ moment.tz.setDefault('Asia/Jakarta').locale('id')
 		 .catch((err) => {
 			aruga.reply(from, 'Error', id)
 		})
+	      })
 		break
-            case 'tomp3':
-                if (isMedia || isQuotedVideo){
-                    if (mimetype === 'video/mp4') {
-                        var medata = await decryptMedia(message, uaOverride)
-                        aruga.reply(from, mess.wait, id)
-                        aruga.sendPtt(from, medata, id)
-                    }
-                }
-                break
            case 'stickergif':
         case 'stikergif':
 	case 'sgif':
