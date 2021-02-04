@@ -1399,13 +1399,13 @@ moment.tz.setDefault('Asia/Jakarta').locale('id')
            if (isMedia && type === 'video' || mimetype === 'image/gif') {
                 try {
                     const mediaData = await decryptMedia(message, uaOverride)
-                    await aruga.sendMp4AsSticker(from, mediaData, {crop: false, fps: 10, startTime: `00:00:00.0`, endTime : `00:00:10.0`,loop: 0})
+                    await aruga.sendMp4AsSticker(from, mediaData, {crop: true, fps: 10, startTime: `00:00:00.0`, endTime : `00:00:10.0`,loop: 0})
                 } catch (err) {
                     aruga.reply(from, `Size media terlalu besar! mohon kurangi durasi video.`)
                 }
             } else if (quotedMsg && quotedMsg.type == 'video' || quotedMsg && quotedMsg.mimetype == 'image/gif') {
                 const mediaData = await decryptMedia(quotedMsg, uaOverride)
-                await aruga.sendMp4AsSticker(from, mediaData, {crop: false, fps: 10, startTime: `00:00:00.0`, endTime : `00:00:10.0`,loop: 0})
+                await aruga.sendMp4AsSticker(from, mediaData, {crop: true, fps: 10, startTime: `00:00:00.0`, endTime : `00:00:10.0`,loop: 0})
             } else {
                 aruga.reply(from, `Kesalahan ⚠️ Hanya bisa video/gif apabila file media berbentuk gambar ketik /stickergif`, id)
 		.catch((err) => {
@@ -1729,6 +1729,8 @@ break
                 const linkmp3 = args[0].replace('https://youtu.be/','').replace('https://www.youtube.com/watch?v=','')
                 rugaapi.ymp3(`https://youtu.be/${linkmp3}`)
                 .then(async(res) => {
+				await aruga.sendFileFromUrl(from, `${res.thumb}`, '', `「 *YOUTUBE MP3* 」\n\n*Title :* ${res.title}\n*Size :* ${res.size}\n*Quality :* ${res.quality}\n\n*_Waitt, Urbae lagi ngirim audionya_*`, id)
+				if (Number(res.size.split(' MB')[0] > 10)) return aruga.reply(from, 'Gagal, ukuran audio terlalu besar', id)
                       		await aruga.sendFileFromUrl(from, `${res.result}`, `${res.title}.mp3`, '', id)
 				.catch((err) => {
 				aruga.reply(from, `URL ${linkmp3} Sudah pernah didownload sebelumnya, Link akan direset selama 30 menit`,id)
@@ -2487,17 +2489,11 @@ case 'ytsearch':
             case 'ytmp4':
             if (args.length == 0) return aruga.reply(from, `Untuk mendownload video dari youtube\nketik: ${prefix}ytmp4 [link_yt]`, id)
             const linkmp4 = args[0].replace('https://youtu.be/','').replace('https://www.youtube.com/watch?v=','')
-			rugaapi.ymp4(`https://youtu.be/${linkmp4}`)
+	    rugaapi.ytmp4(`https://youtu.be/${linkmp4}`)
             .then(async(res) => {
-				if (res.error) return aruga.sendFileFromUrl(from, `${res.url}`, '', `${res.error}`)
-				await aruga.sendFileFromUrl(from, `${res.thumb}`, 'img.jpg', `*「 YOUTUBE MP4 」*\n\n*Judul :* ${res.title}\n*Filesize :* ${res.filesize}\n\n*_Sabar, Urbae lagi ngirim videonya_*`, id)
-                                 if (Number(res.filesize.split(' MB')[0] > 50)) return aruga.reply(from, 'Maaf, Ukuran file terlalu besar!', id)
-				const respoonn10 = await fetch(res.result);
-                		const buffeer = await respoonn10.buffer();
-                		await sleep(1000)
-                		//aruga.sendFileFromUrl(from, webplay.data.result.mp3, `${webplay.data.result.title}.mp3`, 'Nih...', id)
-                		await fs.writeFile(`./media/play.mp4`, buffeer)
-    				await aruga.sendFile(from,'./media/play.mp4', 'play.mp4',`*${res.title}*\n${res.filesize}*`, id)
+				await aruga.sendFileFromUrl(from, `${res.thumb}`, 'img.jpg', `*「 YOUTUBE MP4 」*\n\n*Judul :* ${res.title}\n*Filesize :* ${res.filesize}\n*Quality :* ${res.quality}\n*_Sabar, Urbae lagi ngirim videonya_*`, id)
+                                if (Number(res.size.split(' MB')[0] > 50)) return aruga.reply(from, 'Maaf, Ukuran file terlalu besar!', id)
+				await aruga.sendFileFromUrl(from, res.link, '', `${res.title}\n${res.size}\n${res.quality}`, id)
 				.catch((err) => {
 				aruga.reply(from, `URL ${pncri} Sudah pernah didownload sebelumnya, Link akan direset selama 30 menit`,id)
 			 })
@@ -2541,18 +2537,13 @@ case 'ytsearch':
             case 'play'://silahkan kalian custom sendiri jika ada yang ingin diubah
            if (args.length == 0) return aruga.reply(from, `Untuk mencari lagu dari youtube\n\nPenggunaan: ${prefix}play judul lagu`, id)
 	   const pncri = body.slice(6)
-           axios.get(`https://api.arugaz.my.id/api/media/ytsearch?query=${pncri}`)
+           axios.get(`https://api.zeks.xyz/api/yts?q=${pncri}&apikey=apivinz`)
             .then(async (res) => {
-                await aruga.sendFileFromUrl(from, `${res.data.result[0].thumbnail}`, ``, `「 *PLAY* 」\n\nJudul: ${res.data.result[0].title}\nDurasi: ${res.data.result[0].duration}detik\nUploaded: ${res.data.result[0].uploadDate}\nView: ${res.data.result[0].viewCount}\nChannel: ${res.data.result[0].channel.name}\n\n*_Wait, Urbae lagi ngirim Audionya_*`, id)
-				rugaapi.ytmp3(`https://youtu.be/${res.data.result[0].id}`)
+                await aruga.sendFileFromUrl(from, `${res.data.result[0].video.thumbnail_src}`, ``, `「 *PLAY* 」\n\nJudul: ${res.data.result[0].video.title}\nDurasi: ${res.data.result[0].video.duration} detik\nUploaded: ${res.data.result[0].video.upload_date}\nView: ${res.data.result[0].video.views}\nUrl: ${res.data.result[0].video.url}\n\n*_Wait, Urbae lagi ngirim Audionya_*`, id)
+				rugaapi.ymp3(`https://youtu.be/${res.data.result[0].video.id}`)
                                 .then(async(res) => {
-                                 if (Number(res.filesize.split(' MB')[0] > 15)) return aruga.reply(from, 'Gagal, ukuran Audio terlalu besar!', id)
-                                 const respoonn119 = await fetch(res.result);
-                                const buffeerkan = await respoonn119.buffer();
-                                await sleep(1000)
-                                //aruga.sendFileFromUrl(from, webplay.data.result.mp3, `${webplay.data.result.titl>
-                                await fs.writeFile(`./media/play.mp3`, buffeerkan)
-                                await aruga.sendFile(from,'./media/play.mp3', 'play.mp',`*${res.title}*\n${res.filesize}`, id)
+                                 if (Number(res.size.split(' MB')[0] > 10)) return aruga.reply(from, 'Gagal, ukuran Audio terlalu besar!', id)
+                                 await aruga.sendFileFromUrl(from, res.link, '', '', id)`
                                 .catch((err) => {
                                         aruga.reply(from, 'Error anjing', id)
                                    })
@@ -2576,21 +2567,16 @@ case 'ytsearch':
                             await aruga.reply(from, 'Error!', id)
                         })
                         break 
-            case 'play2'://silahkan kalian custom sendiri jika ada yang ingin diubah
-		if (!isPrem) return aruga.reply(from, 'Command Premium\nChat owner buat mendaftar', id)
+          case 'play2'://silahkan kalian custom sendiri jika ada yang ingin diubah
+	    if (!isPrem) return aruga.reply(from, 'Command Premium\nChat owner buat mendaftar', id)
             if (args.length == 0) return aruga.reply(from, `Untuk mencari video dari youtube\n\nPenggunaan: ${prefix}play judul lagu`, id)
             axios.get(`https://api.arugaz.my.id/api/media/ytsearch?query=${body.slice(6)}`)
             .then(async (res) => {
                 await aruga.sendFileFromUrl(from, `${res.data.result[0].thumbnail}`, ``, `「 *PLAY VIDEO* 」\n\nJudul: ${res.data.result[0].title}\nDurasi: ${res.data.result[0].duration}detik\nUploaded: ${res.data.result[0].uploadDate}\nView: ${res.data.result[0].viewCount}\nChannel: ${res.data.result[0].channel.name}\n\n*_Wait, Urbae lagi ngirim Videonya_*`, id)
 				rugaapi.ytmp4(`https://youtu.be/${res.data.result[0].id}`)
 				.then(async(res) => {
-					 if (Number(res.filesize.split(' MB')[0] > 50)) return aruga.reply(from, 'Maaf, Ukuran file terlalu besar!', id)
-					 const respoonn21 = await fetch(res.result);
-                                const buffeerlah = await respoonn21.buffer();
-                                await sleep(1000)
-                                //aruga.sendFileFromUrl(from, webplay.data.result.mp3, `${webplay.data.result.titl>
-                                await fs.writeFile(`./media/play.mp4`, buffeerlah)
-                                await aruga.sendFile(from,'./media/play.mp4', 'play.mp4',`*${res.title}*\n${res.filesize}`, id)
+					 if (Number(res.size.split(' MB')[0] > 50)) return aruga.reply(from, 'Maaf, Ukuran file terlalu besar!', id)
+					 await aruga.sendFileFromUrl(from, res.link, '', `${res.title}\n${res.size}\n${res.quality}`, id)
                                 	.catch((err) => {
                                 	aruga.reply(from, `URL ${pncri} Sudah pernah didownload sebelumnya, Link akan direst`)
                          })
@@ -3039,8 +3025,7 @@ case 'ytsearch':
         //Owner Group
         case 'kickall': //mengeluarkan semua member
         if (!isGroupMsg) return aruga.reply(from, 'Maaf, perintah ini hanya dapat dipakai didalam grup!', id)
-	const isOwnergc = chat.groupMetadata.owner
-        if (!isOwnergc) return aruga.reply(from, 'Maaf, perintah ini hanya dapat dipakai oleh owner grup!', id)
+        if (!isOwnerB) return aruga.reply(from, 'Maaf, perintah ini hanya dapat dipakai oleh owner grup!', id)
         if (!isBotGroupAdmins) return aruga.reply(from, 'Gagal, silahkan tambahkan bot sebagai admin grup!', id)
             const allMem = await aruga.getGroupMembers(groupId)
             for (let i = 0; i < allMem.length; i++) {
