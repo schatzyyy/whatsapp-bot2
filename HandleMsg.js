@@ -79,7 +79,7 @@ let dsay = JSON.parse(fs.readFileSync('./lib/database/say.json'))
 let _autostiker = JSON.parse(fs.readFileSync('./lib/helper/antisticker.json'))
 let antilink = JSON.parse(fs.readFileSync('./lib/helper/antilink.json'))
 let prem = JSON.parse(fs.readFileSync('./lib/database/prem.json'))
-let muted = JSON.par(fs.readFileSync('./lib/database/muted.json'))
+let muted = JSON.parse(fs.readFileSync('./lib/database/muted.json'))
 
 let { 
     ownerNumber, 
