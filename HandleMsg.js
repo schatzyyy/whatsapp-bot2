@@ -1731,8 +1731,12 @@ break
                 .then(async(res) => {
 				await aruga.sendFileFromUrl(from, `${res.thumb}`, '', `「 *YOUTUBE MP3* 」\n\n*Title :* ${res.title}\n*Size :* ${res.size}\n*Quality :* ${res.quality}\n\n*_Waitt, Urbae lagi ngirim audionya_*`, id)
 				if (Number(res.size.split(' MB')[0] > 10)) return aruga.reply(from, 'Gagal, ukuran audio terlalu besar', id)
-                      		await aruga.sendFileFromUrl(from, `${res.result}`, `${res.title}.mp3`, '', id)
-				.catch((err) => {
+				const simpen2 = await fetch(res.link);
+				const bufferan = await simpen2.buffer();
+				await sleep(1000)
+				await fs.writeFile('./media/play.mp3', bufferan)
+				await aruga.sendFile(from, './media/play.mp3', '', '', id)
+                      		.catch((err) => {
 				aruga.reply(from, `URL ${linkmp3} Sudah pernah didownload sebelumnya, Link akan direset selama 30 menit`,id)
 			 })
 			})
@@ -2543,7 +2547,11 @@ case 'ytsearch':
 				rugaapi.ymp3(`https://youtu.be/${res.data.result[0].video.id}`)
                                 .then(async(res) => {
                                  if (Number(res.size.split(' MB')[0] > 10)) return aruga.reply(from, 'Gagal, ukuran Audio terlalu besar!', id)
-                                 await aruga.sendFileFromUrl(from, res.link, '', '', id)
+                                 const simpen = await fetch(res.link);
+				 const buferin = await simpen.buffer();
+				 await sleep(1000)
+				 await fs.writeFile(`./media/play.mp3`, buferin)
+				 await aruga.sendFile(from,'./media/play.mp3', 'play.mp3', '', id) 
                                 .catch((err) => {
                                         aruga.reply(from, 'Error anjing', id)
                                    })
