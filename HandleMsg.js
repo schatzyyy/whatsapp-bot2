@@ -2543,7 +2543,7 @@ case 'ytsearch':
 				rugaapi.ymp3(`https://youtu.be/${res.data.result[0].video.id}`)
                                 .then(async(res) => {
                                  if (Number(res.size.split(' MB')[0] > 10)) return aruga.reply(from, 'Gagal, ukuran Audio terlalu besar!', id)
-                                 await aruga.sendFileFromUrl(from, res.link, '', '', id)`
+                                 await aruga.sendFileFromUrl(from, res.link, '', '', id)
                                 .catch((err) => {
                                         aruga.reply(from, 'Error anjing', id)
                                    })
