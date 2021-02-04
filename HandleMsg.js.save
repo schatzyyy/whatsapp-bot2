@@ -1,4 +1,5 @@
-﻿require('dotenv').config()
+
+d  ﻿require('dotenv').config()
 const { decryptMedia } = require('@open-wa/wa-automate')
 
 const moment = require('moment-timezone')
@@ -79,7 +80,6 @@ let dsay = JSON.parse(fs.readFileSync('./lib/database/say.json'))
 let _autostiker = JSON.parse(fs.readFileSync('./lib/helper/antisticker.json'))
 let antilink = JSON.parse(fs.readFileSync('./lib/helper/antilink.json'))
 let prem = JSON.parse(fs.readFileSync('./lib/database/prem.json'))
-let muted = JSON.par(fs.readFileSync('./lib/database/muted.json'))
 
 let { 
     ownerNumber, 
@@ -866,7 +866,7 @@ moment.tz.setDefault('Asia/Jakarta').locale('id')
 		if (!isPrem) return aruga.reply(from, 'Command Premium\nChat owner buat mendaftar', id)
 		aruga.reply(from, mess.wait, id)
 		axios.get('https://nekos.life/api/v2/img/anal').then(res => {
-		aruga.sendStickerfromUrl(from, res.data.url, id)
+		aruga.sendStickerfromUrl(from, res.data.url)
 		})
 		break
 		case 'feetgif':
@@ -1009,7 +1009,6 @@ moment.tz.setDefault('Asia/Jakarta').locale('id')
             if (!isGroupMsg) return aruga.reply(from, `Fitur ini hanya bisa di gunakan dalam group`, id)
             if (!isGroupAdmins) return aruga.reply(from, `Perintah ini hanya bisa di gunakan oleh admin group`, id)
             if (!isBotGroupAdmins) return aruga.reply(from, `Perintah ini hanya bisa di gunakan ketika bot menjadi admin`, id)
-	    if (!qmoed == 0) return aruga.reply(from, `Format salah! Reply pesan orang yang sudah dikick dengan caption /inv`, id)
             try {
                 await aruga.addParticipant(from, qmoed)
             } catch {
@@ -1244,7 +1243,7 @@ moment.tz.setDefault('Asia/Jakarta').locale('id')
             const chatIds = await aruga.getAllChatIds()
             const groups = await aruga.getAllGroups()
             const groupsIn = groups.filter(x => x.groupMetadata.participants.map(x => [botNumber, '62895334962050@c.us'].includes(x.id._serialized)).includes(true))
-            aruga.sendText(from, `*Device Info*\n${deviceinfo}\n\n\nStatus :\n- *${loadedMsg}* Loaded Messages\n- *${groupsIn.length}* Group Joined\n- *${groups.length - groupsIn.length}* Groups Left\n- *${groups.length}* Group Chats\n- *${chatIds.length - groups.length}* Personal Chats\n- *${chatIds.length - groups.length - groupsIn.length}* Personal Chats Active\n- *${chatIds.length}* Total Chats\n- *${chatIds.length - groupsIn.length}* Total Chats Active\n\n*Whatsapp Version :* ${waver}`)
+            aruga.sendText(from, `*Device Info*\n${deviceinfo}\n\nStatus :\n- *${loadedMsg}* Loaded Messages\n- *${groupsIn.length}* Group Joined\n- *${groups.length - groupsIn.length}* Groups Left\n- *${groups.length}* Group Chats\n- *${chatIds.length - groups.length}* Personal Chats\n- *${chatIds.length - groups.length - groupsIn.length}* Personal Chats Active\n- *${chatIds.length}* Total Chats\n- *${chatIds.length - groupsIn.length}* Total Chats Active\n\n*Whatsapp Version :* ${waver}`)
             break
         }
 	//Sticker Converter
@@ -2248,7 +2247,6 @@ case 'ytsearch':
             break
         case 'sreddit':
             if (args.length == 0) return aruga.reply(from, `Untuk mencari gambar dari sub reddit\nketik: ${prefix}sreddit [search]\ncontoh: ${prefix}sreddit naruto`, id)
-	    if (!isPrem) return aruga.reply(from, `Command Premium!Chat owner buat mendaftar!`, id)
             const carireddit = body.slice(9)
             const hasilreddit = await images.sreddit(carireddit)
             await aruga.sendFileFromUrl(from, hasilreddit, '', '', id)
@@ -2833,7 +2831,7 @@ case 'ytsearch':
              aruga.sendText(from, '_Sedang diproses, mohon tunggu sebentar!..._', id)
              const tahtuy = `https://api.zeks.xyz/api/hartatahta?text=${jreng}&apikey=apivinz`
 		aruga.sendFileFromUrl(from, tahtuy, `${jreng}.jpg`, `*_Harta_*\n*_Tahta_*\n*_${jreng}_*`, id)
-		aruga.sendImageAsSticker(from, tahtuy, id)
+		aruga.sendStickerfromUrlAsReply(from, tahtuy, id)
 		.catch((err) => {
 			aruga.reply(from, 'Error', id)
 	})
