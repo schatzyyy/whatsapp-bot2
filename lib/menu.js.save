@@ -279,7 +279,6 @@ _-_-_-_-_-_-_-_-_-_-_-_-_-_
 *┃➥${prefix}botstat*
 *┃➥${prefix}ownerbot*
 *┃➥${prefix}join*
-*┃➥${prefix}reportbug*
 *┗━───────────────╯*
  _-_-_-_-_-_-_-_-_-_-_-_-_-_
 
@@ -287,9 +286,7 @@ _-_-_-_-_-_-_-_-_-_-_-_-_-_
 
 *┏━───────────────╮*
 *┃➥${prefix}ban* 
-*┃➥${prefix}unban*
-*┃➥${prefix}oaddprem*
-*┃➥${prefix}odelprem*
+
 *┃➥${prefix}bc* 
 *┃➥${prefix}leaveall*
 *┃➥${prefix}clearall* 
@@ -319,8 +316,6 @@ exports.textAdmin = () => {
 *${prefix}kick* <reply pesan orang yang ingin dikick>
 *${prefix}pkick* <tag member yang ingin dikick>
 *${prefix}promote* @tag
-*${prefix}opromote* <reply pesan yang ingin dipromote>
-*${prefix}odemote* <reply pesan yang ingin didemote>
 *${prefix}demote* @tag
 *${prefix}infoall*
 *${prefix}del*
@@ -332,7 +327,6 @@ exports.textAdmin = () => {
 *${prefix}bokep*
 *${prefix}antilink on/off*
 *${prefix}edotensei*
-*${prefix}oedotensei* <tag member yang ingin diedotensei>
 *${prefix}inv* <reply pesan orang yang ingin dikick>
     
 _-_-_-_-_-_-_-_-_-_-_-_-_-_

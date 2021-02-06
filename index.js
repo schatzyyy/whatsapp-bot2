@@ -1,5 +1,6 @@
 const { create, Client } = require('@open-wa/wa-automate')
 const figlet = require('figlet')
+const fs = require('fs-extra')
 const options = require('./utils/options')
 const { color, messageLog } = require('./utils')
 const HandleMsg = require('./HandleMsg')
@@ -18,39 +19,26 @@ const start = (aruga = new Client()) => {
     })
 
     // ketika bot diinvite ke dalam group
-    aruga.onAddedToGroup(async (chat) => {
-	const groups = await aruga.getAllGroups()
-	// kondisi ketika batas group bot telah tercapai,ubah di file settings/setting.json
-	if (groups.length > groupLimit) {
-	await aruga.sendText(chat.id, `Sorry, the group on this bot is full\nMax Group is: ${groupLimit}`).then(() => {
-	      aruga.leaveGroup(chat.id)
-	      aruga.deleteChat(chat.id)
-	  }) 
-	} else {
-	// kondisi ketika batas member group belum tercapai, ubah di file settings/setting.json
-	    if (chat.groupMetadata.participants.length < memberLimit) {
-	    await aruga.sendText(chat.id, `Sorry, BOT comes out if the group members do not exceed ${memberLimit} people`).then(() => {
-	      aruga.leaveGroup(chat.id)
-	      aruga.deleteChat(chat.id)
-	    })
-	    } else {
-        await aruga.simulateTyping(chat.id, true).then(async () => {
-          await aruga.sendText(chat.id, `what up y'all~, I'm Thoriq BOT. Untuk mencari tahu command BOT, ketik ${prefix}menu`)
-        })
-	    }
-	}
-    })
+     aruga.onAddedToGroup((async (chat) => {
+        let totalMem = chat.groupMetadata.participants.length
+        let groupName = chat.contact.name
+	const gucid = gcid.includes(groupId)
+        const ownerNumber = '62895334950905@c.us'
+        const getAllMembers = await aruga.getGroupMembersId(chat.groupMetadata.id)
+        if (totalMem < 300 && !getAllMembers.includes(ownerNumber)) {
+            aruga.sendText(chat.id, `Upss...\n\nUntuk bisa mengundang bot kedalam grup *${name}*. Diwajibkan untuk donasi dulu yah ^^\n\n10K = 1 Minggu\n20K = 1 Bulan\n50K = Forever\n\nJika berminat, langsung chat contact admin dengan cara ketik: */ownerbot*`).then(() => aruga.leaveGroup(chat.id)).then(() => aruga.deleteChat(chat.id))
+        } else {
+            aruga.sendText(chat.groupMetadata.id, `Halo *${name}* terimakasih sudah menginvite bot ini, untuk melihat menu silahkan kirim */help* dan jangan lupa bantu owner untuk bisa memperbesar server agar bot ini tidak suspend/slow respon dengan cara kirim */donasi*`)
+        }
+    }))
 
     // ketika seseorang masuk/keluar dari group
    aruga.onGlobalParicipantsChanged(async (event) => {
         const host = await aruga.getHostNumber() + '@c.us'
         if (event.action === 'add' && event.who !== host) {
-            const gChat = await aruga.getChatById(event.chat)
-            const pChat = await aruga.getContact(event.who)
-            const { contact, groupMetadata, name} = gChat
-            const gatauih = await aruga.getProfilePicFromServer(event.who)
-            const capt = `*ey yo,what up!* *@${pChat.replace('@c.us','')}*\n\nWelcome to *${name}*\n\nThere is nothing to say, just follow the rules of ${name}* Group.\n\n*Commands bot /menu , /p*`
-            aruga.sendFileFromUrl(gChat, gatauih, 'profile.jpg', capt)
+            const gChat = await aruga.getProfilePicFromServer(event.who)
+	    const capt = `Ey yo @${event.who.replace('@c.us', '')} Welcome to *${name}\n\nIntro dulu yuk hambaku\nNama :\nUmur :\nGender :\nInstagram :\n\nDon't forget to follow the rules of ${name} Group!\n\nBest regards\n-Thoriq Azzikra\n\nhttps://github.com/Urbaeexyz/whatsapp-bot2`
+	    await aruga.sendFileFromUrl(event.chat, gChat, 'prof.jpg', capt)
         }
         // kondisi ketika seseorang dikick/keluar dari group
         if (event.action === 'remove' && event.who !== host) {
