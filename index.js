@@ -32,21 +32,6 @@ const start = (aruga = new Client()) => {
         }
     }))
 
-    // ketika seseorang masuk/keluar dari group
-   aruga.onGlobalParicipantsChanged(async (event) => {
-        const host = await aruga.getHostNumber() + '@c.us'
-        if (event.action === 'add' && event.who !== host) {
-            const gChat = await aruga.getProfilePicFromServer(event.who)
-	    const capt = `Ey yo @${event.who.replace('@c.us', '')} Welcome to *${name}\n\nIntro dulu yuk hambaku\nNama :\nUmur :\nGender :\nInstagram :\n\nDon't forget to follow the rules of ${name} Group!\n\nBest regards\n-Thoriq Azzikra\n\nhttps://github.com/Urbaeexyz/whatsapp-bot2`
-	    await aruga.sendFileFromUrl(event.chat, gChat, 'prof.jpg', capt)
-        }
-        // kondisi ketika seseorang dikick/keluar dari group
-        if (event.action === 'remove' && event.who !== host) {
-            const zchat = await aruga.getProfilePicFromServer(event.who)
-            const aigo = `eh @${event.who.replace('@c.us', '')} malah keluar:(`
-            await aruga.sendFileFromUrl(event.chat, zchat, 'profile.jpg', aigo)
-        }
-    })
 
     aruga.onIncomingCall(async (callData) => {
         // ketika seseorang menelpon nomor bot akan mengirim pesan
@@ -56,6 +41,30 @@ const start = (aruga = new Client()) => {
             await aruga.contactBlock(callData.peerJid)
         })
     })
+
+	    aruga.onGlobalParicipantsChanged(async (event) => {
+        const host = await aruga.getHostNumber() + '@c.us'
+		const left = JSON.parse(fs.readFileSync('./lib/database/left.json'))
+		const isLeft = left.includes(event.chat)
+		const welcome = JSON.parse(fs.readFileSync('./lib/welcome.json'))
+		const isWelcome = welcome.includes(event.chat)
+		let profile = await aruga.getProfilePicFromServer(event.who)
+		if (profile == '' || profile == undefined) profile = 'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTQcODjk7AcA4wb_9OLzoeAdpGwmkJqOYxEBA&usqp=CAU'
+        // kondisi ketika seseorang diinvite/join group lewat link
+        if (event.action === 'add' && event.who !== host && isWelcome) {
+			 const gChat = await aruga.getChatById(event.chat)
+			const { contact, groupMetadata, name} = gChat
+			const capt = `*ey yo,what up!* *@${event.who.replace('@c.us','')}* Welcome to *${name}*\n\nThere is nothing to say, just follow the rules of *${name}* Group.\n\n*Commands bot: /menu, /p*`
+			await aruga.sendFileFromUrl(event.chat, profile, 'profile.jpg', capt)
+        }
+        // kondisi ketika seseorang dikick/keluar dari group
+        if (event.action === 'remove' && event.who !== host && isLeft) {
+            const zchat = await aruga.getProfilePicFromServer(event.who)
+            const aigo = `eh @${event.who.replace('@c.us', '')} udah dipungut malah mau jadi anak pungut lagi.`
+            await aruga.sendFileFromUrl(event.chat, zchat, 'profile.jpg', aigo)
+        }
+    })
+
 
     // ketika seseorang mengirim pesan
     aruga.onMessage(async (message) => {
