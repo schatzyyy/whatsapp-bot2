@@ -5,7 +5,7 @@
 <a href="#"><img title="Whatsapp-Bot" src="https://img.shields.io/badge/Whatsapp Bot-green?colorA=%23ff0000&colorB=%23017e40&style=for-the-badge"></a>
 </p>
 <p align="center">
-<a href="https://github.com/Urbaee"><img title="Author" src="https://img.shields.io/badge/AUTHOR-Thoriq-blue.svg?style=for-the-badge&logo=github"></a>
+<a href="https://github.com/Urbaeexyz"><img title="Author" src="https://img.shields.io/badge/AUTHOR-Thoriq-blue.svg?style=for-the-badge&logo=github"></a>
 <p align="center">
 <a href="https://github.com/Urbaeexyz/followers"><img title="Followers" src="https://img.shields.io/github/followers/Urbaeexyz?color=blue&style=flat-square"></a>
 <a href="https://github.com/Urbaeexyz/whatsapp-bot2/stargazers/"><img title="Stars" src="https://img.shields.io/github/stars/Urbaeexyz/whatsapp-bot2?color=red&style=flat-square"></a>
