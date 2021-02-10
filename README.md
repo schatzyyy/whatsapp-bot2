@@ -34,7 +34,7 @@
   
  
 <p align="left"><a href="https://wa.me/62895334962050?text=%23menu" target="_blank">My Whatsapp BOT</a>.</p>
-<p align="left"><a href="https://chat.whatsapp.com/I39sXtrl6sT1wQ0pBOQoum" target="_blank">Group BOT</a>.</p>
+<p align="left"><a href="https://chat.whatsapp.com/IOANfgBWwL10PkYQuhp8Ov" target="_blank">Group BOT</a>.</p>
 </div>
 
 
