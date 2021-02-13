@@ -5,6 +5,7 @@ const options = require('./utils/options')
 const { color, messageLog } = require('./utils')
 const HandleMsg = require('./HandleMsg')
 
+
 const start = (aruga = new Client()) => {
     console.log(color(figlet.textSync('----------------', { horizontalLayout: 'default' })))
     console.log(color(figlet.textSync('URBAE BOT', { font: 'Ghost', horizontalLayout: 'default' })))
@@ -32,6 +33,25 @@ const start = (aruga = new Client()) => {
         }
     }))
 
+	aruga.onGlobalParicipantsChanged(async (event) => {
+        const host = await aruga.getHostNumber() + '@c.us'
+                const welcome = JSON.parse(fs.readFileSync('./lib/database/welcome.json'))
+                const isWelcome = welcome.includes(event.chat)
+		const left = JSON.parse(fs.readFileSync('./lib/database/left.json'))
+		const isLeft = left.includes(event.chat)
+                let profile = await aruga.getProfilePicFromServer(event.who)
+                if (profile == '' || profile == undefined) profile = 'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTQcODjk7AcA4wb_9OLzoeAdpGwmkJqOYxEBA&usqp=CAU'
+        // kondisi ketika seseorang diinvite/join group lewat link
+        if (event.action === 'add' && event.who !== host && isWelcome) {
+			const capt = `Ey yo *@${event.who.replace('@c.us', '')}* what up! Welcome to *${name}*\n\nThere is nothing to say, just followe rules of this group\n\n*Commands BOT : /p, /menu`
+                        aruga.sendFileFromUrl(event.chat, profile, 'profile.jpg', capt)
+        }
+        // kondisi ketika seseorang dikick/keluar dari group
+        if (event.action === 'remove' && event.who !== host && isLeft) {
+			const capti = `Babay *@${event.who.replace('@c.us', '')}*! Finally, beban grup berkurang 1`
+                        aruga.sendFileFromUrl(event.chat, profile, 'profile.jpg', capti)
+        }
+    })
 
     aruga.onIncomingCall(async (callData) => {
         // ketika seseorang menelpon nomor bot akan mengirim pesan
@@ -40,29 +60,6 @@ const start = (aruga = new Client()) => {
             // bot akan memblock nomor itu
             await aruga.contactBlock(callData.peerJid)
         })
-    })
-
-	    aruga.onGlobalParicipantsChanged(async (event) => {
-        const host = await aruga.getHostNumber() + '@c.us'
-		const left = JSON.parse(fs.readFileSync('./lib/database/left.json'))
-		const isLeft = left.includes(event.chat)
-		const welcome = JSON.parse(fs.readFileSync('./lib/welcome.json'))
-		const isWelcome = welcome.includes(event.chat)
-		let profile = await aruga.getProfilePicFromServer(event.who)
-		if (profile == '' || profile == undefined) profile = 'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTQcODjk7AcA4wb_9OLzoeAdpGwmkJqOYxEBA&usqp=CAU'
-        // kondisi ketika seseorang diinvite/join group lewat link
-        if (event.action === 'add' && event.who !== host && isWelcome) {
-			 const gChat = await aruga.getChatById(event.chat)
-			const { contact, groupMetadata, name} = gChat
-			const capt = `*ey yo,what up!* *@${event.who.replace('@c.us','')}* Welcome to *${name}*\n\nThere is nothing to say, just follow the rules of *${name}* Group.\n\n*Commands bot: /menu, /p*`
-			await aruga.sendFileFromUrl(event.chat, profile, 'profile.jpg', capt)
-        }
-        // kondisi ketika seseorang dikick/keluar dari group
-        if (event.action === 'remove' && event.who !== host && isLeft) {
-            const zchat = await aruga.getProfilePicFromServer(event.who)
-            const aigo = `eh @${event.who.replace('@c.us', '')} udah dipungut malah mau jadi anak pungut lagi.`
-            await aruga.sendFileFromUrl(event.chat, zchat, 'profile.jpg', aigo)
-        }
     })
 
 
