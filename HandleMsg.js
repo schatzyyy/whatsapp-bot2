@@ -9,6 +9,8 @@ const speed = require('performance-now')
 const fetch = require('node-fetch')
 const translatte = require('translatte')
 const bent = require('bent')
+const path = require('path')
+const ffmpeg = require('fluent-ffmpeg')
 const request = require('request-promise')
 const emojiUnicode = require('emoji-unicode')
 const get = require('got')
@@ -73,12 +75,13 @@ let banned = JSON.parse(fs.readFileSync('./settings/banned.json'))
 const simi = JSON.parse(fs.readFileSync('./settings/simi.json'))
 const ngegas = JSON.parse(fs.readFileSync('./settings/ngegas.json'))
 const setting = JSON.parse(fs.readFileSync('./settings/setting.json'))
+const _autostiker = JSON.parse(fs.readFileSync('./lib/helper/autostiker.json'))
+const _afk = JSON.parse(fs.readFileSync('./lib/database/afk.json'))
 
 let dbcot = JSON.parse(fs.readFileSync('./lib/database/bacot.json'))
 let dsay = JSON.parse(fs.readFileSync('./lib/database/say.json'))
 let left = JSON.parse(fs.readFileSync('./lib/database/left.json'))
 let welkom = JSON.parse(fs.readFileSync('./lib/database/welcome.json'))
-let _autostiker = JSON.parse(fs.readFileSync('./lib/helper/antisticker.json'))
 let antilink = JSON.parse(fs.readFileSync('./lib/helper/antilink.json'))
 let prem = JSON.parse(fs.readFileSync('./lib/database/prem.json'))
 let grupid = JSON.parse(fs.readFileSync('./lib/database/groupid.json'))
@@ -140,7 +143,10 @@ moment.tz.setDefault('Asia/Jakarta').locale('id')
 		const chats = (type === 'chat') ? body : (type === 'image' || type === 'video') ? caption : ''
         const pengirim = sender.id
         const serial = sender.id
+	const time = moment(t * 1000).format('DD/MM/YY HH:mm:ss')
+	const timee = moment(t * 1000).format('HH:mm:ss')
         const isBotGroupAdmins = groupAdmins.includes(botNumber) || false
+	const userId = sender.id.substring(9, 13)
         const blockNumber = await aruga.getBlockedIds()
         const groupMembers = isGroupMsg ? await aruga.getGroupMembersId(groupId) : ''
         const GroupLinkDetector = antilink.includes(chatId)
@@ -159,7 +165,9 @@ moment.tz.setDefault('Asia/Jakarta').locale('id')
         const url = args.length !== 0 ? args[0] : ''
         const isQuotedImage = quotedMsg && quotedMsg.type === 'image'
         const isQuotedVideo = quotedMsg && quotedMsg.type === 'video'
-		
+	const isQuotedFile = quotedMsg && quotedMsg.type === 'file'
+	const reason = q ? q : 'Gada'
+
         // [IDENTIFY]
         const ownerNumber = "62895334951166@c.us"
         const isOwnerBot = ownerNumber.includes(pengirim)
@@ -364,6 +372,78 @@ moment.tz.setDefault('Asia/Jakarta').locale('id')
             }
         }
 
+	const addAfk = (userId, time) => {
+		let obj = {id: `${userId}`, time: `${time}`, reason: `${reason}`}
+		_afk.push(obj)
+		fs.writeFileSync('./lib/database/afk.json', JSON.stringify(_afk))
+		}
+
+		const getAfk = (userId) => {
+			let isAfk = false
+			Object.keys(_afk).forEach((i) => {
+				if (_afk[i].id === userId) {
+				isAfk = true
+				
+			}
+			})
+			return isAfk
+			}
+
+		const getAfkReason = (userId) => {
+				let position = false
+				Object.keys(_afk).forEach((i) => {
+				if (_afk[i].id === userId) {
+					position = i
+				}
+			})
+			if (position !== false) {
+				return _afk[position].time
+			}
+		}
+
+		const getAfkTime = (userId) => {
+			let position = false
+			Object.keys(_afk).forEach((i) => {
+			if (_afk[i].id === userId) {
+				position = i
+			}
+		})
+		if (position !== false) {
+			return _afk[position].time
+		}
+		}
+
+		const getAfkId = (userId) => {
+			let position = false
+			Object.keys(_afk).forEach((i) => {
+				if (_afk[i].id === userId) {
+					position = i
+				}
+			})
+			if (position !== false) {
+				return _afk[position].id
+			}
+			}
+
+
+	const isAfkOn = getAfk(sender.id)
+		if (isGroupMsg) {
+			const checking = getAfk(sender.id)
+			for (let ment of mentionedJidList) {
+				if(getAfk(ment)) {
+					const getId = getAfkId(ment)
+					const getReason = getAfkReason(getId)
+					const getTime = getAfkTime(getId)
+					await aruga.reply(from, `*「 AFK MODE 」*\n\nSssttt! Orangnya lagi afk, jangan diganggu!\n➸ *Alasan*: ${getReason}\n➸ *Sejak*: ${getTime}`, id)
+					}
+				}
+				if (checking && !isCmd) {
+					_afk.splice(sender.id, 1)
+					fs.writeFileSync('./lib/database/afk.json', JSON.stringify(_afk))
+					await aruga.sendTextWithMentions(from, `@${pushname} SEKARANG TIDAK *AFK*`)
+				}
+				}
+
 
         //fitur anti link
         if (isGroupMsg && GroupLinkDetector && !isGroupAdmins && !isOwner){
@@ -378,13 +458,12 @@ moment.tz.setDefault('Asia/Jakarta').locale('id')
                 }
             }
         }
-        
-        
-        
+
+
         if (isAutoStikerOn && isMedia && isImage) {
             const mediaData = await decryptMedia(message, uaOverride)
             const imageBase64 = `data:${mimetype};base64,${mediaData.toString('base64')}`
-            await aruga.sendImageAsSticker(from, imageBase64)
+            await aruga.sendImageAsSticker(from, imageBase64, {keepScale: true})
                 .then(async () => {
                     console.log(`Sticker processed for ${processTime(t, moment())} seconds`)
                 })
@@ -793,11 +872,11 @@ moment.tz.setDefault('Asia/Jakarta').locale('id')
                 if (args[0] === 'enable') {
                     if (isAutoStikerOn) return await aruga.reply(from, 'Fitur auto stiker sudah diaktifkan', id)
                     _autostiker.push(chat.id)
-                    fs.writeFileSync('./lib/helper/antisticker.json', JSON.stringify(_autostiker))
+                    fs.writeFileSync('./lib/helper/autosticker.json', JSON.stringify(_autostiker))
                     await aruga.reply(from, 'Fitur autosticker berhasil diaktifkan' , id)
                 } else if (args[0] === 'disable') {
                     _autostiker.splice(chat.id, 1)
-                    fs.writeFileSync('./lib/helper/antisticker.json', JSON.stringify(_autostiker))
+                    fs.writeFileSync('./lib/helper/autosticker.json', JSON.stringify(_autostiker))
                     await aruga.reply(from, 'Fitur autostiker berhasil dinonaktifkan' , id)
                 } else {
                     await aruga.reply(from, 'Format salah' , id)
@@ -1445,13 +1524,13 @@ moment.tz.setDefault('Asia/Jakarta').locale('id')
            if (isMedia && type === 'video' || mimetype === 'image/gif') {
                 try {
                     const mediaData = await decryptMedia(message, uaOverride)
-                    await aruga.sendMp4AsSticker(from, mediaData, {crop: true, fps: 10, startTime: `00:00:00.0`, endTime : `00:00:10.0`,loop: 0}, {keepScale: false})
+                    await aruga.sendMp4AsSticker(from, mediaData, {crop: true, fps: 30, startTime: `00:00:00.0`, endTime : `00:00:10.0`,loop: 0}, {keepScale: true})
                 } catch (err) {
                     aruga.reply(from, `Size media terlalu besar! mohon kurangi durasi video.`, id)
                 }
             } else if (quotedMsg && quotedMsg.type == 'video' || quotedMsg && quotedMsg.mimetype == 'image/gif') {
                 const mediaData = await decryptMedia(quotedMsg, uaOverride)
-                await aruga.sendMp4AsSticker(from, mediaData, {crop: true, fps: 10, startTime: `00:00:00.0`, endTime : `00:00:10.0`,loop: 0}, {keepScale: false})
+                await aruga.sendMp4AsSticker(from, mediaData, {crop: true, fps: 30, startTime: `00:00:00.0`, endTime : `00:00:10.0`,loop: 0}, {keepScale: true})
             } else {
                 aruga.reply(from, `Kesalahan ⚠️ Hanya bisa video/gif apabila file media berbentuk gambar ketik /stickergif`, id)
 		.catch((err) => {
@@ -1776,19 +1855,17 @@ break
         case 'ytmp3':
             case 'ytmp3':
                 if (args.length == 0) return aruga.reply(from, `Untuk mendownload lagu dari youtube\nketik: ${prefix}ytmp3 [link_yt]`, id)
-                const linkmp3 = args[0].replace('https://youtu.be/','').replace('https://www.youtube.com/watch?v=','')
-                rugaapi.ymp3(`https://youtu.be/${linkmp3}`)
+                aruga.reply(from, mess.wait, id)
+		axios.get(`https://st4rz.herokuapp.com/api/yta2?url=${body.slice(7)}`)
                 .then(async(res) => {
-				await aruga.sendFileFromUrl(from, res.thumb, '', `「 *YOUTUBE MP3* 」\n\nJudul: ${res.title}\nSize: ${res.size}\nQuality: ${res.quality}\n\n_*Waitt, lemme send that fuckin' audio*_`, id)
-				if (Number(res.size.split(' MB')[0] > 15)) return aruga.reply(from, 'Sorry dude, that fuckin audio has big size', id)
-				const buf123 = await fetch(res.link)
-				const buf321 = await buf123.buffer();
-				await sleep(1000)
-				fs.writeFile('./media/song.mp3', buf321)
-				aruga.sendFile(from, './media/song.mp3', '', '', id)
+				await aruga.sendFileFromUrl(from, res.data.thumb, '', `「 *YOUTUBE MP3* 」\n\nJudul: ${res.data.title}\nExecute: ${res.data.ext}\n\n*_Waitt, lemme send that fuckin' audio_*`, id)
+				await aruga.sendFileFromUrl(from, res.data.result, '', '', id)
                       		.catch((err) => {
 				aruga.reply(from, `URL ${linkmp3} Sudah pernah didownload sebelumnya, Link akan direset selama 30 menit`,id)
 			 })
+			})
+			.catch(err => {
+				aruga.reply(from, 'error', id)
 			})
     			break
             case 'jadwalbola':
@@ -2004,38 +2081,17 @@ break
                     case 'ig':
                         case 'instagram':
                            if (args.length == 0) return aruga.reply(from, `Kirim perintah *${prefix}ig [linkIg]*`, id)
-                            const igUrl = body.split(' ')[1]
-                            if (!igUrl.startsWith('https://www.instagram.com')) return aruga.reply(from, 'Maaf, ini bukan link instagram!')
-                            aruga.reply(from, mess.wait, id)
-                             {
-                                request.get({
-                                    url: `http://keepsaveit.com/api?api_key=${keepSave}&url=${igUrl}`,
-                                    json: true,
-                                    headers: {
-                                        'User-Agent': 'request'
-                                    }
-                                }, (err, res, data) => {
-                                    if (err) {
-                                        console.log('Error : ', err);
-                                    } else if (res.statusCode !== 200) {
-                                        console.log('Status:', res.statusCode);
-                                        aruga.reply(from, data.msg, id)
-                                    } else {
-                                        const { title, links } = data.response
-                                        const { ext, url, size, resolution } = links
-                                        const regexIg = /\\\//gi;
-                                        const thisUrlIg = url.replace(regexIg, '/')
-                                        if (ext === 'mp4') {
-                                            aruga.sendFileFromUrl(from, thisUrlIg, 'KZ0-IGDL.mp4', `*From :* ${title.split(' on')[0]}\n*Size :* ${size}\n*Resolusi :* ${resolution}`, id)
-                                        } else {
-                                            aruga.sendFileFromUrl(from, thisUrlIg, 'KZ0-IGDL.mp3', `*From:* ${title.split(' on')[0]}\n*Size:* ${size}`, id)
-                                            .catch(() => {
-                                                aruga.reply(from, 'Error, linknya ga valid tod', id)
-                                            })
-                                        }
-                                    }
-                            })
-                        }
+                            const igUrl = body.slice(4)
+			    axios.get(`https://api.vhtear.com/instadl?link=${igUrl}&apikey=PandaEvers`)
+			    .then(async(res) => {
+				await aruga.sendFileFromUrl(from, res.data.result.post[0].urlDownload, '', `*From: ${res.data.result.owner_username}*`, id)
+				.catch(err => {
+					aruga.reply(from, 'Error', id)
+				})
+				})
+				.catch(err => {
+					aruga.reply(from, 'Error', id)
+				})
                                 break
                             case 'nhpdf':
                                 if (args.length == 0)return aruga.reply(from, `Kode nuklir tidak ditemukan\nUsage : ${prefix}nhpdf 20935`, id)
@@ -2149,8 +2205,78 @@ case 'ytsearch':
 			break
 			
         // Random Kata
+	 case 'fiersa':
+                fetch('https://raw.githubusercontent.com/AlvioAdjiJanuar/Fiersa-Besari/main/fiersa-besari.txt')
+            .then(res => res.text())
+            .then(body => {
+                let ff = body.split('\n')
+                let randomff = ff[Math.floor(Math.random() * ff.length)]
+                aruga.reply(from, randomff, id)
+            })
+            .catch(() => {
+                aruga.reply(from, 'Ada yang Error!', id)
+            })
+            break
+	case 'buatgrup':
+		const bwtgrup = body.trim().split(' ')
+		const gcnuma = bwtgrup[1]
+		aruga.createGroup(gcnuma, sender.id)
+		aruga.sendText(from, 'berhasil membuat grup', id)
+		break
+	 case 'chika':
+    await aruga.reply(from, `media sedang dikirim , tunggu sampe10-20 detik`, id)
+    fetch('https://raw.githubusercontent.com/AlvioAdjiJanuar/chika/main/chika.txt')
+    .then(res => res.text())
+        .then(body => {
+    let chika = body.split('\n')
+    let chikax = chika[Math.floor(Math.random() * chika.length)]
+    aruga.sendFileFromUrl(from, `https://piyobot.000webhostapp.com/${chikax}.mp4`, 'chika.mp4', 'Nih asu', id)
+    .then(() => console.log('Success sending Video'))
+        })
+        .catch(() => {
+            aruga.reply(from, 'Ada yang Error!', id)
+        })
+    break
+	case 'tomp3':
+	   if ((isMedia || isQuotedVideo || isQuotedFile)) {
+            aruga.reply(from, mess.wait, id)
+            const encryptMedia = isQuotedVideo || isQuotedFile ? quotedMsg : message
+            const _mimetype = isQuotedVideo || isQuotedFile ? quotedMsg.mimetype : mimetype
+            console.log(color('[WAPI]', 'green'), 'Downloading and decrypt media...')
+            const mediaData = await decryptMedia(encryptMedia)
+            let temp = './temp'
+            let name = new Date() * 1
+            let fileInputPath = path.join(temp, 'video', `${name}.${_mimetype.replace(/.+\//, '')}`)
+            let fileOutputPath = path.join(temp, 'audio', `${name}.mp3`)
+            console.log(color('[fs]', 'green'), `Downloading media into '${fileInputPath}'`)
+            fs.writeFile(fileInputPath, mediaData, err => {
+                if (err) return aruga.sendText(from, 'Ada yang error saat menulis file\n\n' + err)
+                ffmpeg(fileInputPath)
+                    .format('mp3')
+                    .on('start', function (commandLine) {
+                        console.log(color('[FFmpeg]', 'green'), commandLine)
+                    })
+                    .on('progress', function (progress) {
+                        console.log(color('[FFmpeg]', 'green'), progress)
+                    })
+                    .on('end', function () {
+                        console.log(color('[FFmpeg]', 'green'), 'Processing finished!')
+                        aruga.sendFile(from, fileOutputPath, 'audio.mp3', '', id)
+                        setTimeout(() => {
+                            try {
+                                fs.unlinkSync(fileInputPath)
+                                fs.unlinkSync(fileOutputPath)
+                            } catch (e) {
+                                console.log(color('[ERROR]', 'red'), e)
+                            }
+                        }, 30000)
+                    })
+                    .save(fileOutputPath)
+            })
+        }
+    break
       	case 'motivasi':
-            fetch('https://raw.githubusercontent.com/selyxn/motivasi/main/motivasi.txt')
+            fetch('https://raw.githubusercontent.com/AlvioAdjiJanuar/motivasi/main/motivasi.txt')
             .then(res => res.text())
             .then(body => {
                 let splitmotivasi = body.split('\n')
@@ -2160,7 +2286,7 @@ case 'ytsearch':
             .catch(() => {
                 aruga.reply(from, 'Ada yang Error!', id)
             })
-            break
+		break
 	      case 'urgay':
         		if (args.length == 0) return aruga.reply(from, `Untuk mengetahui seberapa gay seseorang gunakan ${prefix}urgay namanya\n\nContoh: ${prefix}urgay burhan`, id)
             axios.get(`https://arugaz.herokuapp.com/api/howgay`)
@@ -2634,12 +2760,13 @@ case 'ytsearch':
             case 'play'://silahkan kalian custom sendiri jika ada yang ingin diubah
            if (args.length == 0) return aruga.reply(from, `Untuk mencari lagu dari youtube\n\nPenggunaan: ${prefix}play judul lagu`, id)
 	   const pncri = body.slice(6)
+	  console.log(color(`Hasil Pencarian ${pncri}`, 'green'))
            axios.get(`https://api.zeks.xyz/api/yts?q=${pncri}&apikey=apivinz`)
             .then(async (res) => {
                 await aruga.sendFileFromUrl(from, `${res.data.result[0].video.thumbnail_src}`, ``, `「 *PLAY* 」\n\nJudul: ${res.data.result[0].video.title}\nDurasi: ${res.data.result[0].video.duration} detik\nUploaded: ${res.data.result[0].video.upload_date}\nView: ${res.data.result[0].video.views}\nUrl: ${res.data.result[0].video.url}\n\n*_Wait, Urbae lagi ngirim Audionya_*`, id)
 				rugaapi.ytmp3(`https://youtu.be/${res.data.result[0].video.id}`)
                                 .then(async(res) => {
-				await aruga.sendFileFromUrl(from, res.result, '', '', id)
+				await aruga.sendFileFromUrl(from, res.result, '', '', id) 
                                 .catch((err) => {
                                         aruga.reply(from, 'Error anjing', id)
                                    })
@@ -3241,12 +3368,12 @@ case 'ytsearch':
 	case 'left':
 	    if (!isGroupMsg) return aruga.reply(from, 'Perintah ini hanya bisa digunakan didalam Grup!', id)
 	    if (!isGroupAdmins) return aruga.reply(from, 'Perintah ini hanya bisa digunakan oleh Admin Grup!', id)
-	    if (args.length === 0) return aruga.reply(from, 'Pilih on atau off tod', id)
-	    if (args[0].toLowerCase() === 'on') {
+	    if (args.length === 0) return aruga.reply(from, 'Pilih enable atau disable tod', id)
+	    if (args[0] === 'enable') {
 		left.push(chat.id)
 		fs.writeFileSync('./lib/database/left.json', JSON.stringify(left))
 		aruga.reply(from, 'Fitur left berhasil diaktifkan digrup ini!', id)
-	   } else if (args[0].toLowerCase() === 'off') {
+	   } else if (args[0] === 'disable') {
 		left.splice(chat.id, 1)
 		fs.writeFileSync('./lib/database/left.json', JSON.stringify(left))
 		aruga.reply(from, 'Fitur left berhasil dinonaktifkan di grup ini!', id)
@@ -3254,20 +3381,26 @@ case 'ytsearch':
 		aruga.reply(from, 'Pilih enable atau disable', id)
 	}
 	break
+	case 'afk':                             
+              if (!isGroupMsg) return await aruga.reply(from, 'Maaf, fitur ini hanya bisa digunakan didalam Grup!', id)
+                if (isAfkOn) return await aruga.reply(from, `${pushname} sekarang sedang *AFK (AWAY FROM KEYBOARD)*\n\nReason: ${reason}`, id)
+                addAfk(sender.id, time, reason)
+		await aruga.sendTextWithMentions(from, `@${sender.id.replace(/@c.us/g, '')} SEKARANG SEDANG *AFK (AWAY FROM KEYBOARD)*\nAlasan: ${reason}`)
+break
 	 case 'welcome':
             if (!isGroupMsg) return aruga.reply(from, 'Perintah ini hanya bisa di gunakan didalam Grup!', id)
             if (!isGroupAdmins) return aruga.reply(from, 'Perintah ini hanya bisa digunakan oleh Admin Grup!', id)
-            if (args.length === 0) return aruga.reply(from, 'Pilih on atau off', id)
-            if (args[0].toLowerCase() === 'on') {
+            if (args.length === 0) return aruga.reply(from, 'Pilih enable atau disable', id)
+            if (args[0].toLowerCase() === 'enable') {
                 welkom.push(chat.id)
 		fs.writeFileSync('./lib/database/welcome.json', JSON.stringify(welkom))
-		aruga.reply(from, 'Fitur welcome berhasil dinonaktifkan di grup ini', id)
-	} else if (args[0].toLowerCase() === 'off') {
-		welkom.splice(chat.id, 1)
+		aruga.reply(from, 'Fitur welcome berhasil diaktifkan di grup ini', id)
+	} else if (args[0] === 'disable') {
+                welkom.splice(chat.id, 1)
 		fs.writeFileSync('./lib/database/welcome.json', JSON.stringify(welkom))
 		aruga.reply(from, 'Fitur welcome berhasil dinonaktifkan di grup ini', id)
 		} else {
-			aruga.reply(from, 'Pilih on atau off tod', id)
+			aruga.reply(from, 'Pilih enable atau disable tod', id)
 		}
 		break
         case 'ban':
@@ -3424,7 +3557,7 @@ case 'ytsearch':
                     var groupname = name
                     var timestp = chat.groupMetadata.creation
                     var date = moment(timestp * 1000).format('dddd, DD MMMM YYYY')
-                    var time = moment(timestp * 1000).format('HH:mm:ss')
+                    var timeh = moment(timestp * 1000).format('HH:mm:ss')
                     var ownerwoi = chat.groupMetadata.owner
                     var grplink = antilink.includes(chat.id)
                     var botadmin = isBotGroupAdmins ? 'Admin' : 'Member'
@@ -3437,7 +3570,7 @@ case 'ytsearch':
                     await aruga.sendFileFromUrl(from, pfp, 'group.png', `*「 GROUP INFO 」*
 *➸ Name : ${groupname}*
 
-Group ini didirikan sejak *${date}* Pukul *${time}* oleh @${ownerwoi.replace('@c.us','')}
+Group ini didirikan sejak *${date}* Pukul *${timeh}* oleh @${ownerwoi.replace('@c.us','')}
 
 
 *➸ Members : ${totalMem}*
