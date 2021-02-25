@@ -38,8 +38,15 @@
 </div>
 
 
-## Please Follow Tutorial Below So There Is No Mistake!
+### FFMPEG
+- [DOWNLOAD](https://ffmpeg.org/)
+- [TUTORIAL](https://youtu.be/04Gf6TEnmjk)
 
+## FFMPEG LINUX/UBUNTU SERVER 
+```sudo apt install ffmpeg```
+Setelah diinstal Ketik ini di Terminal
+```ffmpeg```
+Jika muncul berarti sudah terinstall dan sudah di path
 
 ## Getting Started
 
