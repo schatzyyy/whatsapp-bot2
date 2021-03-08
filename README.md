@@ -37,6 +37,11 @@
 <p align="left"><a href="https://chat.whatsapp.com/IOANfgBWwL10PkYQuhp8Ov" target="_blank">Group BOT</a>.</p>
 </div>
 
+### SCRIPT INI SUDAH TIDAK BERKERJA LAGI SILAHKAN GUNAKAN SCRIPT DIBAWAH
+### EN : THIS SCRIPT IT'S NOT WORKING AGAIN PLEASE USE SCRIPT IN BELLOW!
+
+https://github.com/Urbaeexyz/wa-bot
+
 
 ### FFMPEG
 - [DOWNLOAD](https://ffmpeg.org/)
