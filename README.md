@@ -40,7 +40,7 @@
 ### SCRIPT INI SUDAH TIDAK BERKERJA LAGI SILAHKAN GUNAKAN SCRIPT DIBAWAH
 ### EN : THIS SCRIPT IT'S NOT WORKING AGAIN PLEASE USE SCRIPT IN BELLOW!
 
-https://github.com/Urbaeexyz/wa-bot
+[Whatsapp-Bot](https://github.com/Urbaeexyz/wa-bot)
 
 
 ### FFMPEG
