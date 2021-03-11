@@ -34,14 +34,16 @@
   
  
 <p align="left"><a href="https://wa.me/62895334962050?text=%23menu" target="_blank">My Whatsapp BOT</a>.</p>
-<p align="left"><a href="https://chat.whatsapp.com/IOANfgBWwL10PkYQuhp8Ov" target="_blank">Group BOT</a>.</p>
 </div>
 
-### SCRIPT INI SUDAH TIDAK BERKERJA LAGI SILAHKAN GUNAKAN SCRIPT DIBAWAH
-### EN : THIS SCRIPT IT'S NOT WORKING AGAIN PLEASE USE SCRIPT IN BELLOW!
+<p align="center">
+SCRIPT INI SUDAH TIDAK BERKERJA LAGI SILAHKAN GUNAKAN SCRIPT DIBAWAH
+</p>
+<p align="center">
+ENGLISH : THIS SCRIPT IT'S NOT WORKING AGAIN PLEASE USE SCRIPT IN BELLOW!
+</p>
 
-[Whatsapp-Bot](https://github.com/Urbaeexyz/wa-bot)
-
+<p align="center"><a href="https://github.com/Urbaeexyz/wa-bot" target="_blank">Whatsapp Bot</a>
 
 ### FFMPEG
 - [DOWNLOAD](https://ffmpeg.org/)
