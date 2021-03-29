@@ -30,4 +30,4 @@ SCRIPT INI SUDAH TIDAK BERKERJA LAGI SILAHKAN GUNAKAN SCRIPT DIBAWAH
 ENGLISH : THIS SCRIPT IT'S NOT WORKING AGAIN PLEASE USE SCRIPT IN BELLOW!
 </p>
 
-<p align="center"><a href="https://github.com/Urbaeexyz/wa-bot" target="_blank">NEW SCRIPT WHATSAPP-BOT</a>
+<p align="center"><a href="https://github.com/Urbaeexyz/wa-bot" target="_blank">NEW SCRIPT WHATSAPP-BOT</a></p>
