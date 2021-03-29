@@ -22,12 +22,7 @@
  <img align="center" src="https://github-readme-stats.vercel.app/api/pin/?username=Urbaeexyz&repo=wa-bot&theme=dark" />
   </p>
 
+## IMPORTANT
+PLEASE USE SCRIPT IN BELLOW!
 
-<p align="center">
-SCRIPT INI SUDAH TIDAK BERKERJA LAGI SILAHKAN GUNAKAN SCRIPT DIBAWAH
-</p>
-<p align="center">
-ENGLISH : THIS SCRIPT IT'S NOT WORKING AGAIN PLEASE USE SCRIPT IN BELLOW!
-</p>
-
-<p align="center"><a href="https://github.com/Urbaeexyz/wa-bot" target="_blank">NEW SCRIPT WHATSAPP-BOT</a></p>
+<p align="left"><a href="https://github.com/Urbaeexyz/wa-bot" target="_blank">NEW SCRIPT WHATSAPP-BOT</a></p>
